@@ -51,27 +51,15 @@ function WelcomePage() {
 
               {/* Heading & Subtext */}
               {isSi ? (
-                <>
-                  <h1 className="mt-6 text-center font-[family-name:var(--font-sinhala)] text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
-                    ආයුබෝවන්! 👋
-                    <span className="block mt-0.5">අපි එක්ක එකතු වෙන්න</span>
-                  </h1>
-                  <p className="mt-2.5 text-center font-[family-name:var(--font-sinhala)] text-sm sm:text-base leading-relaxed text-slate-500">
-                    විනාඩි 2ක් විතරයි ගතවෙන්නේ. ලියන්න ඕන දේ ටිකයි —
-                    <span className="block">වැඩිය අකුරු ටයිප් කරන්න ඕන නෑ.</span>
-                  </p>
-                </>
+                <h1 className="mt-6 text-center font-[family-name:var(--font-sinhala)] text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
+                  ආයුබෝවන්! 👋
+                  <span className="block mt-0.5">අපි එක්ක එකතු වෙන්න</span>
+                </h1>
               ) : (
-                <>
-                  <h1 className="mt-6 text-center font-display text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
-                    Welcome! 👋
-                    <span className="block mt-0.5">Join with us</span>
-                  </h1>
-                  <p className="mt-2.5 text-center text-sm sm:text-base leading-relaxed text-slate-500">
-                    Takes only 2 minutes. Very few details needed —
-                    <span className="block">No long typing required.</span>
-                  </p>
-                </>
+                <h1 className="mt-6 text-center font-display text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
+                  Welcome! 👋
+                  <span className="block mt-0.5">Join with us</span>
+                </h1>
               )}
 
               {/* 3 Key Highlights */}
