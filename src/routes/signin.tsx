@@ -65,7 +65,7 @@ function SignInPage() {
                   id="s-phone"
                   type="tel"
                   inputMode="tel"
-                  placeholder="077 123 4567"
+                  placeholder={isSi ? "උදා: 077 123 4567" : "e.g. 077 123 4567"}
                   autoComplete="tel"
                   className={inputClass}
                 />

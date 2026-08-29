@@ -181,7 +181,7 @@ function SignUpPage() {
                     required
                     value={businessName}
                     onChange={(e) => setBusinessName(e.target.value)}
-                    placeholder={isSi ? "උදා: Sunbeam Apparels" : "e.g. Sunbeam Apparels"}
+                    placeholder={isSi ? "උදා: සන්බීම් ඇපරල්ස්" : "e.g. Sunbeam Apparels"}
                     autoComplete="organization"
                     className={inputClass}
                   />
@@ -220,7 +220,7 @@ function SignUpPage() {
                     required
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="077 123 4567"
+                    placeholder={isSi ? "උදා: 077 123 4567" : "e.g. 077 123 4567"}
                     autoComplete="tel"
                     className={inputClass}
                   />
