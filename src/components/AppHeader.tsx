@@ -1,39 +1,47 @@
 "use client";
 
 import Link from "next/link";
-import { Home } from "lucide-react";
+import Image from "next/image";
 import { useLanguage } from "../lib/language-context";
 
 export function AppHeader() {
   const { lang, setLang } = useLanguage();
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#080B1E] px-4 py-3 sm:px-6 shadow-md border-b border-white/5">
-      <div className="mx-auto flex max-w-2xl items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-[#020326] px-4 py-3 sm:px-8 shadow-md border-b border-white/10">
+      <div className="mx-auto flex max-w-5xl items-center justify-between">
         {/* Left: App Logo + Titles */}
-        <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-          <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-b from-[#2948FF] to-[#172ED6] shadow-md shadow-blue-950/50 ring-1 ring-white/15">
-            <Home className="size-5.5 text-white" strokeWidth={2.2} />
+        <Link href="/" className="flex items-center hover:opacity-90 transition-opacity">
+          {/* Logo */}
+          <div className="relative h-9 w-28 sm:h-11 sm:w-36 shrink-0">
+            <Image
+              src="/images/logo.png"
+              alt="Apparel Bank"
+              fill
+              priority
+              className="object-contain object-left"
+              sizes="(max-width: 640px) 112px, 144px"
+            />
           </div>
-          <div className="flex flex-col">
-            <span className="font-display text-lg sm:text-xl font-bold tracking-tight text-white leading-tight">
-              Apparel Bank
-            </span>
-            <span className="font-[family-name:var(--font-sinhala)] text-xs sm:text-sm font-semibold text-[#818CF8] leading-tight mt-0.5">
-              {lang === "en" ? "Supplier Registration" : "සැපයුම්කරු ලියාපදිංචිය"}
-            </span>
-          </div>
+
+          {/* Divider */}
+          <div className="hidden sm:block mx-3.5 sm:mx-4 h-6 sm:h-7 w-[1px] bg-white/25 shrink-0"></div>
+
+          {/* Subtitle */}
+          <span className="hidden sm:inline-block font-[family-name:var(--font-sinhala)] text-base sm:text-lg font-medium text-[#8B98FF] tracking-normal leading-tight whitespace-nowrap">
+            {lang === "en" ? "Supplier Registration" : "සැපයුම්කරු ලියාපදිංචිය"}
+          </span>
         </Link>
 
         {/* Right: Language switch toggle pill */}
-        <div className="flex items-center rounded-full bg-[#18203E] p-1 ring-1 ring-white/10">
+        <div className="flex items-center rounded-full bg-[#12183a] p-1 ring-1 ring-white/15">
           <button
             type="button"
             onClick={() => setLang("si")}
-            className={`rounded-full px-3 py-1 text-xs sm:text-sm font-bold transition-all ${
+            className={`rounded-full px-3.5 py-1 text-xs sm:text-sm font-bold transition-all ${
               lang === "si"
-                ? "bg-white text-[#080B1E] shadow-sm"
-                : "text-white/70 hover:text-white"
+                ? "bg-white text-[#020326] shadow-sm"
+                : "text-white/75 hover:text-white"
             }`}
           >
             <span className="font-[family-name:var(--font-sinhala)]">සිං</span>
@@ -41,10 +49,10 @@ export function AppHeader() {
           <button
             type="button"
             onClick={() => setLang("en")}
-            className={`rounded-full px-3 py-1 text-xs sm:text-sm font-bold transition-all ${
+            className={`rounded-full px-3.5 py-1 text-xs sm:text-sm font-bold transition-all ${
               lang === "en"
-                ? "bg-white text-[#080B1E] shadow-sm"
-                : "text-white/70 hover:text-white"
+                ? "bg-white text-[#020326] shadow-sm"
+                : "text-white/75 hover:text-white"
             }`}
           >
             EN
