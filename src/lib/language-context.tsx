@@ -1,26 +1,28 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-export type LanguageMode = "both" | "si" | "en";
+export type LanguageMode = "si" | "en";
 
 interface LanguageContextType {
   lang: LanguageMode;
   setLang: (lang: LanguageMode) => void;
+  isSi: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: "both",
+  lang: "si",
   setLang: () => {},
+  isSi: true,
 });
 
-const STORAGE_KEY = "factorypass_lang_mode";
+const STORAGE_KEY = "apparelbank_lang_mode";
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [lang, setLangState] = useState<LanguageMode>("both");
+  const [lang, setLangState] = useState<LanguageMode>("si");
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as LanguageMode;
-      if (saved === "both" || saved === "si" || saved === "en") {
+      if (saved === "si" || saved === "en") {
         setLangState(saved);
       }
     } catch {
@@ -38,7 +40,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, setLang }}>
+    <LanguageContext.Provider value={{ lang, setLang, isSi: lang === "si" }}>
       {children}
     </LanguageContext.Provider>
   );

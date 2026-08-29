@@ -1,13 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { useLanguage } from "../lib/language-context";
+import { AppHeader } from "../components/AppHeader";
 
 export const Route = createFileRoute("/signin")({
   head: () => ({
     meta: [
-      { title: "FactoryPass — Sign In | ඇතුල් වන්න" },
+      { title: "Apparel Bank — ඇතුල් වන්න | Sign In" },
       {
         name: "description",
-        content: "Sign in to your FactoryPass account.",
+        content: "Apparel Bank ගිණුමට ඇතුල් වන්න.",
       },
     ],
   }),
@@ -18,130 +20,120 @@ const inputClass =
   "w-full rounded-2xl border-2 border-border bg-card px-4 py-3.5 text-lg font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/20";
 
 function SignInPage() {
+  const { isSi } = useLanguage();
+
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-background px-4 py-8">
-      <div className="w-full max-w-md">
-        <div className="rounded-3xl bg-card p-7 sm:p-9 ring-1 ring-border shadow-sm">
-          {/* Back link */}
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
-          >
-            <span>‹</span>
-            <span>Back</span>
-            <span lang="si" className="font-[family-name:var(--font-sinhala)]">
-              / ආපසු
-            </span>
-          </Link>
+    <div className="min-h-screen flex flex-col bg-[#F3F6FA]">
+      <AppHeader />
 
-          {/* Heading */}
-          <div className="mt-5">
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-              Sign In
-              <span className="block font-[family-name:var(--font-sinhala)] text-xl sm:text-2xl font-semibold text-primary-deep mt-0.5">
-                ඇතුල් වන්න
-              </span>
-            </h1>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              Enter your mobile number and password
-            </p>
-            <p
-              lang="si"
-              className="font-[family-name:var(--font-sinhala)] text-sm text-muted-foreground"
-            >
-              දුරකථන අංකය සහ මුරපදය ඇතුළත් කරන්න
-            </p>
-          </div>
-
-          {/* Form */}
-          <form className="mt-6 flex flex-col gap-4.5" onSubmit={(e) => e.preventDefault()}>
-            {/* Field 1: Phone */}
-            <div>
-              <label htmlFor="s-phone" className="mb-1.5 block cursor-pointer">
-                <span className="font-display text-base font-bold text-foreground">
-                  Mobile Number
-                </span>
-                <span
-                  lang="si"
-                  className="ml-2 font-[family-name:var(--font-sinhala)] text-sm font-semibold text-primary-deep"
-                >
-                  / ජංගම දුරකථන අංකය
-                </span>
-              </label>
-              <input
-                id="s-phone"
-                type="tel"
-                inputMode="tel"
-                placeholder="077 123 4567"
-                autoComplete="tel"
-                className={inputClass}
-              />
+      <main className="flex-1 flex items-center justify-center px-4 py-8 sm:py-10">
+        <div className="w-full max-w-md">
+          <div className="rounded-[2.2rem] bg-white p-7 sm:p-9 shadow-sm ring-1 ring-slate-200/80">
+            {/* Back link */}
+            <div className="border-b border-slate-100 pb-4">
+              <Link
+                to="/"
+                className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
+              >
+                <span>‹</span>
+                <span>{isSi ? "මුල් පිටුවට" : "Back to Home"}</span>
+              </Link>
             </div>
 
-            {/* Field 2: Password */}
-            <div>
-              <label htmlFor="s-pass" className="mb-1.5 block cursor-pointer">
-                <span className="font-display text-base font-bold text-foreground">
-                  Password
-                </span>
-                <span
-                  lang="si"
-                  className="ml-2 font-[family-name:var(--font-sinhala)] text-sm font-semibold text-primary-deep"
-                >
-                  / මුරපදය
-                </span>
-              </label>
-              <input
-                id="s-pass"
-                type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                className={inputClass}
-              />
+            {/* Heading */}
+            <div className="mt-5">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+                {isSi ? "ඇතුල් වන්න" : "Sign In"}
+              </h1>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                {isSi
+                  ? "දුරකථන අංකය සහ මුරපදය ඇතුළත් කරන්න"
+                  : "Enter your mobile number and password to sign in"}
+              </p>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="mt-2 flex h-13 sm:h-14 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 text-cream transition-all hover:bg-primary-deep active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
-            >
-              <span className="font-display text-lg font-bold">Continue</span>
-              <span
-                lang="si"
-                className="font-[family-name:var(--font-sinhala)] text-base font-semibold opacity-95"
-              >
-                (ඉදිරියට)
-              </span>
-              <ArrowRight className="size-5 stroke-[2.5]" />
-            </button>
-          </form>
+            {/* Form */}
+            <form className="mt-6 flex flex-col gap-4.5" onSubmit={(e) => e.preventDefault()}>
+              {/* Field 1: Phone */}
+              <div>
+                <label htmlFor="s-phone" className="mb-1.5 block cursor-pointer">
+                  <span className="font-display text-base font-bold text-foreground">
+                    {isSi ? "ජංගම දුරකථන අංකය (Mobile Number)" : "Mobile Number"}
+                  </span>
+                </label>
+                <input
+                  id="s-phone"
+                  type="tel"
+                  inputMode="tel"
+                  placeholder="077 123 4567"
+                  autoComplete="tel"
+                  className={inputClass}
+                />
+              </div>
 
-          {/* Switch to Sign Up */}
-          <div className="mt-6 border-t border-border pt-4 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link
-                to="/signup"
-                className="font-bold text-primary-deep hover:underline"
+              {/* Field 2: Password */}
+              <div>
+                <label htmlFor="s-pass" className="mb-1.5 block cursor-pointer">
+                  <span className="font-display text-base font-bold text-foreground">
+                    {isSi ? "මුරපදය (Password)" : "Password"}
+                  </span>
+                </label>
+                <input
+                  id="s-pass"
+                  type="password"
+                  placeholder="••••••••"
+                  autoComplete="current-password"
+                  className={inputClass}
+                />
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold"
               >
-                Sign up
-              </Link>
-            </p>
-            <p
-              lang="si"
-              className="mt-0.5 font-[family-name:var(--font-sinhala)] text-sm text-muted-foreground"
-            >
-              ගිණුමක් නැද්ද?{" "}
-              <Link
-                to="/signup"
-                className="font-bold text-primary-deep hover:underline"
-              >
-                නව ගිණුමක් සාදන්න
-              </Link>
-            </p>
+                <span className="font-display text-lg font-bold">Continue</span>
+                {isSi && (
+                  <span
+                    lang="si"
+                    className="font-[family-name:var(--font-sinhala)] text-base font-semibold opacity-95"
+                  >
+                    (ඉදිරියට)
+                  </span>
+                )}
+                <ArrowRight className="size-5 stroke-[2.5]" />
+              </button>
+            </form>
+
+            {/* Switch to Sign Up */}
+            <div className="mt-6 border-t border-slate-100 pt-4 text-center">
+              <p className="text-sm text-muted-foreground">
+                {isSi ? (
+                  <>
+                    ගිණුමක් නැද්ද?{" "}
+                    <Link
+                      to="/signup"
+                      className="font-bold text-primary hover:underline"
+                    >
+                      නව ගිණුමක් සාදන්න
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    Don't have an account?{" "}
+                    <Link
+                      to="/signup"
+                      className="font-bold text-primary hover:underline"
+                    >
+                      Create Account
+                    </Link>
+                  </>
+                )}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </main>
+    </div>
   );
 }
