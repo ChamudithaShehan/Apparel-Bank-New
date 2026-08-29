@@ -1,21 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Home, CheckCircle2, RotateCcw, Calendar, Users, Package } from "lucide-react";
 import { useState } from "react";
-import { useLanguage } from "../lib/language-context";
-import { AppHeader } from "../components/AppHeader";
-
-export const Route = createFileRoute("/signup")({
-  head: () => ({
-    meta: [
-      { title: "Apparel Bank — සැපයුම්කරු ලියාපදිංචිය | Supplier Registration" },
-      {
-        name: "description",
-        content: "Apparel Bank සැපයුම්කරු ලියාපදිංචිය. පහසු පියවර 3ක් පමණි.",
-      },
-    ],
-  }),
-  component: SignUpPage,
-});
+import { useLanguage } from "@/lib/language-context";
+import { AppHeader } from "@/components/AppHeader";
 
 const inputClass =
   "w-full rounded-2xl border-2 border-border bg-card px-4 py-3.5 text-lg font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/20";
@@ -76,7 +66,7 @@ const moqOptions = [
   { id: "500plus", labelSi: "කෑලි 500ට වැඩි", labelEn: "500+ Pieces", subSi: "තොග ඇණවුම්", subEn: "Bulk Orders" },
 ];
 
-function SignUpPage() {
+export default function SignUpPage() {
   const { isSi } = useLanguage();
 
   // Multi-step form state: 1 (Basic Info), 2 (Garment Categories), 3 (Years in Operation), 4 (Workforce), 5 (MOQ), 6 (Success Screen)
@@ -143,7 +133,7 @@ function SignUpPage() {
               {/* Back to Home & Step indicator */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <Link
-                  to="/"
+                  href="/"
                   className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
                 >
                   <span>‹</span>
@@ -270,7 +260,7 @@ function SignUpPage() {
                     <>
                       දැනටමත් ලියාපදිංචි වී තිබේද?{" "}
                       <Link
-                        to="/signin"
+                        href="/signin"
                         className="font-bold text-primary hover:underline"
                       >
                         ඇතුල් වන්න
@@ -280,7 +270,7 @@ function SignUpPage() {
                     <>
                       Already registered?{" "}
                       <Link
-                        to="/signin"
+                        href="/signin"
                         className="font-bold text-primary hover:underline"
                       >
                         Sign In
@@ -305,8 +295,8 @@ function SignUpPage() {
                   <span>‹</span>
                   <span>{isSi ? "පෙර පියවර" : "Back to Step 1"}</span>
                 </button>
-                <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                  {isSi ? "පියවර 2 / 3" : "Step 2 of 3"}
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
+                  {isSi ? "පියවර 2 / 5" : "Step 2 of 5"}
                 </span>
               </div>
 
@@ -341,11 +331,12 @@ function SignUpPage() {
                       >
                         {/* Real Garment Photo */}
                         <div className="relative aspect-square w-full overflow-hidden bg-slate-100">
-                          <img
+                          <Image
                             src={cat.image}
                             alt={cat.nameEn}
-                            className="size-full object-cover transition-transform duration-200 group-hover:scale-105"
-                            loading="lazy"
+                            fill
+                            className="object-cover transition-transform duration-200 group-hover:scale-105"
+                            sizes="(max-width: 640px) 50vw, 250px"
                           />
                           {/* Selection badge overlay */}
                           <div
@@ -766,7 +757,7 @@ function SignUpPage() {
 
               <div className="mt-7 flex flex-col gap-3">
                 <Link
-                  to="/"
+                  href="/"
                   className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-6 text-white font-bold transition-all hover:bg-[#020333]/90 shadow-sm"
                 >
                   <Home className="size-4.5" />

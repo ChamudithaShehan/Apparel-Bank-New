@@ -1,22 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { ArrowRight, Check, Clock, FileText, ShieldCheck, PhoneCall } from "lucide-react";
-import { useLanguage } from "../lib/language-context";
-import { AppHeader } from "../components/AppHeader";
+import { useLanguage } from "@/lib/language-context";
+import { AppHeader } from "@/components/AppHeader";
 
-export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Apparel Bank — සැපයුම්කරු ලියාපදිංචිය | Supplier Registration" },
-      {
-        name: "description",
-        content: "විනාඩි 2ක් විතරයි ගතවෙන්නේ. ලියන්න ඕන දේ ටිකයි — වැඩිය අකුරු ටයිප් කරන්න ඕන නෑ. සම්පූර්ණයෙන්ම නොමිලේ.",
-      },
-    ],
-  }),
-  component: WelcomePage,
-});
-
-function WelcomePage() {
+export default function WelcomePage() {
   const { isSi } = useLanguage();
 
   return (
@@ -97,7 +86,7 @@ function WelcomePage() {
               {/* Action Button */}
               <div className="mt-6 w-full">
                 <Link
-                  to="/signup"
+                  href="/signup"
                   className="flex h-13.5 sm:h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-6 text-white font-bold transition-all hover:bg-[#020333]/90 active:scale-[0.99] shadow-sm"
                 >
                   <span className="font-display text-lg font-bold">Continue</span>
@@ -119,7 +108,7 @@ function WelcomePage() {
                       <>
                         දැනටමත් ගිණුමක් තිබේද?{" "}
                         <Link
-                          to="/signin"
+                          href="/signin"
                           className="font-bold text-primary hover:underline"
                         >
                           ඇතුල් වන්න
@@ -129,7 +118,7 @@ function WelcomePage() {
                       <>
                         Already have an account?{" "}
                         <Link
-                          to="/signin"
+                          href="/signin"
                           className="font-bold text-primary hover:underline"
                         >
                           Sign In

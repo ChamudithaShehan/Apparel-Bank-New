@@ -1,3 +1,5 @@
+"use client";
+
 import { useLanguage } from "../lib/language-context";
 
 export function LanguageSelector({ className = "" }: { className?: string }) {

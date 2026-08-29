@@ -1,25 +1,14 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { useLanguage } from "../lib/language-context";
-import { AppHeader } from "../components/AppHeader";
+"use client";
 
-export const Route = createFileRoute("/signin")({
-  head: () => ({
-    meta: [
-      { title: "Apparel Bank — ඇතුල් වන්න | Sign In" },
-      {
-        name: "description",
-        content: "Apparel Bank ගිණුමට ඇතුල් වන්න.",
-      },
-    ],
-  }),
-  component: SignInPage,
-});
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { useLanguage } from "@/lib/language-context";
+import { AppHeader } from "@/components/AppHeader";
 
 const inputClass =
   "w-full rounded-2xl border-2 border-border bg-card px-4 py-3.5 text-lg font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/20";
 
-function SignInPage() {
+export default function SignInPage() {
   const { isSi } = useLanguage();
 
   return (
@@ -32,7 +21,7 @@ function SignInPage() {
             {/* Back link */}
             <div className="border-b border-slate-100 pb-4">
               <Link
-                to="/"
+                href="/"
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
               >
                 <span>‹</span>
@@ -112,7 +101,7 @@ function SignInPage() {
                   <>
                     ගිණුමක් නැද්ද?{" "}
                     <Link
-                      to="/signup"
+                      href="/signup"
                       className="font-bold text-primary hover:underline"
                     >
                       නව ගිණුමක් සාදන්න
@@ -120,9 +109,9 @@ function SignInPage() {
                   </>
                 ) : (
                   <>
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link
-                      to="/signup"
+                      href="/signup"
                       className="font-bold text-primary hover:underline"
                     >
                       Create Account

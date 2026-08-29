@@ -1,4 +1,6 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
 import { Home } from "lucide-react";
 import { useLanguage } from "../lib/language-context";
 
@@ -9,7 +11,7 @@ export function AppHeader() {
     <header className="sticky top-0 z-50 w-full bg-[#080B1E] px-4 py-3 sm:px-6 shadow-md border-b border-white/5">
       <div className="mx-auto flex max-w-2xl items-center justify-between">
         {/* Left: App Logo + Titles */}
-        <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+        <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-b from-[#2948FF] to-[#172ED6] shadow-md shadow-blue-950/50 ring-1 ring-white/15">
             <Home className="size-5.5 text-white" strokeWidth={2.2} />
           </div>

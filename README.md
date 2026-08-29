@@ -1,15 +1,96 @@
-# Simple Sign-Up
+# Apparel Bank — Supplier Registration
 
-I need to make a design. First, it should ask whether you want to sign in or not. When you click on sign up, you need a form. In the first step, you need to enter BUSINESS / FACTORY NAME, CONTACT PERSON / MANAGER, PRIMARY MOBILE NUMBER, and finally enter the password. That's all you need. This should be as simple as possible. Why do people aged 60+ use this? That's why don't make the letters so small. Please make me the UI for this.
+A bilingual (Sinhala / English) multi-step supplier registration web application designed with high accessibility, simplicity, and clear visual cues for garment factory owners and suppliers.
 
+---
 
-## Development
+## ✨ Features
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+- **🌐 Instant Bilingual Toggle**: Seamlessly switch between Sinhala (`සිං`) and English (`EN`) at any point. Language preference is persisted across pages and reloads.
+- **👴 Senior & User-Friendly Design**: High-contrast elements, large typography (`Quicksand`, `Nunito`, `Noto Sans Sinhala`), large tap-friendly buttons, and visual cards.
+- **📝 5-Step Registration Wizard**:
+  1. **Step 1 — Basic Information**: Business Name, User Name, Primary Mobile Number, and Password.
+  2. **Step 2 — Garment Categories**: Visual cards with real photos to select manufactured garment types (T-Shirts, Shirts, Trousers, Dresses).
+  3. **Step 3 — Years in Operation**: Single-tap options for business experience (<1, 1-5, 5-10, 10+ years).
+  4. **Step 4 — Workforce / Team Size**: Selectable team tiers (1-10, 11-50, 51-200, 200+ employees).
+  5. **Step 5 — Minimum Order Quantity (MOQ)**: Order thresholds (1-50, 51-200, 201-500, 500+ pieces).
+  6. **Confirmation Summary**: Consolidated review card with quick options to register another supplier or return to home.
+- **🔐 Simple Sign-In**: Clean sign-in page with localized helpers.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **UI Library**: [React 19](https://react.dev/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Fonts**: `next/font/google` (`Noto Sans Sinhala`, `Quicksand`, `Nunito`)
+
+---
+
+## 📁 Project Structure
+
+```
+├── public/
+│   ├── favicon.ico
+│   └── images/categories/     # Real category photo assets
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx         # Root layout with fonts & LanguageProvider
+│   │   ├── page.tsx           # Home / Welcome page
+│   │   ├── signin/
+│   │   │   └── page.tsx       # Sign In page
+│   │   └── signup/
+│   │       └── page.tsx       # 5-step Supplier Registration wizard
+│   ├── components/
+│   │   ├── AppHeader.tsx      # Global navy header with branding & language toggle
+│   │   ├── LanguageSelector.tsx # Pill-based language switch component
+│   │   └── ui/                # Reusable UI components
+│   ├── lib/
+│   │   ├── language-context.tsx # Global language state & localStorage persistence
+│   │   └── utils.ts           # Class merging utilities (clsx / tailwind-merge)
+│   └── styles.css             # Tailwind CSS v4 design tokens & theme
+├── next.config.ts             # Next.js configuration
+├── postcss.config.mjs         # PostCSS configuration
+└── tsconfig.json              # TypeScript configuration
+```
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have **Node.js** (v18.17+ or v20+) installed.
+
+### Installation
+
+1. Clone the repository:
+   ```sh
+   git clone <repository-url>
+   cd simple-sign-up-main
+   ```
+
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+3. Run the development server:
+   ```sh
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## 📦 Production Build
+
+To build and run the optimized production version:
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+npm run build
+npm run start
 ```
