@@ -41,9 +41,13 @@ export default function RootLayout({
   return (
     <html
       lang="si"
+      suppressHydrationWarning
       className={`${quicksand.variable} ${nunito.variable} ${notoSansSinhala.variable}`}
     >
-      <body className="antialiased bg-[#F3F6FA] text-foreground min-h-screen">
+      <body
+        suppressHydrationWarning
+        className="antialiased bg-[#F3F6FA] text-foreground min-h-screen"
+      >
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

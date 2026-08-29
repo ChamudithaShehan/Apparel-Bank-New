@@ -75,11 +75,11 @@ export default function WelcomePage() {
 
               {/* Free Registration Badge */}
               <div className="mt-5 flex w-full items-center justify-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/40 py-3 px-5 shadow-xs">
-                <div className="flex size-6 items-center justify-center rounded-full border-2 border-emerald-500 text-emerald-500 bg-white">
+                <div className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 text-emerald-500 bg-white">
                   <Check className="size-3.5 stroke-[3]" />
                 </div>
-                <span className="font-[family-name:var(--font-sinhala)] text-base sm:text-lg font-bold text-[#0B122F]">
-                  {isSi ? "සම්පූර්ණයෙන්ම නොමිලේ ලියාපදිංචිය" : "Completely Free Registration"}
+                <span className="font-[family-name:var(--font-sinhala)] text-base sm:text-lg font-bold text-[#0B122F] text-center">
+                  {isSi ? "ලියාපදිංචිය සම්පූර්ණයෙන්ම නොමිලේ" : "Registration is 100% Free"}
                 </span>
               </div>
 
