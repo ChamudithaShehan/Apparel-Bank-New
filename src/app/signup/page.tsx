@@ -80,14 +80,13 @@ export default function SignUpPage() {
   const { isSi } = useLanguage();
 
   // Multi-step form state: 1 (Account Info), 2 (Business Name), 3 (Categories), 4 (Years), 5 (Workforce), 6 (MOQ), 7 (Success)
-  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6 | 7>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5 | 6>(1);
 
   // Form state
   const [businessName, setBusinessName] = useState("");
   const [userName, setUserName] = useState("");
   const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [yearsInOperation, setYearsInOperation] = useState<string>("1-5");
+    const [yearsInOperation, setYearsInOperation] = useState<string>("1-5");
   const [workforce, setWorkforce] = useState<string>("1-10");
   const [moq, setMoq] = useState<string>("51-200");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
@@ -130,12 +129,6 @@ export default function SignUpPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleStep6Submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(7);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <div className="min-h-screen flex flex-col bg-[#F3F6FA]">
       <AppHeader />
@@ -156,7 +149,7 @@ export default function SignUpPage() {
                   <span>{isSi ? "මුල් පිටුවට" : "Back to Home"}</span>
                 </Link>
                 <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                  {isSi ? "පියවර 1 / 6" : "Step 1 of 6"}
+                  {isSi ? "පියවර 1 / 5" : "Step 1 of 5"}
                 </span>
               </div>
 
@@ -174,6 +167,59 @@ export default function SignUpPage() {
 
               {/* Step 1 Form */}
               <form className="mt-6 flex flex-col gap-4.5" onSubmit={handleStep1Submit}>
+                {/* Field: Garment Categories */}
+                <div>
+                  <label className="mb-2 block">
+                    <span className="font-display text-base font-bold text-foreground">
+                      {isSi ? "නිෂ්පාදනය කරන ඇඳුම් වර්ග" : "Garment Categories Manufactured"}
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
+                    {garmentCategories.map((cat) => {
+                      const isSelected = selectedCategories.includes(cat.id);
+                      return (
+                        <button
+                          key={cat.id}
+                          type="button"
+                          onClick={() => toggleCategory(cat.id)}
+                          className={`group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all duration-150 active:scale-[0.98] ${
+                            isSelected
+                              ? "border-primary bg-primary/5 ring-2 ring-primary/25 shadow-sm"
+                              : "border-slate-200 bg-card hover:border-slate-300 hover:shadow-xs"
+                          }`}
+                        >
+                          <div className="relative aspect-square w-full overflow-hidden bg-slate-100">
+                            <Image
+                              src={cat.image}
+                              alt={cat.nameEn}
+                              fill
+                              className="object-cover transition-transform duration-200 group-hover:scale-105"
+                              sizes="(max-width: 640px) 50vw, 250px"
+                            />
+                            <div
+                              className={`absolute top-2 right-2 flex size-7 items-center justify-center rounded-full transition-all ${
+                                isSelected
+                                  ? "bg-primary text-white shadow-md scale-100"
+                                  : "bg-black/35 text-white/80 scale-90 opacity-0 group-hover:opacity-100"
+                              }`}
+                            >
+                              <Check className="size-4 stroke-[3]" />
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <h3 className="font-[family-name:var(--font-sinhala)] text-base font-bold text-foreground leading-tight">
+                              {isSi ? cat.nameSi : cat.nameEn}
+                            </h3>
+                            <p className="text-xs text-muted-foreground mt-0.5">
+                              {isSi ? cat.descSi : cat.descEn}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
                 {/* Field 1: User Name */}
                 <div>
                   <label htmlFor="f-person" className="mb-1.5 block cursor-pointer">
@@ -213,29 +259,11 @@ export default function SignUpPage() {
                   />
                 </div>
 
-                {/* Field 3: Password */}
-                <div>
-                  <label htmlFor="f-pass" className="mb-1.5 block cursor-pointer">
-                    <span className="font-display text-base font-bold text-foreground">
-                      {isSi ? "මුරපදය (Password)" : "Password"}
-                    </span>
-                  </label>
-                  <input
-                    id="f-pass"
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    autoComplete="new-password"
-                    className={inputClass}
-                  />
-                </div>
-
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold"
+                  disabled={selectedCategories.length === 0}
+                  className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span className="font-display text-lg font-bold">Continue</span>
                   {isSi && (
@@ -293,7 +321,7 @@ export default function SignUpPage() {
                   <span>{isSi ? "පෙර පියවර" : "Back to Step 1"}</span>
                 </button>
                 <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
-                  {isSi ? "පියවර 2 / 6" : "Step 2 of 6"}
+                  {isSi ? "පියවර 2 / 5" : "Step 2 of 5"}
                 </span>
               </div>
 
@@ -353,7 +381,7 @@ export default function SignUpPage() {
             </div>
           )}
 
-          {/* ================= STEP 3: Garment Categories (Form 3) ================= */}
+          {/* ================= STEP 3: Years in Operation (Form 3) ================= */}
           {step === 3 && (
             <div className="rounded-[2.2rem] bg-white p-7 sm:p-9 shadow-sm ring-1 ring-slate-200/80">
               {/* Back to Step 2 & Step indicator */}
@@ -367,110 +395,7 @@ export default function SignUpPage() {
                   <span>{isSi ? "පෙර පියවර" : "Back to Step 2"}</span>
                 </button>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  {isSi ? "පියවර 3 / 6" : "Step 3 of 6"}
-                </span>
-              </div>
-
-              {/* Heading */}
-              <div className="mt-5">
-                <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-                  {isSi ? "නිෂ්පාදනය කරන ඇඳුම් වර්ග" : "Garment Categories Manufactured"}
-                </h1>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {isSi
-                    ? "ඔබේ ආයතනයෙන් නිෂ්පාදනය කරන ඇඳුම් වර්ග තෝරන්න (එකකට වඩා තෝරාගත හැක)"
-                    : "Select the garment categories manufactured by your factory"}
-                </p>
-              </div>
-
-              {/* Step 3 Form */}
-              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep3Submit}>
-                {/* 2x2 Grid of visual cards with real photos */}
-                <div className="grid grid-cols-2 gap-3.5 sm:gap-4">
-                  {garmentCategories.map((cat) => {
-                    const isSelected = selectedCategories.includes(cat.id);
-                    return (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => toggleCategory(cat.id)}
-                        className={`group relative flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all duration-150 active:scale-[0.98] ${
-                          isSelected
-                            ? "border-primary bg-primary/5 ring-2 ring-primary/25 shadow-sm"
-                            : "border-slate-200 bg-card hover:border-slate-300 hover:shadow-xs"
-                        }`}
-                      >
-                        {/* Real Garment Photo */}
-                        <div className="relative aspect-square w-full overflow-hidden bg-slate-100">
-                          <Image
-                            src={cat.image}
-                            alt={cat.nameEn}
-                            fill
-                            className="object-cover transition-transform duration-200 group-hover:scale-105"
-                            sizes="(max-width: 640px) 50vw, 250px"
-                          />
-                          {/* Selection badge overlay */}
-                          <div
-                            className={`absolute top-2 right-2 flex size-7 items-center justify-center rounded-full transition-all ${
-                              isSelected
-                                ? "bg-primary text-white shadow-md scale-100"
-                                : "bg-black/35 text-white/80 scale-90 opacity-0 group-hover:opacity-100"
-                            }`}
-                          >
-                            <Check className="size-4 stroke-[3]" />
-                          </div>
-                        </div>
-
-                        {/* Category Title & Details */}
-                        <div className="p-3">
-                          <h3 className="font-[family-name:var(--font-sinhala)] text-base font-bold text-foreground leading-tight">
-                            {isSi ? cat.nameSi : cat.nameEn}
-                          </h3>
-                          <p className="text-xs text-muted-foreground mt-0.5">
-                            {isSi ? cat.descSi : cat.descEn}
-                          </p>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Continue to Step 4 Button */}
-                <button
-                  type="submit"
-                  disabled={selectedCategories.length === 0}
-                  className="mt-2 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <span className="font-display text-lg font-bold">Continue</span>
-                  {isSi && (
-                    <span
-                      lang="si"
-                      className="font-[family-name:var(--font-sinhala)] text-base font-semibold opacity-95"
-                    >
-                      (ඉදිරියට)
-                    </span>
-                  )}
-                  <ArrowRight className="size-5 stroke-[2.5]" />
-                </button>
-              </form>
-            </div>
-          )}
-
-          {/* ================= STEP 4: Years in Operation (Form 4) ================= */}
-          {step === 4 && (
-            <div className="rounded-[2.2rem] bg-white p-7 sm:p-9 shadow-sm ring-1 ring-slate-200/80">
-              {/* Back to Step 3 & Step indicator */}
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                <button
-                  type="button"
-                  onClick={() => setStep(3)}
-                  className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
-                >
-                  <span>‹</span>
-                  <span>{isSi ? "පෙර පියවර" : "Back to Step 3"}</span>
-                </button>
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  {isSi ? "පියවර 4 / 6" : "Step 4 of 6"}
+                  {isSi ? "පියවර 3 / 5" : "Step 3 of 5"}
                 </span>
               </div>
 
@@ -490,7 +415,7 @@ export default function SignUpPage() {
               </div>
 
               {/* Step 4 Form */}
-              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep4Submit}>
+              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep3Submit}>
                 {/* Selectable Cards for Years in Operation */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {yearsOptions.map((opt) => {
@@ -548,21 +473,21 @@ export default function SignUpPage() {
             </div>
           )}
 
-          {/* ================= STEP 5: Workforce / Team Size (Form 5) ================= */}
-          {step === 5 && (
+          {/* ================= STEP 4: Workforce / Team Size (Form 4) ================= */}
+          {step === 4 && (
             <div className="rounded-[2.2rem] bg-white p-7 sm:p-9 shadow-sm ring-1 ring-slate-200/80">
-              {/* Back to Step 4 & Step indicator */}
+              {/* Back to Step 3 & Step indicator */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <button
                   type="button"
-                  onClick={() => setStep(4)}
+                  onClick={() => setStep(3)}
                   className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
                 >
                   <span>‹</span>
-                  <span>{isSi ? "පෙර පියවර" : "Back to Step 4"}</span>
+                  <span>{isSi ? "පෙර පියවර" : "Back to Step 3"}</span>
                 </button>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  {isSi ? "පියවර 5 / 6" : "Step 5 of 6"}
+                  {isSi ? "පියවර 4 / 5" : "Step 4 of 5"}
                 </span>
               </div>
 
@@ -582,7 +507,7 @@ export default function SignUpPage() {
               </div>
 
               {/* Step 5 Form */}
-              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep5Submit}>
+              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep4Submit}>
                 {/* Selectable Cards for Workforce */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {workforceOptions.map((opt) => {
@@ -640,21 +565,21 @@ export default function SignUpPage() {
             </div>
           )}
 
-          {/* ================= STEP 6: Minimum Order Quantity (Form 6) ================= */}
-          {step === 6 && (
+          {/* ================= STEP 5: Minimum Order Quantity (Form 5) ================= */}
+          {step === 5 && (
             <div className="rounded-[2.2rem] bg-white p-7 sm:p-9 shadow-sm ring-1 ring-slate-200/80">
-              {/* Back to Step 5 & Step indicator */}
+              {/* Back to Step 4 & Step indicator */}
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                 <button
                   type="button"
-                  onClick={() => setStep(5)}
+                  onClick={() => setStep(4)}
                   className="inline-flex items-center gap-1.5 text-sm font-bold text-primary-deep hover:underline"
                 >
                   <span>‹</span>
-                  <span>{isSi ? "පෙර පියවර" : "Back to Step 5"}</span>
+                  <span>{isSi ? "පෙර පියවර" : "Back to Step 4"}</span>
                 </button>
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-                  {isSi ? "පියවර 6 / 6" : "Step 6 of 6"}
+                  {isSi ? "පියවර 5 / 5" : "Step 5 of 5"}
                 </span>
               </div>
 
@@ -674,7 +599,7 @@ export default function SignUpPage() {
               </div>
 
               {/* Step 6 Form */}
-              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep6Submit}>
+              <form className="mt-6 flex flex-col gap-6" onSubmit={handleStep5Submit}>
                 {/* Selectable Cards for MOQ */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {moqOptions.map((opt) => {
@@ -734,8 +659,8 @@ export default function SignUpPage() {
             </div>
           )}
 
-          {/* ================= STEP 7: Success Confirmation ================= */}
-          {step === 7 && (
+          {/* ================= STEP 6: Success Confirmation ================= */}
+          {step === 6 && (
             <div className="rounded-[2.2rem] bg-white p-7 sm:p-10 shadow-sm ring-1 ring-slate-200/80 text-center">
               <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/50">
                 <CheckCircle2 className="size-12 stroke-[2.5]" />
@@ -842,7 +767,6 @@ export default function SignUpPage() {
                     setBusinessName("");
                     setUserName("");
                     setPhone("");
-                    setPassword("");
                     setYearsInOperation("1-5");
                     setWorkforce("1-10");
                     setMoq("51-200");
