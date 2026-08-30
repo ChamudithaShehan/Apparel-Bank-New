@@ -12,10 +12,15 @@ import {
   Users,
   Package,
   Building2,
+  Sparkles,
+  Star,
+  ShieldCheck,
+  Clock,
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "@/lib/language-context";
 import { AppHeader } from "@/components/AppHeader";
+import { addRegistration, setCurrentUser } from "@/lib/registrations";
 
 const inputClass =
   "w-full rounded-2xl border-2 border-border bg-card px-4 py-3.5 text-lg font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/20";
@@ -92,6 +97,7 @@ export default function SignUpPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
     "tshirt",
   ]);
+  const [registeredId, setRegisteredId] = useState<string>("");
 
   const toggleCategory = (id: string) => {
     setSelectedCategories((prev) =>
@@ -125,6 +131,17 @@ export default function SignUpPage() {
 
   const handleStep5Submit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newReg = addRegistration({
+      businessName: businessName.trim() || "My Business",
+      userName: userName.trim() || "Supplier",
+      phone: phone.trim() || "0770000000",
+      yearsInOperation,
+      workforce,
+      moq,
+      selectedCategories,
+    });
+    setCurrentUser(newReg);
+    setRegisteredId(newReg.id);
     setStep(6);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -751,12 +768,112 @@ export default function SignUpPage() {
                 </div>
               </div>
 
+              {/* Auto-Generated Fiverr-Style Manufacturing Gig Showcase */}
+              <div className="mt-6 rounded-3xl bg-slate-900 text-white p-5 sm:p-6 text-left shadow-lg space-y-4">
+                <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="size-5 text-emerald-400" />
+                    <div>
+                      <h3 className="text-sm sm:text-base font-extrabold text-white">
+                        {isSi
+                          ? "ඔබගේ සේවා දැන්වීම (Fiverr Style Gig) සූදානම්!"
+                          : "Your Manufacturing Gig Has Been Auto-Created!"}
+                      </h3>
+                      <p className="text-[11px] text-slate-400 font-medium">
+                        {isSi
+                          ? "ඔබ ඇතුළත් කළ තොරතුරු අනුව ස්වයංක්‍රීයව සකස් වූ සේවා කාඩ්පත"
+                          : "Auto-generated factory service listing ready for clothing buyers"}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-black px-2.5 py-1 border border-amber-400/30">
+                    Pending Admin Sign-off
+                  </span>
+                </div>
+
+                {/* Gig Card Preview */}
+                <div className="rounded-2xl bg-white text-slate-900 p-4 border border-slate-200 shadow-sm space-y-3">
+                  <div className="relative h-36 w-full rounded-xl overflow-hidden bg-slate-100">
+                    <Image
+                      src={
+                        selectedCategories.includes("shirt")
+                          ? "/images/categories/shirt.jpg"
+                          : selectedCategories.includes("dresses")
+                          ? "/images/categories/dresses.jpg"
+                          : selectedCategories.includes("trousers")
+                          ? "/images/categories/trousers.jpg"
+                          : "/images/categories/tshirt.jpg"
+                      }
+                      alt="Gig preview"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">
+                      ✨ Auto-Generated Gig
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex size-6 items-center justify-center rounded-full bg-[#020333] text-[10px] font-bold text-white">
+                        {(userName || "SP").slice(0, 2).toUpperCase()}
+                      </div>
+                      <p className="text-xs font-black text-slate-900 truncate">
+                        {businessName || "Your Garment Factory"}
+                      </p>
+                    </div>
+
+                    <h4 className="text-xs sm:text-sm font-extrabold text-slate-900 mt-1 line-clamp-2">
+                      I will manufacture custom{" "}
+                      {selectedCategories
+                        .map((c) => garmentCategories.find((g) => g.id === c)?.nameEn)
+                        .filter(Boolean)
+                        .join(" & ") || "Apparel"}{" "}
+                      for clothing brands
+                    </h4>
+
+                    <div className="flex items-center gap-1.5 text-xs text-amber-500 font-bold mt-1">
+                      <Star className="size-3 fill-amber-500" />
+                      <span>4.9 (New Factory)</span>
+                      <span className="text-slate-300">•</span>
+                      <span className="text-slate-500 text-[11px] font-semibold">
+                        MOQ: {moqOptions.find((m) => m.id === moq)?.labelEn}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-2 flex items-center justify-between text-xs">
+                    <span className="text-slate-400 font-bold uppercase text-[10px]">Starting at</span>
+                    <span className="font-black text-slate-900">
+                      {selectedCategories.includes("tshirt") ? "LKR 750" : "LKR 1,200"} / pc
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Success Actions */}
               <div className="mt-7 flex flex-col gap-3">
                 <Link
-                  href="/"
-                  className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-6 text-white font-bold transition-all hover:bg-[#020333]/90 shadow-sm"
+                  href="/dashboard"
+                  className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-6 text-white font-bold text-lg transition-all hover:bg-emerald-700 active:scale-[0.99] shadow-md"
                 >
-                  <Home className="size-4.5" />
+                  <span>{isSi ? "මගේ ගිණුමට පිවිසෙන්න" : "Go to My Dashboard"}</span>
+                  <ArrowRight className="size-5 stroke-[2.5]" />
+                </Link>
+
+                <Link
+                  href={`/gig/${registeredId || "REG-8012"}`}
+                  className="flex h-13 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 px-6 text-white font-bold transition-all hover:bg-blue-700 shadow-sm"
+                >
+                  <Sparkles className="size-4.5" />
+                  <span>{isSi ? "නිර්මාණය වූ සේවා පිටුව බලන්න" : "View Generated Gig Page"}</span>
+                </Link>
+
+                <Link
+                  href="/"
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-6 text-white font-bold transition-all hover:bg-[#020333]/90 shadow-sm text-sm"
+                >
+                  <Home className="size-4" />
                   <span>{isSi ? "මුල් පිටුවට ආපසු" : "Back to Home"}</span>
                 </Link>
 
@@ -771,8 +888,9 @@ export default function SignUpPage() {
                     setWorkforce("1-10");
                     setMoq("51-200");
                     setSelectedCategories(["tshirt"]);
+                    setRegisteredId("");
                   }}
-                  className="inline-flex items-center justify-center gap-1.5 text-sm font-bold text-slate-500 hover:text-slate-800 py-2"
+                  className="inline-flex items-center justify-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-800 py-2 cursor-pointer"
                 >
                   <RotateCcw className="size-3.5" />
                   <span>{isSi ? "තවත් සැපයුම්කරුවෙක් ලියාපදිංචි කරන්න" : "Register another supplier"}</span>

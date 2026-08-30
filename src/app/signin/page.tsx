@@ -1,15 +1,63 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowRight, AlertCircle, Sparkles } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { AppHeader } from "@/components/AppHeader";
+import { findRegistration, setCurrentUser, getRegistrations } from "@/lib/registrations";
 
 const inputClass =
   "w-full rounded-2xl border-2 border-border bg-card px-4 py-3.5 text-lg font-semibold text-foreground outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-primary focus:ring-2 focus:ring-primary/20";
 
 export default function SignInPage() {
   const { isSi } = useLanguage();
+  const router = useRouter();
+
+  const [userName, setUserName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+
+    const trimmedUser = userName.trim();
+    const trimmedPhone = phone.trim();
+
+    if (!trimmedUser || !trimmedPhone) {
+      setErrorMsg(
+        isSi
+          ? "කරුණාකර පරිශීලක නාමය සහ දුරකථන අංකය ඇතුළත් කරන්න."
+          : "Please enter both User Name and Mobile Number."
+      );
+      return;
+    }
+
+    setIsLoading(true);
+
+    const user = findRegistration(trimmedUser, trimmedPhone);
+
+    if (user) {
+      setCurrentUser(user);
+      router.push("/dashboard");
+    } else {
+      setIsLoading(false);
+      setErrorMsg(
+        isSi
+          ? "පරිශීලක නාමය හෝ දුරකථන අංකය සොයාගත නොහැක. කරුණාකර නැවත පරීක්ෂා කරන්න හෝ නව ගිණුමක් සාදන්න."
+          : "No registration found with this User Name and Mobile Number. Please check your details or register first."
+      );
+    }
+  };
+
+  const fillSample = (sampleUser: string, samplePhone: string) => {
+    setUserName(sampleUser);
+    setPhone(samplePhone);
+    setErrorMsg(null);
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F3F6FA]">
@@ -34,15 +82,23 @@ export default function SignInPage() {
               <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                 {isSi ? "ඇතුල් වන්න" : "Sign In"}
               </h1>
-              <p className="mt-1.5 text-sm text-muted-foreground">
+              <p className="mt-1.5 text-base text-muted-foreground">
                 {isSi
                   ? "පරිශීලක නාමය සහ දුරකථන අංකය ඇතුළත් කරන්න"
                   : "Enter your user name and mobile number to sign in"}
               </p>
             </div>
 
+            {/* Error Alert */}
+            {errorMsg && (
+              <div className="mt-4 flex items-start gap-3 rounded-2xl bg-rose-50 p-4 text-rose-800 border border-rose-200">
+                <AlertCircle className="size-5 shrink-0 mt-0.5 text-rose-600" />
+                <p className="text-sm font-semibold">{errorMsg}</p>
+              </div>
+            )}
+
             {/* Form */}
-            <form className="mt-6 flex flex-col gap-4.5" onSubmit={(e) => e.preventDefault()}>
+            <form className="mt-6 flex flex-col gap-4.5" onSubmit={handleSubmit}>
               {/* Field 1: User Name */}
               <div>
                 <label htmlFor="s-username" className="mb-1.5 block cursor-pointer">
@@ -53,8 +109,11 @@ export default function SignInPage() {
                 <input
                   id="s-username"
                   type="text"
-                  placeholder={isSi ? "ඔබේ නම" : "Your name"}
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder={isSi ? "උදා: Sunil Bandara" : "e.g. Sunil Bandara"}
                   autoComplete="username"
+                  required
                   className={inputClass}
                 />
               </div>
@@ -70,8 +129,11 @@ export default function SignInPage() {
                   id="s-phone"
                   type="tel"
                   inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder={isSi ? "උදා: 077 123 4567" : "e.g. 077 123 4567"}
                   autoComplete="tel"
+                  required
                   className={inputClass}
                 />
               </div>
@@ -79,30 +141,62 @@ export default function SignInPage() {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold"
+                disabled={isLoading}
+                className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-[#020333] px-5 text-white transition-all hover:bg-[#020333]/90 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground shadow-sm font-bold text-lg disabled:opacity-70 cursor-pointer"
               >
-                <span className="font-display text-lg font-bold">Continue</span>
-                {isSi && (
-                  <span
-                    lang="si"
-                    className="font-[family-name:var(--font-sinhala)] text-base font-semibold opacity-95"
-                  >
-                    (ඉදිරියට)
-                  </span>
-                )}
-                <ArrowRight className="size-5 stroke-[2.5]" />
+                <span className="font-display font-bold">
+                  {isLoading
+                    ? isSi
+                      ? "පරීක්ෂා කරමින්..."
+                      : "Verifying..."
+                    : isSi
+                    ? "ඇතුල් වන්න (Continue)"
+                    : "Continue"}
+                </span>
+                {!isLoading && <ArrowRight className="size-5 stroke-[2.5]" />}
               </button>
             </form>
 
+            {/* Quick Demo Fill For Convenience */}
+            <div className="mt-6 rounded-2xl bg-blue-50/60 p-3.5 border border-blue-100">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-blue-900 mb-2">
+                <Sparkles className="size-3.5 text-blue-600" />
+                <span>{isSi ? "පරීක්ෂා කිරීම සඳහා නිදසුන් ගිණුම්:" : "Sample accounts to test:"}</span>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => fillSample("Sunil Bandara", "0771234567")}
+                  className="rounded-xl bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-xs border border-slate-200 hover:bg-slate-50 cursor-pointer"
+                >
+                  🟢 Sunil (Approved)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => fillSample("Anula Silva", "0719876543")}
+                  className="rounded-xl bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-xs border border-slate-200 hover:bg-slate-50 cursor-pointer"
+                >
+                  🟡 Anula (Pending)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => fillSample("Nimal Jayasinghe", "0765554321")}
+                  className="rounded-xl bg-white px-2.5 py-1 text-xs font-bold text-slate-700 shadow-xs border border-slate-200 hover:bg-slate-50 cursor-pointer"
+                >
+                  🔴 Nimal (Rejected)
+                </button>
+              </div>
+            </div>
+
             {/* Switch to Sign Up */}
             <div className="mt-6 border-t border-slate-100 pt-4 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 {isSi ? (
                   <>
                     ගිණුමක් නැද්ද?{" "}
                     <Link
                       href="/signup"
-                      className="font-bold text-primary hover:underline"
+                      className="font-bold text-primary hover:underline ml-1 text-primary-deep"
                     >
                       නව ගිණුමක් සාදන්න
                     </Link>
@@ -112,7 +206,7 @@ export default function SignInPage() {
                     Don&apos;t have an account?{" "}
                     <Link
                       href="/signup"
-                      className="font-bold text-primary hover:underline"
+                      className="font-bold text-primary hover:underline ml-1 text-primary-deep"
                     >
                       Create Account
                     </Link>
