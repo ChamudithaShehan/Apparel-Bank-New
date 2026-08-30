@@ -36,14 +36,30 @@ export default function SignInPage() {
               </h1>
               <p className="mt-1.5 text-sm text-muted-foreground">
                 {isSi
-                  ? "දුරකථන අංකය සහ මුරපදය ඇතුළත් කරන්න"
-                  : "Enter your mobile number and password to sign in"}
+                  ? "පරිශීලක නාමය සහ දුරකථන අංකය ඇතුළත් කරන්න"
+                  : "Enter your user name and mobile number to sign in"}
               </p>
             </div>
 
             {/* Form */}
             <form className="mt-6 flex flex-col gap-4.5" onSubmit={(e) => e.preventDefault()}>
-              {/* Field 1: Phone */}
+              {/* Field 1: User Name */}
+              <div>
+                <label htmlFor="s-username" className="mb-1.5 block cursor-pointer">
+                  <span className="font-display text-base font-bold text-foreground">
+                    {isSi ? "පරිශීලක නාමය (User Name)" : "User Name"}
+                  </span>
+                </label>
+                <input
+                  id="s-username"
+                  type="text"
+                  placeholder={isSi ? "ඔබේ නම" : "Your name"}
+                  autoComplete="username"
+                  className={inputClass}
+                />
+              </div>
+
+              {/* Field 2: Mobile Number */}
               <div>
                 <label htmlFor="s-phone" className="mb-1.5 block cursor-pointer">
                   <span className="font-display text-base font-bold text-foreground">
@@ -56,22 +72,6 @@ export default function SignInPage() {
                   inputMode="tel"
                   placeholder={isSi ? "උදා: 077 123 4567" : "e.g. 077 123 4567"}
                   autoComplete="tel"
-                  className={inputClass}
-                />
-              </div>
-
-              {/* Field 2: Password */}
-              <div>
-                <label htmlFor="s-pass" className="mb-1.5 block cursor-pointer">
-                  <span className="font-display text-base font-bold text-foreground">
-                    {isSi ? "මුරපදය (Password)" : "Password"}
-                  </span>
-                </label>
-                <input
-                  id="s-pass"
-                  type="password"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
                   className={inputClass}
                 />
               </div>
