@@ -21,10 +21,22 @@ export interface FactoryBranding {
   websiteOrSocial?: string;
 }
 
+export interface GigProduct {
+  id: string;
+  name: string;
+  category: string;
+  image: string;
+  pricePerUnit: string;
+  moq: string;
+  material?: string;
+  description?: string;
+}
+
 export interface SupplierProfileDetails {
   businessAndLocation?: BusinessAndLocation;
   operationsAndLogistics?: OperationsAndLogistics;
   factoryBranding?: FactoryBranding;
+  products?: GigProduct[];
 }
 
 export interface SupplierRegistration {
@@ -79,6 +91,28 @@ export const INITIAL_REGISTRATIONS: SupplierRegistration[] = [
         tagline: "Premier handloom and casual woven garment manufacturers since 2017.",
         websiteOrSocial: "https://lankaweave.lk",
       },
+      products: [
+        {
+          id: "PROD-01",
+          name: "Premium Linen Long Sleeve Shirt",
+          category: "shirt",
+          image: "/images/categories/shirt.jpg",
+          pricePerUnit: "LKR 1,450",
+          moq: "50 Pcs",
+          material: "100% Organic Linen",
+          description: "Export finish with coconut shell buttons and tailored cuffs.",
+        },
+        {
+          id: "PROD-02",
+          name: "Casual Crewneck Cotton T-Shirt",
+          category: "tshirt",
+          image: "/images/categories/tshirt.jpg",
+          pricePerUnit: "LKR 850",
+          moq: "100 Pcs",
+          material: "180 GSM Single Jersey",
+          description: "Pre-shrunk, bio-washed combed cotton with double needle hem.",
+        },
+      ],
     },
   },
   {
@@ -92,6 +126,20 @@ export const INITIAL_REGISTRATIONS: SupplierRegistration[] = [
     selectedCategories: ["dresses"],
     status: "pending",
     submittedAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+    profileDetails: {
+      products: [
+        {
+          id: "PROD-03",
+          name: "Floral Cotton Summer Dress",
+          category: "dresses",
+          image: "/images/categories/dresses.jpg",
+          pricePerUnit: "LKR 1,650",
+          moq: "30 Pcs",
+          material: "100% Breathable Rayon/Cotton",
+          description: "Comfort fit with flared hem and high-definition floral print.",
+        },
+      ],
+    },
   },
   {
     id: "REG-8014",
@@ -207,6 +255,7 @@ export function updateSupplierProfile(
             ...item.profileDetails?.factoryBranding,
             ...profile.factoryBranding,
           },
+          products: profile.products || item.profileDetails?.products || [],
         },
       };
       updatedSupplier = merged;
@@ -224,6 +273,44 @@ export function updateSupplierProfile(
   }
 
   return updatedSupplier;
+}
+
+// Add a product to a supplier's Gig
+export function addSupplierProduct(
+  supplierId: string,
+  product: Omit<GigProduct, "id">
+): SupplierRegistration | null {
+  const registrations = getRegistrations();
+  const supplier = registrations.find((r) => r.id === supplierId);
+  if (!supplier) return null;
+
+  const currentProducts = supplier.profileDetails?.products || [];
+  const newProduct: GigProduct = {
+    ...product,
+    id: `PROD-${Math.floor(100 + Math.random() * 900)}`,
+  };
+
+  const updatedProducts = [newProduct, ...currentProducts];
+  return updateSupplierProfile(supplierId, {
+    products: updatedProducts,
+  });
+}
+
+// Delete a product from a supplier's Gig
+export function deleteSupplierProduct(
+  supplierId: string,
+  productId: string
+): SupplierRegistration | null {
+  const registrations = getRegistrations();
+  const supplier = registrations.find((r) => r.id === supplierId);
+  if (!supplier) return null;
+
+  const currentProducts = supplier.profileDetails?.products || [];
+  const updatedProducts = currentProducts.filter((p) => p.id !== productId);
+
+  return updateSupplierProfile(supplierId, {
+    products: updatedProducts,
+  });
 }
 
 // Find registration by username and phone

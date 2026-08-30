@@ -141,26 +141,35 @@ export default function SupplierGigDetailPage({
     .slice(0, 3)
     .toUpperCase() || "CSG";
 
-  const portfolioPhotos = [
-    {
-      id: "#1",
-      title: "Premium Linen Shirt Sample",
-      file: "sample-linen-shirt.jpg",
-      src: "/images/categories/shirt.jpg",
-    },
-    {
-      id: "#2",
-      title: "Floral Summer Dress Sample",
-      file: "sample-cotton-dress.jpg",
-      src: "/images/categories/dresses.jpg",
-    },
-    {
-      id: "#3",
-      title: "Workstation & Juki Stitching Line",
-      file: "sample-factory-floor.jpg",
-      src: "/images/categories/tshirt.jpg",
-    },
-  ];
+  const customProducts = supplier.profileDetails?.products || [];
+  const portfolioPhotos =
+    customProducts.length > 0
+      ? customProducts.map((p, idx) => ({
+          id: `#${idx + 1}`,
+          title: p.name,
+          file: p.material ? `${p.material} • ${p.pricePerUnit}` : `MOQ: ${p.moq} • ${p.pricePerUnit}`,
+          src: p.image,
+        }))
+      : [
+          {
+            id: "#1",
+            title: "Premium Linen Shirt Sample",
+            file: "sample-linen-shirt.jpg",
+            src: "/images/categories/shirt.jpg",
+          },
+          {
+            id: "#2",
+            title: "Floral Summer Dress Sample",
+            file: "sample-cotton-dress.jpg",
+            src: "/images/categories/dresses.jpg",
+          },
+          {
+            id: "#3",
+            title: "Workstation & Juki Stitching Line",
+            file: "sample-factory-floor.jpg",
+            src: "/images/categories/tshirt.jpg",
+          },
+        ];
 
   const handleWhatsAppClick = () => {
     const cleanPhone = supplier.phone.replace(/[^0-9]/g, "");
@@ -553,7 +562,7 @@ export default function SupplierGigDetailPage({
             </div>
 
             <span className="rounded-full bg-blue-50 border border-blue-100 text-blue-900 text-xs font-bold px-3 py-1">
-              3 Portfolio Photos
+              {portfolioPhotos.length} Portfolio Items
             </span>
           </div>
 
