@@ -849,23 +849,85 @@ export default function UserDashboardPage() {
               )}
 
               {user.status === "rejected" && (
-                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] bg-rose-50 border-2 border-rose-400 p-4 sm:p-6 text-rose-950 shadow-2xs flex items-center gap-3 sm:gap-4">
-                  <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-sm">
-                    <XCircle className="size-7 sm:size-8 stroke-[2.5]" />
+                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] bg-rose-50 border-2 border-rose-400 p-4 sm:p-6 text-rose-950 shadow-2xs space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 sm:gap-4">
+                      <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-sm">
+                        <XCircle className="size-7 sm:size-8 stroke-[2.5]" />
+                      </div>
+                      <div>
+                        <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase text-rose-900 bg-rose-200 px-2.5 py-0.5 rounded-full mb-1">
+                          Action Required
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black text-rose-950">
+                          {isSi ? "ලියාපදිංචිය තහවුරු කර නැත ❌" : "Application Not Approved ❌"}
+                        </h3>
+                        <p className="text-xs sm:text-sm font-semibold text-rose-900">
+                          {isSi
+                            ? "පරිපාලක කණ්ඩායම විසින් ඔබගේ අයදුම්පත සඳහා පහත හේතුව දක්වා ඇත."
+                            : "Our admin team reviewed your application and noted the feedback below."}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setActiveModal("basicInfo")}
+                        className="flex-1 sm:flex-none h-10 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold cursor-pointer transition-colors shadow-2xs"
+                      >
+                        {isSi ? "තොරතුරු සංස්කරණය" : "Edit Registration"}
+                      </button>
+                      <a
+                        href={`https://wa.me/94112345678?text=${encodeURIComponent(
+                          `Hello Apparel Bank Support, I am inquiring about my registration review for "${user.businessName}" (ID: ${user.id}).`
+                        )}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex-1 sm:flex-none h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+                      >
+                        <MessageSquare className="size-3.5" />
+                        <span>{isSi ? "WhatsApp සහාය" : "WhatsApp Support"}</span>
+                      </a>
+                    </div>
                   </div>
-                  <div>
-                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase text-rose-900 bg-rose-200 px-2.5 py-0.5 rounded-full mb-1">
-                      Action Required
-                    </span>
-                    <h3 className="text-base sm:text-lg font-black text-rose-950">
-                      {isSi ? "ලියාපදිංචිය තහවුරු කර නැත ❌" : "Application Not Approved ❌"}
-                    </h3>
-                    <p className="text-xs sm:text-sm font-semibold text-rose-900">
-                      {isSi
-                        ? "කරුණාකර අපගේ සහාය අංකය (011 234 5678) අමතන්න."
-                        : "Please contact Apparel Bank support at 011 234 5678 for assistance."}
-                    </p>
+
+                  {user.reviewNotes && (
+                    <div className="rounded-2xl bg-white p-3.5 sm:p-4 border border-rose-200 space-y-1">
+                      <span className="text-[10px] sm:text-[11px] font-black uppercase text-rose-800 flex items-center gap-1">
+                        <AlertCircle className="size-3.5 text-rose-600" />
+                        {isSi ? "පරිපාලකගේ සටහන / ප්‍රතික්ෂේප කිරීමට හේතුව:" : "Admin Feedback / Reason for Rejection:"}
+                      </span>
+                      <p className="text-xs sm:text-sm font-semibold text-rose-950 leading-relaxed bg-rose-50/70 p-2.5 rounded-xl border border-rose-100">
+                        &ldquo;{user.reviewNotes}&rdquo;
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Incomplete Profile Alert Prompt (When approved or pending and < 100%) */}
+              {completenessScore < 100 && (
+                <div className="rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex size-10 items-center justify-center rounded-xl bg-amber-500 text-white shrink-0">
+                      <Sparkles className="size-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs sm:text-sm font-black text-amber-950">
+                        {isSi ? "කර්මාන්තශාලා ගිණුම සම්පූර්ණ කරන්න" : "Action Required: Complete Your Factory Profile"}
+                      </h4>
+                      <p className="text-[11px] sm:text-xs text-amber-800 font-semibold">
+                        {isSi
+                          ? "වෙළඳපොළේ Verified Factory ලාංඡනය සක්‍රීය කිරීමට පහත පියවර 3 සම්පූර්ණ කරන්න."
+                          : "Fill in the 3 sections below (Business & Location, Operations, Factory Branding) to unlock your Verified Supplier badge."}
+                      </p>
+                    </div>
                   </div>
+
+                  <span className="text-xs font-black text-amber-900 bg-amber-200/80 px-3 py-1 rounded-full self-start sm:self-auto shrink-0">
+                    {completenessScore}% Completed
+                  </span>
                 </div>
               )}
 

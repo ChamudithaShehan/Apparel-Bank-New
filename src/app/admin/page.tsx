@@ -33,6 +33,10 @@ import {
   Award,
   Zap,
   ShieldCheck,
+  MessageCircle,
+  Phone,
+  Send,
+  AlertTriangle,
 } from "lucide-react";
 import {
   SupplierRegistration,
@@ -85,6 +89,14 @@ const moqLabels: Record<string, string> = {
   "500plus": "500+ Pieces (Enterprise Bulk)",
 };
 
+const REJECTION_PRESETS = [
+  "Invalid or unverified Business Registration (BRN) number",
+  "Factory premises address requires physical site verification",
+  "Garment manufacturing capacity does not meet minimum quality guidelines",
+  "Minimum Order Quantity (MOQ) and workforce capacity mismatch",
+  "Contact phone number was unreachable during admin verification call",
+];
+
 export default function ProfessionalAdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
   const [registrations, setRegistrations] = useState<SupplierRegistration[]>([]);
@@ -98,6 +110,11 @@ export default function ProfessionalAdminDashboard() {
   const [toast, setToast] = useState<{ msg: string; type: "success" | "error" | "info" } | null>(null);
   const [mounted, setMounted] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Rejection Reason Modal State
+  const [rejectModalSupplier, setRejectModalSupplier] = useState<SupplierRegistration | null>(null);
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [selectedPreset, setSelectedPreset] = useState("");
 
   // Create / Edit Role Modal State
   const [showRoleModal, setShowRoleModal] = useState(false);
@@ -156,6 +173,46 @@ export default function ProfessionalAdminDashboard() {
     } else {
       showToast(`Supplier application for ${name} (${supplier?.businessName}) was REJECTED.`, "error");
     }
+  };
+
+  const handleDirectWhatsApp = (supplier: SupplierRegistration, customMsg?: string) => {
+    const cleanPhone = supplier.phone.replace(/[^0-9]/g, "");
+    const defaultText = `Hello ${supplier.userName}, this is the Apparel Bank Administration regarding your supplier registration for "${supplier.businessName}" (Ref ID: ${supplier.id}).`;
+    const text = encodeURIComponent(customMsg || defaultText);
+    window.open(`https://wa.me/94${cleanPhone.replace(/^0/, "")}?text=${text}`, "_blank");
+  };
+
+  const handleOpenRejectModal = (supplier: SupplierRegistration) => {
+    setRejectModalSupplier(supplier);
+    setRejectionReason(supplier.reviewNotes || "");
+    setSelectedPreset("");
+  };
+
+  const handleConfirmReject = (sendWhatsApp: boolean) => {
+    if (!rejectModalSupplier) return;
+    const finalReason =
+      rejectionReason.trim() ||
+      selectedPreset ||
+      "Application requirements not met during verification review.";
+
+    handleUpdateStatus(rejectModalSupplier.id, "rejected", finalReason);
+
+    if (sendWhatsApp) {
+      const cleanPhone = rejectModalSupplier.phone.replace(/[^0-9]/g, "");
+      const msg = `Hello ${rejectModalSupplier.userName},\n\nThis is the Apparel Bank Administration regarding your supplier registration for "${rejectModalSupplier.businessName}" (Ref ID: ${rejectModalSupplier.id}).\n\nYour application was not approved for the following reason:\n📌 "${finalReason}"\n\nIf you have updated your information or need assistance to rectify this, please reply here or contact our support desk at 011 234 5678.\n\nThank you,\nApparel Bank Verification Team`;
+      window.open(`https://wa.me/94${cleanPhone.replace(/^0/, "")}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    setRejectModalSupplier(null);
+    setRejectionReason("");
+    setSelectedPreset("");
+  };
+
+  const handleApproveWithWhatsApp = (supplier: SupplierRegistration) => {
+    handleUpdateStatus(supplier.id, "approved");
+    const cleanPhone = supplier.phone.replace(/[^0-9]/g, "");
+    const msg = `🎉 Congratulations ${supplier.userName}!\n\nYour supplier registration for "${supplier.businessName}" (Ref ID: ${supplier.id}) has been APPROVED on Apparel Bank.\n\nTo activate your Verified Factory Badge and start receiving wholesale buyer orders, please sign in to your dashboard and complete your Factory Profile (Business & Location, Operations & Logistics, and Factory Branding):\n👉 https://apparelbank.lk/dashboard\n\nWelcome to Sri Lanka's leading garment marketplace!`;
+    window.open(`https://wa.me/94${cleanPhone.replace(/^0/, "")}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
   const handleBulkStatusChange = (newStatus: "approved" | "rejected") => {
@@ -1059,11 +1116,26 @@ export default function ProfessionalAdminDashboard() {
                                 <button
                                   type="button"
                                   onClick={() => setSelectedSupplier(supplier)}
-                                  className="rounded-xl bg-slate-100 hover:bg-slate-200 p-2 text-slate-700 cursor-pointer"
-                                  title="View Dossier"
+                                  className="rounded-xl bg-slate-100 hover:bg-slate-200 p-2 text-slate-700 cursor-pointer transition-colors"
+                                  title="View Full Supplier Dossier"
                                 >
                                   <Eye className="size-4" />
                                 </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDirectWhatsApp(supplier)}
+                                  className="rounded-xl bg-emerald-50 hover:bg-emerald-600 hover:text-white p-2 text-emerald-700 transition-colors border border-emerald-200 cursor-pointer"
+                                  title="Direct WhatsApp Chat"
+                                >
+                                  <MessageCircle className="size-4" />
+                                </button>
+                                <a
+                                  href={`tel:${supplier.phone}`}
+                                  className="rounded-xl bg-slate-100 hover:bg-slate-200 p-2 text-slate-700 transition-colors cursor-pointer"
+                                  title="Direct Phone Call"
+                                >
+                                  <Phone className="size-4" />
+                                </a>
                                 <button
                                   type="button"
                                   onClick={() => handleUpdateStatus(supplier.id, "approved")}
@@ -1073,20 +1145,20 @@ export default function ProfessionalAdminDashboard() {
                                       ? "bg-slate-100 text-slate-300 cursor-not-allowed"
                                       : "bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white border border-emerald-200"
                                   }`}
-                                  title="Approve"
+                                  title="Approve Supplier"
                                 >
                                   <Check className="size-4 stroke-[2.5]" />
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => handleUpdateStatus(supplier.id, "rejected")}
+                                  onClick={() => handleOpenRejectModal(supplier)}
                                   disabled={supplier.status === "rejected"}
                                   className={`rounded-xl p-2 transition-all cursor-pointer ${
                                     supplier.status === "rejected"
                                       ? "bg-slate-100 text-slate-300 cursor-not-allowed"
                                       : "bg-rose-50 text-rose-700 hover:bg-rose-600 hover:text-white border border-rose-200"
                                   }`}
-                                  title="Reject"
+                                  title="Reject Application with Reason"
                                 >
                                   <X className="size-4 stroke-[2.5]" />
                                 </button>
@@ -1733,24 +1805,66 @@ export default function ProfessionalAdminDashboard() {
               </button>
             </div>
 
-            {/* Current Status */}
-            <div className="mt-4 flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-400 uppercase">Status:</span>
-              {selectedSupplier.status === "approved" && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-black text-emerald-800">
-                  🟢 Approved
-                </span>
+            {/* Current Status & Admin Rejection Notes */}
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-400 uppercase">Status:</span>
+                {selectedSupplier.status === "approved" && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-black text-emerald-800">
+                    🟢 Approved & Verified
+                  </span>
+                )}
+                {selectedSupplier.status === "pending" && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-0.5 text-xs font-black text-amber-900">
+                    🟡 Pending Verification Review
+                  </span>
+                )}
+                {selectedSupplier.status === "rejected" && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-0.5 text-xs font-black text-rose-900">
+                    🔴 Rejected
+                  </span>
+                )}
+              </div>
+
+              {selectedSupplier.status === "rejected" && selectedSupplier.reviewNotes && (
+                <div className="rounded-xl bg-rose-50 border border-rose-200 p-3.5 space-y-1">
+                  <span className="text-[11px] font-black uppercase text-rose-800 flex items-center gap-1">
+                    <AlertTriangle className="size-3.5 text-rose-600" />
+                    Admin Rejection Reason Logged:
+                  </span>
+                  <p className="text-xs font-semibold text-rose-900 leading-relaxed">
+                    &ldquo;{selectedSupplier.reviewNotes}&rdquo;
+                  </p>
+                </div>
               )}
-              {selectedSupplier.status === "pending" && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-3 py-0.5 text-xs font-black text-amber-900">
-                  🟡 Pending Review
-                </span>
-              )}
-              {selectedSupplier.status === "rejected" && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-rose-100 px-3 py-0.5 text-xs font-black text-rose-900">
-                  🔴 Rejected
-                </span>
-              )}
+            </div>
+
+            {/* Direct Contact Action Ribbon */}
+            <div className="mt-4 rounded-2xl bg-blue-50/70 border border-blue-100 p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+              <div>
+                <span className="text-[10px] font-black uppercase text-blue-900 block">Direct Supplier Communication</span>
+                <p className="text-xs font-bold text-slate-700">
+                  {selectedSupplier.userName} ({selectedSupplier.phone})
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleDirectWhatsApp(selectedSupplier)}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                >
+                  <MessageCircle className="size-3.5" />
+                  <span>Chat on WhatsApp</span>
+                </button>
+                <a
+                  href={`tel:${selectedSupplier.phone}`}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+                >
+                  <Phone className="size-3.5" />
+                  <span>Call Directly</span>
+                </a>
+              </div>
             </div>
 
             {/* Details Grid */}
@@ -1900,46 +2014,152 @@ export default function ProfessionalAdminDashboard() {
             )}
 
             {/* Modal Actions */}
-            <div className="mt-6 flex flex-col sm:flex-row items-center gap-3 border-t border-slate-100 pt-5">
+            <div className="mt-6 flex flex-col gap-2.5 border-t border-slate-100 pt-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onClick={() => handleApproveWithWhatsApp(selectedSupplier)}
+                  className="flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-sm cursor-pointer transition-colors"
+                >
+                  <Send className="size-4" />
+                  <span>Approve & WhatsApp Welcome 🎉</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleOpenRejectModal(selectedSupplier)}
+                  className="flex h-12 items-center justify-center gap-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold text-xs sm:text-sm cursor-pointer transition-colors"
+                >
+                  <X className="size-4 stroke-[2.5]" />
+                  <span>Reject with Reason (WhatsApp) 💬</span>
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 pt-1">
+                <Link
+                  href="/marketplace"
+                  target="_blank"
+                  className="flex-1 h-10 flex items-center justify-center gap-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold cursor-pointer transition-colors"
+                >
+                  <ExternalLink className="size-3.5" />
+                  <span>Preview Marketplace Gig</span>
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedSupplier(null)}
+                  className="px-5 h-10 rounded-xl border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* REJECTION REASON & WHATSAPP DISAPPROVAL MODAL */}
+      {/* ========================================================================= */}
+      {rejectModalSupplier && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/65 p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-7 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                  <XCircle className="size-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
+                    Reject Supplier Application
+                  </h3>
+                  <p className="text-xs text-slate-400 font-medium">
+                    {rejectModalSupplier.businessName} ({rejectModalSupplier.id})
+                  </p>
+                </div>
+              </div>
               <button
                 type="button"
-                onClick={() => {
-                  handleUpdateStatus(selectedSupplier.id, "approved");
-                }}
-                className="flex h-12 w-full sm:flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 font-bold text-white shadow-sm hover:bg-emerald-700 cursor-pointer"
+                onClick={() => setRejectModalSupplier(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
               >
-                <Check className="size-4.5 stroke-[2.5]" />
-                <span>Approve Application</span>
+                <X className="size-5" />
               </button>
+            </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  handleUpdateStatus(selectedSupplier.id, "rejected");
-                }}
-                className="flex h-12 w-full sm:flex-1 items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 font-bold text-white shadow-sm hover:bg-rose-700 cursor-pointer"
-              >
-                <X className="size-4.5 stroke-[2.5]" />
-                <span>Reject Application</span>
-              </button>
+            <div className="mt-4 space-y-4">
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-600 mb-1.5">
+                  Quick Rejection Presets (Click to Auto-fill):
+                </label>
+                <div className="space-y-1.5">
+                  {REJECTION_PRESETS.map((preset, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        setSelectedPreset(preset);
+                        setRejectionReason(preset);
+                      }}
+                      className={`w-full text-left p-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                        rejectionReason === preset
+                          ? "bg-rose-50 border-rose-300 text-rose-900 font-bold"
+                          : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      • {preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-              <Link
-                href="/marketplace"
-                target="_blank"
-                className="flex h-12 w-full sm:w-auto items-center justify-center gap-1.5 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 px-4 font-bold hover:bg-blue-100 cursor-pointer"
-                title="Preview Fiverr Gig on Public Marketplace"
-              >
-                <ExternalLink className="size-4" />
-                <span>Preview Gig</span>
-              </Link>
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                  Rejection Reason / Review Notes *
+                </label>
+                <textarea
+                  rows={3}
+                  required
+                  value={rejectionReason}
+                  onChange={(e) => setRejectionReason(e.target.value)}
+                  placeholder="Explain why the application cannot be approved and what the supplier needs to update..."
+                  className="w-full rounded-xl border-2 border-slate-200 p-3 text-xs sm:text-sm font-semibold outline-none focus:border-rose-500"
+                />
+              </div>
 
-              <button
-                type="button"
-                onClick={() => setSelectedSupplier(null)}
-                className="flex h-12 w-full sm:w-auto items-center justify-center rounded-xl border border-slate-300 px-5 font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                <span>Close</span>
-              </button>
+              <div className="rounded-xl bg-slate-50 p-3 border border-slate-200 text-xs text-slate-500 font-medium">
+                <span className="font-bold text-slate-700 block mb-0.5">Supplier Contact:</span>
+                <p>👤 {rejectModalSupplier.userName} • 📞 {rejectModalSupplier.phone}</p>
+              </div>
+
+              <div className="flex flex-col gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => handleConfirmReject(true)}
+                  className="w-full flex h-12 items-center justify-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs sm:text-sm shadow-md cursor-pointer transition-colors active:scale-98"
+                >
+                  <MessageCircle className="size-4" />
+                  <span>Reject & Send Reason on WhatsApp 💬</span>
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleConfirmReject(false)}
+                    className="flex-1 h-11 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs cursor-pointer transition-colors"
+                  >
+                    Reject Application Only
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setRejectModalSupplier(null)}
+                    className="px-4 h-11 rounded-xl border border-slate-300 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
