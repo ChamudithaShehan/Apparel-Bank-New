@@ -42,6 +42,8 @@ import {
   HelpCircle as QuestionIcon,
   Search,
   SlidersHorizontal,
+  Edit2,
+  User,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import {
@@ -50,6 +52,7 @@ import {
   SupplierRegistration,
   getRegistrations,
   updateSupplierProfile,
+  updateSupplierBasicInfo,
   addSupplierProduct,
   deleteSupplierProduct,
   GigProduct,
@@ -86,7 +89,7 @@ const moqLabels: Record<string, { en: string; si: string }> = {
   "500plus": { en: "500+ Pieces (කෑලි 500ට වැඩි)", si: "කෑලි 500ට වැඩි (500+ Pieces)" },
 };
 
-type ActiveModal = "location" | "logistics" | "branding" | "addProduct" | null;
+type ActiveModal = "location" | "logistics" | "branding" | "addProduct" | "basicInfo" | null;
 
 interface MockInquiry {
   id: string;
@@ -150,6 +153,15 @@ export default function UserDashboardPage() {
   const [inquiries, setInquiries] = useState<MockInquiry[]>(INITIAL_INQUIRIES);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
 
+  // Form states for Basic Info
+  const [editBusinessName, setEditBusinessName] = useState("");
+  const [editUserName, setEditUserName] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+  const [editYears, setEditYears] = useState("5-10");
+  const [editWorkforce, setEditWorkforce] = useState("11-50");
+  const [editMoq, setEditMoq] = useState("51-200");
+  const [editCategories, setEditCategories] = useState<string[]>(["tshirt"]);
+
   // Form states for Location
   const [brn, setBrn] = useState("");
   const [businessType, setBusinessType] = useState("Private Limited");
@@ -183,28 +195,38 @@ export default function UserDashboardPage() {
     setMounted(true);
     const currentUser = getCurrentUser();
     setUser(currentUser);
-    if (currentUser?.profileDetails) {
-      const { businessAndLocation, operationsAndLogistics, factoryBranding } =
-        currentUser.profileDetails;
-      if (businessAndLocation) {
-        setBrn(businessAndLocation.brn || "");
-        setBusinessType(businessAndLocation.businessType || "Private Limited");
-        setDistrict(businessAndLocation.district || "Colombo");
-        setAddress(businessAndLocation.address || "");
-        setPostalCode(businessAndLocation.postalCode || "");
-      }
-      if (operationsAndLogistics) {
-        setLeadTime(operationsAndLogistics.leadTime || "14 - 21 Days");
-        setFabricSourcing(operationsAndLogistics.fabricSourcing || "Full Fabric & Trims In-House Sourcing");
-        setSampleAvailability(operationsAndLogistics.sampleAvailability || "Free with Bulk Orders (3-5 Days)");
-        setDeliveryCapability(operationsAndLogistics.deliveryCapability || "Islandwide Doorstep Delivery");
-        setPaymentTerms(operationsAndLogistics.paymentTerms || "30% Advance, Balance on Delivery");
-      }
-      if (factoryBranding) {
-        setLogoUrl(factoryBranding.logoUrl || "/images/categories/shirt.jpg");
-        setCoverUrl(factoryBranding.coverUrl || "/images/categories/tshirt.jpg");
-        setTagline(factoryBranding.tagline || "");
-        setWebsiteOrSocial(factoryBranding.websiteOrSocial || "");
+    if (currentUser) {
+      setEditBusinessName(currentUser.businessName || "");
+      setEditUserName(currentUser.userName || "");
+      setEditPhone(currentUser.phone || "");
+      setEditYears(currentUser.yearsInOperation || "5-10");
+      setEditWorkforce(currentUser.workforce || "11-50");
+      setEditMoq(currentUser.moq || "51-200");
+      setEditCategories(currentUser.selectedCategories || ["tshirt"]);
+
+      if (currentUser.profileDetails) {
+        const { businessAndLocation, operationsAndLogistics, factoryBranding } =
+          currentUser.profileDetails;
+        if (businessAndLocation) {
+          setBrn(businessAndLocation.brn || "");
+          setBusinessType(businessAndLocation.businessType || "Private Limited");
+          setDistrict(businessAndLocation.district || "Colombo");
+          setAddress(businessAndLocation.address || "");
+          setPostalCode(businessAndLocation.postalCode || "");
+        }
+        if (operationsAndLogistics) {
+          setLeadTime(operationsAndLogistics.leadTime || "14 - 21 Days");
+          setFabricSourcing(operationsAndLogistics.fabricSourcing || "Full Fabric & Trims In-House Sourcing");
+          setSampleAvailability(operationsAndLogistics.sampleAvailability || "Free with Bulk Orders (3-5 Days)");
+          setDeliveryCapability(operationsAndLogistics.deliveryCapability || "Islandwide Doorstep Delivery");
+          setPaymentTerms(operationsAndLogistics.paymentTerms || "30% Advance, Balance on Delivery");
+        }
+        if (factoryBranding) {
+          setLogoUrl(factoryBranding.logoUrl || "/images/categories/shirt.jpg");
+          setCoverUrl(factoryBranding.coverUrl || "/images/categories/tshirt.jpg");
+          setTagline(factoryBranding.tagline || "");
+          setWebsiteOrSocial(factoryBranding.websiteOrSocial || "");
+        }
       }
     }
   }, []);
@@ -232,6 +254,29 @@ export default function UserDashboardPage() {
   const handleSignOut = () => {
     clearCurrentUser();
     router.push("/signin");
+  };
+
+  const handleSaveBasicInfo = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !editBusinessName.trim() || !editUserName.trim() || !editPhone.trim()) return;
+    if (editCategories.length === 0) {
+      showToast(isSi ? "කරුණාකර අවම වශයෙන් එක් ඇඳුම් වර්ගයක් තෝරන්න!" : "Please select at least one garment category!");
+      return;
+    }
+
+    const updated = updateSupplierBasicInfo(user.id, {
+      businessName: editBusinessName.trim(),
+      userName: editUserName.trim(),
+      phone: editPhone.trim(),
+      yearsInOperation: editYears,
+      workforce: editWorkforce,
+      moq: editMoq,
+      selectedCategories: editCategories,
+    });
+
+    if (updated) setUser(updated);
+    setActiveModal(null);
+    showToast(isSi ? "මූලික තොරතුරු සාර්ථකව සුරැකිණි! ✅" : "Basic registration details updated! ✅");
   };
 
   const handleSaveLocation = (e: React.FormEvent) => {
@@ -694,7 +739,7 @@ export default function UserDashboardPage() {
               title="Sign Out"
               className="flex size-9 sm:size-10 items-center justify-center rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 cursor-pointer"
             >
-              <LogOut className="size-3.5 sm:size-4" />
+              <LogOut className="size-3.5" />
             </button>
           </div>
         </header>
@@ -1413,7 +1458,7 @@ export default function UserDashboardPage() {
                 </p>
               </div>
 
-              {/* 3 Detail Panels */}
+              {/* 4 Detail Panels */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* 1. Business & Legal Details */}
                 <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
@@ -1541,7 +1586,7 @@ export default function UserDashboardPage() {
                   </div>
                 </div>
 
-                {/* 4. Registration Summary */}
+                {/* 4. Registration Summary with Direct Edit Button */}
                 <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-2 sm:gap-2.5">
@@ -1549,12 +1594,28 @@ export default function UserDashboardPage() {
                         <FileCheck className="size-4.5 sm:size-5" />
                       </div>
                       <h3 className="text-sm sm:text-base font-black text-[#0B122F]">
-                        {isSi ? "ලියාපදිංචි මුල් තොරතුරු" : "Initial Registration Data"}
+                        {isSi ? "ලියාපදිංචි මූලික තොරතුරු" : "Basic Registration & Capacity"}
                       </h3>
                     </div>
+                    <button
+                      type="button"
+                      onClick={() => setActiveModal("basicInfo")}
+                      className="text-xs font-bold text-blue-600 hover:text-blue-800 cursor-pointer flex items-center gap-1"
+                    >
+                      <Edit2 className="size-3" />
+                      <span>{isSi ? "සංස්කරණය" : "Edit Details"}</span>
+                    </button>
                   </div>
 
                   <div className="space-y-2.5 text-xs sm:text-sm">
+                    <div className="flex justify-between py-1 border-b border-slate-50">
+                      <span className="text-slate-400 font-bold">Business / Factory Name</span>
+                      <span className="font-extrabold text-slate-800">{user.businessName}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-50">
+                      <span className="text-slate-400 font-bold">Contact Name & Phone</span>
+                      <span className="font-extrabold text-slate-800">{user.userName} • {user.phone}</span>
+                    </div>
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Operational Experience</span>
                       <span className="font-extrabold text-slate-800">
@@ -1834,6 +1895,189 @@ export default function UserDashboardPage() {
           );
         })}
       </nav>
+
+      {/* ========================================================================= */}
+      {/* MODAL 0: BASIC REGISTRATION INFO EDIT */}
+      {/* ========================================================================= */}
+      {activeModal === "basicInfo" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-5 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                  <FileCheck className="size-4.5 sm:size-5" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-xl font-black text-[#0B122F]">
+                    {isSi ? "මූලික ලියාපදිංචි තොරතුරු සංස්කරණය" : "Edit Basic Registration Info"}
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-medium">
+                    {isSi ? "ව්‍යාපාරයේ නම, දුරකථනය, MOQ සහ ඇඳුම් වර්ග" : "Update factory name, contact, MOQ and categories"}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                <X className="size-5 sm:size-6" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveBasicInfo} className="mt-4 space-y-3.5">
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                  {isSi ? "ව්‍යාපාරයේ / කර්මාන්තශාලාවේ නම *" : "Business / Factory Name *"}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={editBusinessName}
+                  onChange={(e) => setEditBusinessName(e.target.value)}
+                  placeholder="e.g. Lanka Weave Handlooms"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    {isSi ? "අයිතිකරු / කළමනාකරුගේ නම *" : "Contact Person Name *"}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editUserName}
+                    onChange={(e) => setEditUserName(e.target.value)}
+                    placeholder="e.g. Sunil Bandara"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    {isSi ? "ජංගම දුරකථන අංකය *" : "Mobile Phone Number *"}
+                  </label>
+                  <input
+                    type="tel"
+                    required
+                    value={editPhone}
+                    onChange={(e) => setEditPhone(e.target.value)}
+                    placeholder="e.g. 0771234567"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    {isSi ? "ආයතනයේ වයස *" : "Years in Operation *"}
+                  </label>
+                  <select
+                    value={editYears}
+                    onChange={(e) => setEditYears(e.target.value)}
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm font-semibold outline-none focus:border-[#020333] bg-white cursor-pointer"
+                  >
+                    <option value="under1">&lt; 1 Year (අවුරුදු 1ට අඩු)</option>
+                    <option value="1-5">1 - 5 Years (අවුරුදු 1 - 5)</option>
+                    <option value="5-10">5 - 10 Years (අවුරුදු 5 - 10)</option>
+                    <option value="10plus">10+ Years (අවුරුදු 10ට වැඩි)</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    {isSi ? "සේවක සංඛ්‍යාව *" : "Workforce Size *"}
+                  </label>
+                  <select
+                    value={editWorkforce}
+                    onChange={(e) => setEditWorkforce(e.target.value)}
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm font-semibold outline-none focus:border-[#020333] bg-white cursor-pointer"
+                  >
+                    <option value="1-10">1 - 10 Employees (1 - 10)</option>
+                    <option value="11-50">11 - 50 Employees (11 - 50)</option>
+                    <option value="51-200">51 - 200 Employees (51 - 200)</option>
+                    <option value="200plus">200+ Employees (200+)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                  {isSi ? "අවම ඇණවුම් ප්‍රමාණය (MOQ) *" : "Minimum Order Quantity (MOQ) *"}
+                </label>
+                <select
+                  value={editMoq}
+                  onChange={(e) => setEditMoq(e.target.value)}
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm font-semibold outline-none focus:border-[#020333] bg-white cursor-pointer"
+                >
+                  <option value="1-50">1 - 50 Pieces (කෑලි 1 - 50)</option>
+                  <option value="51-200">51 - 200 Pieces (කෑලි 51 - 200)</option>
+                  <option value="201-500">201 - 500 Pieces (කෑලි 201 - 500)</option>
+                  <option value="500plus">500+ Pieces (කෑලි 500ට වැඩි)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold uppercase text-slate-600 mb-1.5">
+                  {isSi ? "නිෂ්පාදනය කරන ඇඳුම් වර්ග (තෝරන්න) *" : "Garment Categories Manufactured *"}
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: "tshirt", label: "T-Shirts (ටී-ෂර්ට්)" },
+                    { id: "shirt", label: "Shirts (කමිස)" },
+                    { id: "trousers", label: "Trousers (කලිසම්)" },
+                    { id: "dresses", label: "Dresses (ගවුම්)" },
+                  ].map((cat) => {
+                    const isChecked = editCategories.includes(cat.id);
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          if (isChecked) {
+                            if (editCategories.length > 1) {
+                              setEditCategories(editCategories.filter((c) => c !== cat.id));
+                            }
+                          } else {
+                            setEditCategories([...editCategories, cat.id]);
+                          }
+                        }}
+                        className={`p-2.5 rounded-xl border text-xs font-bold text-left flex items-center justify-between transition-all cursor-pointer ${
+                          isChecked
+                            ? "bg-blue-50 border-blue-500 text-blue-900 shadow-2xs font-extrabold"
+                            : "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                        }`}
+                      >
+                        <span>{cat.label}</span>
+                        {isChecked && <Check className="size-4 text-blue-600 stroke-[3]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <button
+                  type="submit"
+                  className="flex-1 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3 sm:py-3.5 text-sm sm:text-base font-extrabold text-white shadow-md cursor-pointer active:scale-98"
+                >
+                  {isSi ? "තොරතුරු සුරකින්න" : "Save Registration Details"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveModal(null)}
+                  className="rounded-xl sm:rounded-2xl border-2 border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                >
+                  {isSi ? "අවලංගු කරන්න" : "Cancel"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* MODAL 1: ADD PRODUCT / SAMPLE TO GIG */}

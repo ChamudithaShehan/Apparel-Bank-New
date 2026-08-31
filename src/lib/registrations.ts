@@ -313,6 +313,48 @@ export function deleteSupplierProduct(
   });
 }
 
+// Update core registration details (businessName, userName, phone, yearsInOperation, workforce, moq, selectedCategories)
+export function updateSupplierBasicInfo(
+  id: string,
+  data: Partial<
+    Pick<
+      SupplierRegistration,
+      | "businessName"
+      | "userName"
+      | "phone"
+      | "yearsInOperation"
+      | "workforce"
+      | "moq"
+      | "selectedCategories"
+    >
+  >
+): SupplierRegistration | null {
+  const registrations = getRegistrations();
+  let updatedSupplier: SupplierRegistration | null = null;
+
+  const updated = registrations.map((item) => {
+    if (item.id === id) {
+      const merged: SupplierRegistration = {
+        ...item,
+        ...data,
+      };
+      updatedSupplier = merged;
+      return merged;
+    }
+    return item;
+  });
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    const currentUser = getCurrentUser();
+    if (currentUser && currentUser.id === id && updatedSupplier) {
+      setCurrentUser(updatedSupplier);
+    }
+  }
+
+  return updatedSupplier;
+}
+
 // Find registration by username and phone
 export function findRegistration(
   userName: string,
