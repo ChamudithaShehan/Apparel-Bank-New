@@ -26,48 +26,75 @@ import {
   Truck,
   Globe,
   ExternalLink,
+  Star,
+  Phone,
+  Check,
+  HelpCircle,
+  Share2,
+  Sliders,
+  DollarSign,
+  ChevronRight,
+  ShieldAlert,
+  Award,
+  Zap,
+  FileText,
+  BadgeCheck,
+  Heart,
 } from "lucide-react";
 import { AppHeader } from "@/components/AppHeader";
+import { useLanguage } from "@/lib/language-context";
 import {
   SupplierRegistration,
   getRegistrations,
   getCurrentUser,
 } from "@/lib/registrations";
-import { generateGigFromSupplier, SupplierGig } from "@/lib/gigs";
+import { generateGigFromSupplier, SupplierGig, GigPackage } from "@/lib/gigs";
 
-const yearsTextMap: Record<string, string> = {
-  under1: "Less than 1 year",
-  "1-5": "1 - 5 Years",
-  "5-10": "5 - 10 Years",
-  "10plus": "10+ Years",
+const yearsTextMap: Record<string, { en: string; si: string }> = {
+  under1: { en: "< 1 Year Experience", si: "අවුරුදු 1ට අඩු පළපුරුද්ද" },
+  "1-5": { en: "1 - 5 Years Experience", si: "අවුරුදු 1 - 5 ක පළපුරුද්ද" },
+  "5-10": { en: "5 - 10 Years Experience", si: "අවුරුදු 5 - 10 ක පළපුරුද්ද" },
+  "10plus": { en: "10+ Years Established", si: "වසර 10කට වැඩි ප්‍රවීණත්වය" },
 };
 
-const workforceTextMap: Record<string, string> = {
-  "1-10": "Solo / 1-10 Staff",
-  "11-50": "11 - 50 Employees",
-  "51-200": "51 - 200 Employees",
-  "200plus": "200+ Employees",
+const workforceTextMap: Record<string, { en: string; si: string }> = {
+  "1-10": { en: "Solo / 1-10 Tailors", si: "සේවකයින් 1 - 10" },
+  "11-50": { en: "11 - 50 Employees", si: "සේවකයින් 11 - 50" },
+  "51-200": { en: "51 - 200 Employees", si: "සේවකයින් 51 - 200" },
+  "200plus": { en: "200+ Factory Staff", si: "සේවකයින් 200ට වැඩි" },
 };
 
-const moqTextMap: Record<string, string> = {
-  "1-50": "50 Pieces",
-  "51-200": "100 - 200 Pieces",
-  "201-500": "200 - 500 Pieces",
-  "500plus": "500+ Pieces",
+const moqTextMap: Record<string, { en: string; si: string }> = {
+  "1-50": { en: "1 - 50 Pcs (Low MOQ)", si: "කෑලි 1 - 50 (අවම ඇණවුම්)" },
+  "51-200": { en: "51 - 200 Pcs (Medium)", si: "කෑලි 51 - 200" },
+  "201-500": { en: "201 - 500 Pcs (Bulk)", si: "කෑලි 201 - 500" },
+  "500plus": { en: "500+ Pcs (Enterprise)", si: "කෑලි 500ට වැඩි" },
 };
 
-const categorySpecialistMap: Record<string, string> = {
-  tshirt: "Custom T-Shirt Manufacturing Specialist",
-  shirt: "Formal & Casual Shirt Production Specialist",
-  trousers: "Tailored Trousers & Pants Specialist",
-  dresses: "High-Fashion Dresses & Frocks Specialist",
+const categorySpecialistMap: Record<string, { en: string; si: string }> = {
+  tshirt: {
+    en: "Custom T-Shirts, Polos & Knitwear Manufacturing Specialist",
+    si: "ටී-ෂර්ට්, පෝලෝ සහ නිට්වෙයාර් නිෂ්පාදන විශේෂඥ",
+  },
+  shirt: {
+    en: "Export-Grade Formal & Casual Shirts Production Specialist",
+    si: "කමිස නිෂ්පාදන විශේෂඥ",
+  },
+  trousers: {
+    en: "Tailored Trousers, Chinos & Workwear Specialist",
+    si: "කලිසම් නිෂ්පාදන විශේෂඥ",
+  },
+  dresses: {
+    en: "High-Fashion Dresses, Frocks & Woven Garment Specialist",
+    si: "ගවුම් සහ විලාසිතා ඇඳුම් නිෂ්පාදන විශේෂඥ",
+  },
 };
 
-const categoryNameMap: Record<string, string> = {
-  tshirt: "T-Shirts",
-  shirt: "Shirts",
-  trousers: "Trousers",
-  dresses: "Dresses",
+const categoryLabels: Record<string, { en: string; si: string }> = {
+  tshirt: { en: "T-Shirts (ටී-ෂර්ට්)", si: "ටී-ෂර්ට් (T-Shirts)" },
+  shirt: { en: "Shirts (කමිස)", si: "කමිස (Shirts)" },
+  trousers: { en: "Trousers (කලිසම්)", si: "කලිසම් (Trousers)" },
+  dresses: { en: "Dresses (ගවුම්)", si: "ගවුම් (Dresses)" },
 };
 
 export default function SupplierGigDetailPage({
@@ -77,12 +104,21 @@ export default function SupplierGigDetailPage({
 }) {
   const resolvedParams = use(params);
   const router = useRouter();
+  const { isSi } = useLanguage();
   const [supplier, setSupplier] = useState<SupplierRegistration | null>(null);
   const [gig, setGig] = useState<SupplierGig | null>(null);
   const [mounted, setMounted] = useState(false);
   const [activePhoto, setActivePhoto] = useState<string | null>(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(0);
+  const [activePackageTab, setActivePackageTab] = useState<"basic" | "standard" | "premium">("standard");
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [quoteSubmitted, setQuoteSubmitted] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  // Estimator State
+  const [estQuantity, setEstQuantity] = useState(250);
+  const [estFabric, setEstFabric] = useState("Standard Cotton (180 GSM)");
 
   useEffect(() => {
     setMounted(true);
@@ -96,7 +132,6 @@ export default function SupplierGigDetailPage({
     );
 
     if (!found) {
-      // Fallback to currently logged in user or first supplier
       const cur = getCurrentUser();
       found = cur || all[0];
     }
@@ -112,71 +147,70 @@ export default function SupplierGigDetailPage({
   const isVerified = supplier.status === "approved";
   const primaryCat = supplier.selectedCategories?.[0] || "tshirt";
   const specialistTitle =
-    categorySpecialistMap[primaryCat] || "Apparel Manufacturing Specialist";
+    categorySpecialistMap[primaryCat]?.[isSi ? "si" : "en"] ||
+    categorySpecialistMap[primaryCat]?.en ||
+    "Apparel Manufacturing Specialist";
 
   const locationDistrict =
-    supplier.profileDetails?.businessAndLocation?.district ||
-    "Maharagama, Sri Lanka";
+    supplier.profileDetails?.businessAndLocation?.district || "Colombo";
   const factoryAddress =
     supplier.profileDetails?.businessAndLocation?.address ||
-    "Industrial Zone, Sri Lanka";
+    "Industrial Zone, Colombo, Sri Lanka";
   const brnNumber =
-    supplier.profileDetails?.businessAndLocation?.brn || "Registered Business";
+    supplier.profileDetails?.businessAndLocation?.brn || "PV-89210 (Verified)";
 
   const leadTimeText =
-    supplier.profileDetails?.operationsAndLogistics?.leadTime || "7 Days";
-  const hasFabricSourcing =
-    supplier.profileDetails?.operationsAndLogistics?.fabricSourcing?.includes(
-      "In-House"
-    ) ?? true;
-  const hasDelivery =
-    supplier.profileDetails?.operationsAndLogistics?.deliveryCapability?.includes(
-      "Delivery"
-    ) ?? true;
-
-  const initials = supplier.businessName
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 3)
-    .toUpperCase() || "CSG";
+    supplier.profileDetails?.operationsAndLogistics?.leadTime || "14 - 21 Days";
+  const fabricSourcingText =
+    supplier.profileDetails?.operationsAndLogistics?.fabricSourcing ||
+    "Full Fabric & Trims In-House Sourcing";
+  const samplePolicyText =
+    supplier.profileDetails?.operationsAndLogistics?.sampleAvailability ||
+    "Free with Bulk Orders (3-5 Days)";
+  const deliveryText =
+    supplier.profileDetails?.operationsAndLogistics?.deliveryCapability ||
+    "Islandwide Doorstep Delivery";
+  const paymentTermsText =
+    supplier.profileDetails?.operationsAndLogistics?.paymentTerms ||
+    "30% Advance, Balance on Delivery";
 
   const customProducts = supplier.profileDetails?.products || [];
-  const portfolioPhotos =
-    customProducts.length > 0
-      ? customProducts.map((p, idx) => ({
-          id: `#${idx + 1}`,
-          title: p.name,
-          file: p.material ? `${p.material} • ${p.pricePerUnit}` : `MOQ: ${p.moq} • ${p.pricePerUnit}`,
-          src: p.image,
-        }))
-      : [
-          {
-            id: "#1",
-            title: "Premium Linen Shirt Sample",
-            file: "sample-linen-shirt.jpg",
-            src: "/images/categories/shirt.jpg",
-          },
-          {
-            id: "#2",
-            title: "Floral Summer Dress Sample",
-            file: "sample-cotton-dress.jpg",
-            src: "/images/categories/dresses.jpg",
-          },
-          {
-            id: "#3",
-            title: "Workstation & Juki Stitching Line",
-            file: "sample-factory-floor.jpg",
-            src: "/images/categories/tshirt.jpg",
-          },
-        ];
+  
+  // Combine custom products with preset images for gallery
+  const galleryList = [
+    {
+      src: supplier.profileDetails?.factoryBranding?.coverUrl || gig.coverImage,
+      title: `${supplier.businessName} Manufacturing Unit`,
+      sub: "Primary Stitching & Production Line",
+    },
+    ...customProducts.map((p) => ({
+      src: p.image,
+      title: p.name,
+      sub: `${p.material || "Quality Fabric"} • MOQ: ${p.moq} • ${p.pricePerUnit}`,
+    })),
+    {
+      src: "/images/categories/shirt.jpg",
+      title: "Finishing & Label Tagging",
+      sub: "Export Quality Inspection",
+    },
+  ];
+
+  const currentGalleryItem = galleryList[selectedPhotoIndex] || galleryList[0];
 
   const handleWhatsAppClick = () => {
     const cleanPhone = supplier.phone.replace(/[^0-9]/g, "");
     const msg = encodeURIComponent(
-      `Hello ${supplier.userName}, I saw your Apparel Bank Manufacturing Gig for ${supplier.businessName}. I would like to inquire about production.`
+      `Hello ${supplier.userName}, I found ${supplier.businessName} on Apparel Bank Marketplace (Gig: ${gig.id}). I am interested in manufacturing custom apparel with an estimated order of ${estQuantity} pieces. Could you please share a quotation?`
     );
     window.open(`https://wa.me/94${cleanPhone.replace(/^0/, "")}?text=${msg}`, "_blank");
+  };
+
+  const handleShareClick = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2500);
+    }
   };
 
   const handleQuoteSubmit = (e: React.FormEvent) => {
@@ -185,488 +219,641 @@ export default function SupplierGigDetailPage({
     setTimeout(() => {
       setQuoteSubmitted(false);
       setQuoteModalOpen(false);
-    }, 2200);
+    }, 2400);
   };
 
+  const currentPkg: GigPackage = gig.packages[activePackageTab];
+
+  // Estimator calculation
+  const baseRate = primaryCat === "tshirt" ? 850 : primaryCat === "shirt" ? 1350 : 1600;
+  const unitCostEst = estQuantity >= 500 ? Math.round(baseRate * 0.85) : estQuantity >= 200 ? Math.round(baseRate * 0.92) : baseRate;
+  const totalEstCost = unitCostEst * estQuantity;
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#F3F6FA] text-slate-800 font-sans antialiased">
+    <div className="min-h-screen flex flex-col bg-[#F6F8FC] text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white">
       <AppHeader />
 
-      <main className="flex-1 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-6xl w-full mx-auto space-y-6">
-        {/* ========================================================================= */}
-        {/* TOP BAR: Navigation & Gig Status / Edit Profile */}
-        {/* ========================================================================= */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 text-sm font-extrabold text-slate-800 hover:text-blue-600 transition-colors"
-          >
-            <ArrowLeft className="size-4 stroke-[2.5]" />
-            <span>Back to Supplier Dashboard</span>
-          </Link>
+      {/* Breadcrumbs & Floating Top Bar */}
+      <div className="bg-white border-b border-slate-200/80 sticky top-15 z-30 shadow-2xs backdrop-blur-md bg-white/95">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-500 overflow-hidden truncate">
+            <Link href="/marketplace" className="hover:text-slate-900 transition-colors shrink-0">
+              {isSi ? "වෙළඳපොළ" : "Marketplace"}
+            </Link>
+            <span>/</span>
+            <span className="text-slate-400 shrink-0">
+              {categoryLabels[primaryCat]?.[isSi ? "si" : "en"] || primaryCat}
+            </span>
+            <span>/</span>
+            <span className="text-slate-900 font-extrabold truncate">{supplier.businessName}</span>
+          </div>
 
-          <div className="flex items-center gap-3">
-            {/* Status Pill Badge */}
-            {isVerified ? (
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-300 px-4 py-1.5 text-xs font-black text-emerald-800 shadow-2xs">
-                <Sparkles className="size-3.5 text-emerald-600 fill-emerald-600" />
-                <span>Gig Status: verified</span>
-              </div>
-            ) : (
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 border border-amber-300 px-4 py-1.5 text-xs font-black text-amber-900 shadow-2xs">
-                <Sparkles className="size-3.5 text-amber-600 fill-amber-600" />
-                <span>Gig Status: unverified</span>
-              </div>
-            )}
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={handleShareClick}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition-colors shadow-2xs cursor-pointer"
+            >
+              <Share2 className="size-3.5" />
+              <span>{shareCopied ? (isSi ? "පිටපත් විය! ✓" : "Copied! ✓") : isSi ? "බෙදාගන්න" : "Share"}</span>
+            </button>
 
-            {/* Edit Profile Button */}
+            <button
+              type="button"
+              onClick={() => setIsSaved(!isSaved)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors shadow-2xs cursor-pointer ${
+                isSaved
+                  ? "bg-rose-50 border-rose-200 text-rose-600"
+                  : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+              }`}
+            >
+              <Heart className={`size-3.5 ${isSaved ? "fill-rose-600 text-rose-600" : ""}`} />
+              <span>{isSaved ? (isSi ? "සුරකින ලදි" : "Saved") : isSi ? "සුරකින්න" : "Save"}</span>
+            </button>
+
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 text-white text-xs sm:text-sm font-extrabold px-4 py-2 shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#020333] hover:bg-[#020333]/90 text-white text-xs font-bold transition-all shadow-2xs cursor-pointer"
             >
               <Edit className="size-3.5" />
-              <span>Edit Supplier Profile</span>
+              <span>{isSi ? "පාලක පුවරුව" : "Supplier Portal"}</span>
             </Link>
           </div>
         </div>
+      </div>
 
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
         {/* ========================================================================= */}
-        {/* HERO CARD: Dark Navy Profile Showcase */}
+        {/* 1. GIG HEADER HERO */}
         {/* ========================================================================= */}
-        <div className="rounded-[2.2rem] bg-[#020333] p-6 sm:p-9 text-white shadow-xl relative overflow-hidden min-h-[260px] flex flex-col justify-end">
-          {/* Cover Photo Background if available */}
-          {supplier.profileDetails?.factoryBranding?.coverUrl ? (
-            <div className="absolute inset-0 z-0">
-              <Image
-                src={supplier.profileDetails.factoryBranding.coverUrl}
-                alt="Factory Cover Photo"
-                fill
-                className="object-cover opacity-35"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020333] via-[#020333]/80 to-[#020333]/40"></div>
-            </div>
-          ) : (
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-          )}
+        <div className="space-y-4">
+          {/* Supplier Badges & Verification Row */}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1 text-xs font-black text-blue-900 shadow-2xs">
+                <Building2 className="size-3.5 text-blue-700" />
+                <span>ID: {gig.id}</span>
+              </span>
 
-          <div className="flex flex-col sm:flex-row items-start sm:items-end gap-5 pt-8 sm:pt-14 relative z-10">
-            {/* Avatar / Logo Box */}
-            <div className="size-24 sm:size-28 rounded-2xl bg-[#070b4a] border-2 border-white/20 flex items-center justify-center text-xl sm:text-2xl font-black text-white shadow-lg shrink-0 overflow-hidden relative">
-              {supplier.profileDetails?.factoryBranding?.logoUrl ? (
-                <Image
-                  src={supplier.profileDetails.factoryBranding.logoUrl}
-                  alt={supplier.businessName}
-                  fill
-                  className="object-cover"
-                />
+              {isVerified ? (
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-3.5 py-1 text-xs font-black text-emerald-700 shadow-2xs">
+                  <ShieldCheck className="size-4 text-emerald-600" />
+                  <span>{isSi ? "සත්‍යාපිත කර්මාන්තශාලාව" : "Verified Apparel Factory"}</span>
+                </span>
               ) : (
-                <span className="tracking-wider">{initials}</span>
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 border border-amber-500/30 px-3.5 py-1 text-xs font-black text-amber-800 shadow-2xs">
+                  <Clock className="size-4 text-amber-600" />
+                  <span>{isSi ? "තහවුරු කිරීමේ අදියරේ" : "Verification in Progress"}</span>
+                </span>
+              )}
+
+              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
+                <MapPin className="size-3.5 text-slate-500" />
+                <span>{locationDistrict}, Sri Lanka</span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs font-bold text-slate-500">
+              <div className="flex items-center gap-1 text-amber-500 font-black">
+                <Star className="size-4 fill-amber-500 text-amber-500" />
+                <span className="text-slate-900 text-sm">4.9</span>
+                <span className="text-slate-400 font-semibold">({gig.seller.reviewCount} reviews)</span>
+              </div>
+              <span>•</span>
+              <span className="text-emerald-700 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-md">
+                ⚡ Responds in 1 Hour
+              </span>
+            </div>
+          </div>
+
+          {/* Gig Headline */}
+          <h1 className="text-2xl sm:text-4xl font-black text-[#0B122F] tracking-tight leading-snug">
+            {gig.title}
+          </h1>
+
+          {/* Seller Snippet */}
+          <div className="flex items-center gap-3.5 pt-1">
+            <div className="relative size-12 rounded-2xl overflow-hidden bg-slate-900 border-2 border-white shadow-sm shrink-0">
+              <Image
+                src={supplier.profileDetails?.factoryBranding?.logoUrl || gig.seller.avatar}
+                alt={supplier.businessName}
+                fill
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-base font-black text-[#0B122F]">{supplier.businessName}</span>
+                <BadgeCheck className="size-4.5 text-blue-600 fill-blue-100" />
+              </div>
+              <p className="text-xs text-slate-500 font-semibold">
+                By {supplier.userName} (Factory Manager) • {yearsTextMap[supplier.yearsInOperation]?.[isSi ? "si" : "en"] || supplier.yearsInOperation}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ========================================================================= */}
+        {/* 2. MAIN 2-COLUMN LAYOUT: Showcase Gallery + Sticky Packages Box */}
+        {/* ========================================================================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* LEFT COLUMN: Media Showcase & Deep Details (8 cols) */}
+          <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+            {/* Gallery Big Screen Card */}
+            <div className="rounded-[2.2rem] bg-white border border-slate-200/90 shadow-sm p-4 sm:p-5 space-y-4">
+              {/* Primary Large Image Frame */}
+              <div
+                onClick={() => setActivePhoto(currentGalleryItem.src)}
+                className="relative h-72 sm:h-96 md:h-[440px] w-full rounded-3xl overflow-hidden bg-slate-900 group cursor-zoom-in shadow-inner"
+              >
+                <Image
+                  src={currentGalleryItem.src}
+                  alt={currentGalleryItem.title}
+                  fill
+                  priority
+                  className="object-cover group-hover:scale-103 transition-transform duration-500"
+                />
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-between p-5 pointer-events-none">
+                  <div className="flex justify-between items-center">
+                    <span className="rounded-full bg-black/60 backdrop-blur-md px-3 py-1 text-xs font-extrabold text-white border border-white/20">
+                      📷 {selectedPhotoIndex + 1} / {galleryList.length}
+                    </span>
+                    <span className="rounded-full bg-white/20 backdrop-blur-md px-3 py-1 text-xs font-bold text-white">
+                      Click to Enlarge ⤢
+                    </span>
+                  </div>
+
+                  <div className="text-white space-y-0.5">
+                    <h3 className="text-lg sm:text-xl font-black text-white">{currentGalleryItem.title}</h3>
+                    <p className="text-xs sm:text-sm text-slate-300 font-medium">{currentGalleryItem.sub}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thumbnails Row */}
+              <div className="flex items-center gap-3 overflow-x-auto pb-1 pt-1">
+                {galleryList.map((item, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSelectedPhotoIndex(idx)}
+                    className={`relative size-18 sm:size-20 rounded-2xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                      selectedPhotoIndex === idx
+                        ? "border-[#020333] ring-3 ring-blue-500/20 scale-102"
+                        : "border-slate-200 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <Image src={item.src} alt={item.title} fill className="object-cover" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Factory Capacity Chips Ribbon */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+              <div className="rounded-2xl bg-white p-4 border border-slate-200/90 shadow-xs space-y-1">
+                <span className="text-[11px] font-black uppercase text-slate-400">Min Order (MOQ)</span>
+                <p className="text-lg font-black text-[#0B122F]">{supplier.moq}</p>
+                <p className="text-[11px] text-slate-400 font-semibold">Flexible Tier</p>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 border border-slate-200/90 shadow-xs space-y-1">
+                <span className="text-[11px] font-black uppercase text-slate-400">Lead Time</span>
+                <p className="text-lg font-black text-[#0B122F]">{leadTimeText.split(" ")[0]} Days</p>
+                <p className="text-[11px] text-emerald-600 font-semibold">Standard Turnaround</p>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 border border-slate-200/90 shadow-xs space-y-1">
+                <span className="text-[11px] font-black uppercase text-slate-400">Workforce</span>
+                <p className="text-lg font-black text-[#0B122F]">
+                  {workforceTextMap[supplier.workforce]?.[isSi ? "si" : "en"] || supplier.workforce}
+                </p>
+                <p className="text-[11px] text-slate-400 font-semibold">In-house Tailors</p>
+              </div>
+
+              <div className="rounded-2xl bg-white p-4 border border-slate-200/90 shadow-xs space-y-1">
+                <span className="text-[11px] font-black uppercase text-slate-400">Starting Price</span>
+                <p className="text-lg font-black text-emerald-700">{gig.startingPrice}</p>
+                <p className="text-[11px] text-slate-400 font-semibold">Per Finished Piece</p>
+              </div>
+            </div>
+
+            {/* About This Manufacturing Gig */}
+            <div className="rounded-[2.2rem] bg-white p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+              <div className="border-b border-slate-100 pb-4">
+                <h3 className="text-xl sm:text-2xl font-black text-[#0B122F]">
+                  {isSi ? "සේවා විස්තරය (About This Manufacturing Gig)" : "About This Manufacturing Gig"}
+                </h3>
+                <p className="text-sm sm:text-base text-slate-600 font-medium mt-3 leading-relaxed">
+                  {gig.overview}
+                </p>
+              </div>
+
+              {/* Scope & Inclusions List */}
+              <div className="space-y-3">
+                <h4 className="text-base font-black text-[#0B122F]">
+                  {isSi ? "නිෂ්පාදන සේවා සහ පහසුකම්" : "What is Included with This Manufacturing Gig"}
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  {gig.features.map((feat, idx) => (
+                    <div key={idx} className="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                      <CheckCircle2 className="size-4.5 text-emerald-600 shrink-0 mt-0.5" />
+                      <span className="text-xs sm:text-sm font-extrabold text-slate-800">{feat}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Garment Samples & Active Catalog */}
+            <div className="rounded-[2.2rem] bg-white p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-black text-[#0B122F]">
+                    {isSi ? "ඇඳුම් සාම්පල එකතුව" : "Garment Samples & Active Catalog"}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">
+                    {isSi
+                      ? "මෙම කර්මාන්තශාලාවෙන් නිපදවන ප්‍රධාන ඇඳුම් සාම්පල සහ මිල ගණන්."
+                      : "Directly manufactured clothing samples available for bulk ordering."}
+                  </p>
+                </div>
+                <span className="rounded-full bg-blue-50 text-blue-900 border border-blue-200 px-3.5 py-1 text-xs font-black">
+                  {customProducts.length > 0 ? `${customProducts.length} Styles` : "Standard Catalog"}
+                </span>
+              </div>
+
+              {customProducts.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {customProducts.map((prod) => (
+                    <div
+                      key={prod.id}
+                      onClick={() => setActivePhoto(prod.image)}
+                      className="rounded-2xl border border-slate-200/90 p-4 bg-slate-50/50 hover:bg-slate-50 transition-all flex flex-col justify-between space-y-3 cursor-pointer group"
+                    >
+                      <div className="flex items-start gap-3.5">
+                        <div className="relative size-20 rounded-xl overflow-hidden bg-slate-200 border border-slate-300 shrink-0">
+                          <Image src={prod.image} alt={prod.name} fill className="object-cover group-hover:scale-105 transition-transform" />
+                        </div>
+                        <div className="space-y-1 flex-1 overflow-hidden">
+                          <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-100 px-2 py-0.5 rounded">
+                            {categoryLabels[prod.category]?.[isSi ? "si" : "en"] || prod.category}
+                          </span>
+                          <h4 className="text-sm font-black text-slate-900 truncate">{prod.name}</h4>
+                          <p className="text-xs font-extrabold text-emerald-700">{prod.pricePerUnit} / Pc</p>
+                          <p className="text-[11px] font-semibold text-slate-500">MOQ: {prod.moq}</p>
+                        </div>
+                      </div>
+                      {prod.description && (
+                        <p className="text-xs text-slate-600 font-medium line-clamp-2 border-t border-slate-200/60 pt-2">
+                          {prod.description}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {[
+                    { name: "Crewneck Heavyweight Cotton T-Shirt", price: "LKR 850 / Pc", moq: "50 Pcs", img: "/images/categories/tshirt.jpg" },
+                    { name: "Tailored Organic Linen Casual Shirt", price: "LKR 1,450 / Pc", moq: "50 Pcs", img: "/images/categories/shirt.jpg" },
+                  ].map((p, idx) => (
+                    <div key={idx} className="rounded-2xl border border-slate-200 p-4 flex items-center gap-3.5 bg-slate-50/60">
+                      <div className="relative size-18 rounded-xl overflow-hidden bg-slate-200 shrink-0">
+                        <Image src={p.img} alt={p.name} fill className="object-cover" />
+                      </div>
+                      <div className="space-y-0.5">
+                        <h4 className="text-sm font-black text-slate-900">{p.name}</h4>
+                        <p className="text-xs font-bold text-emerald-700">{p.price}</p>
+                        <p className="text-[11px] text-slate-500">MOQ: {p.moq}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
 
-            {/* Header Details */}
-            <div className="space-y-2 flex-1">
-              {/* Badges */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-0.5 text-xs font-bold text-amber-300 border border-white/15">
-                  <Building2 className="size-3" />
-                  <span>Apparel Manufacturer Profile</span>
-                </span>
-
-                {isVerified ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-3 py-0.5 text-xs font-bold text-emerald-300 border border-emerald-400/30">
-                    <Sparkles className="size-3" />
-                    <span>verified</span>
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/20 px-3 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/30">
-                    <Sparkles className="size-3" />
-                    <span>unverified</span>
-                  </span>
-                )}
-              </div>
-
-              {/* Business Name */}
-              <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                {supplier.businessName}
-              </h1>
-
-              {/* Specialization Title */}
-              <h2 className="text-lg sm:text-xl font-extrabold text-amber-400">
-                {specialistTitle}
-              </h2>
-
-              {/* Metadata Tags */}
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="inline-flex items-center gap-1 rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-slate-200">
-                  <MapPin className="size-3 text-amber-400" />
-                  <span>{locationDistrict}</span>
-                </span>
-
-                <span className="inline-flex items-center rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-slate-200">
-                  {yearsTextMap[supplier.yearsInOperation] ||
-                    supplier.yearsInOperation}{" "}
-                  Operating Experience
-                </span>
-
-                <span className="inline-flex items-center rounded-lg bg-white/10 px-2.5 py-1 text-xs font-bold text-slate-200">
-                  Team:{" "}
-                  {workforceTextMap[supplier.workforce] || supplier.workforce}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* 4 METRIC CARDS ROW */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5">
-          {/* Card 1: MOQ */}
-          <div className="rounded-3xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex size-11 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-              <Package className="size-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider block">
-                MINIMUM ORDER QUANTITY
-              </span>
-              <p className="text-2xl font-black text-[#0B122F] mt-0.5">
-                {moqTextMap[supplier.moq] || supplier.moq}
-              </p>
-              <p className="text-xs font-semibold text-slate-400 mt-0.5">
-                Per style/color batch
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2: Production Lead Time */}
-          <div className="rounded-3xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex size-11 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-              <Clock className="size-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider block">
-                PRODUCTION LEAD TIME
-              </span>
-              <p className="text-2xl font-black text-[#0B122F] mt-0.5">
-                {leadTimeText}
-              </p>
-              <p className="text-xs font-semibold text-slate-400 mt-0.5">
-                Average turnaround time
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3: Industry Experience */}
-          <div className="rounded-3xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex size-11 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-              <Briefcase className="size-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider block">
-                INDUSTRY EXPERIENCE
-              </span>
-              <p className="text-2xl font-black text-[#0B122F] mt-0.5">
-                {yearsTextMap[supplier.yearsInOperation] ||
-                  supplier.yearsInOperation}
-              </p>
-              <p className="text-xs font-semibold text-slate-400 mt-0.5">
-                Garment manufacturing
-              </p>
-            </div>
-          </div>
-
-          {/* Card 4: Workforce Capacity */}
-          <div className="rounded-3xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-3">
-            <div className="flex size-11 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-              <Users className="size-5" />
-            </div>
-            <div>
-              <span className="text-[11px] font-black uppercase text-slate-400 tracking-wider block">
-                WORKFORCE CAPACITY
-              </span>
-              <p className="text-2xl font-black text-[#0B122F] mt-0.5">
-                {supplier.workforce === "1-10"
-                  ? "Solo"
-                  : workforceTextMap[supplier.workforce] || supplier.workforce}
-              </p>
-              <p className="text-xs font-semibold text-slate-400 mt-0.5">
-                Tailors & operators
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* TWO COLUMN SECTION: Garment Categories & Service Capabilities */}
-        {/* ========================================================================= */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Card: Garment Categories Manufactured */}
-          <div className="rounded-3xl bg-white p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
-            <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-                <Scissors className="size-5" />
-              </div>
-              <h3 className="text-lg font-black text-[#0B122F]">
-                Garment Categories Manufactured
+            {/* Production Capabilities Matrix */}
+            <div className="rounded-[2.2rem] bg-white p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-6">
+              <h3 className="text-xl sm:text-2xl font-black text-[#0B122F]">
+                {isSi ? "කාර්මික සහ මෙහෙයුම් පිරිවිතර" : "Production & Factory Specifications"}
               </h3>
-            </div>
 
-            <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
-              Active pattern making, cutting, and stitching capabilities
-              available for bulk order execution:
-            </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                  <span className="text-xs font-bold text-slate-400 uppercase">Fabric & Material Sourcing</span>
+                  <p className="text-sm font-black text-[#0B122F]">{fabricSourcingText}</p>
+                  <p className="text-xs text-slate-500">Supports in-house knitting mills and buyer provided cut & make</p>
+                </div>
 
-            <div className="flex flex-wrap gap-2 pt-2">
-              {supplier.selectedCategories?.map((catId) => (
-                <span
-                  key={catId}
-                  className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-3.5 py-2 text-xs font-extrabold text-slate-900 border border-slate-200"
-                >
-                  <span className="size-1.5 rounded-full bg-black"></span>
-                  <span>{categoryNameMap[catId] || catId}</span>
-                </span>
-              ))}
-            </div>
-          </div>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                  <span className="text-xs font-bold text-slate-400 uppercase">Sample Development Policy</span>
+                  <p className="text-sm font-black text-[#0B122F]">{samplePolicyText}</p>
+                  <p className="text-xs text-slate-500">Fast physical prototype turn-around in 3-5 days</p>
+                </div>
 
-          {/* Right Card: Supplier Service Capabilities */}
-          <div className="rounded-3xl bg-white p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
-            <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-                <ShieldCheck className="size-5" />
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                  <span className="text-xs font-bold text-slate-400 uppercase">Delivery & Logistics</span>
+                  <p className="text-sm font-black text-[#0B122F]">{deliveryText}</p>
+                  <p className="text-xs text-slate-500">Islandwide doorstep courier & freight forwarder support</p>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-1">
+                  <span className="text-xs font-bold text-slate-400 uppercase">Accepted Payment Terms</span>
+                  <p className="text-sm font-black text-[#0B122F]">{paymentTermsText}</p>
+                  <p className="text-xs text-slate-500">Milestone bank transfer / Apparel Bank verified escrow</p>
+                </div>
               </div>
-              <h3 className="text-lg font-black text-[#0B122F]">
-                Supplier Service Capabilities
-              </h3>
             </div>
 
-            <div className="space-y-2.5 pt-1">
-              {[
-                {
-                  title: "Fabric & Raw Material Sourcing",
-                  sub: "Self-sourcing & Full Package",
-                  icon: Package,
-                  offered: hasFabricSourcing,
-                },
-                {
-                  title: "Custom Brand Tagging & Woven Labels",
-                  sub: "Stitch buyer's custom brand tags",
-                  icon: Tag,
-                  offered: true,
-                },
-                {
-                  title: "Doorstep Local Delivery (Sri Lanka)",
-                  sub: "Warehouse delivery available",
-                  icon: Truck,
-                  offered: hasDelivery,
-                },
-                {
-                  title: "International Export Ready (Air / Sea Freight)",
-                  sub: "Global shipping capable",
-                  icon: Globe,
-                  offered: supplier.yearsInOperation === "10plus",
-                },
-              ].map((serv, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-100"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-8 items-center justify-center rounded-lg bg-slate-200/70 text-slate-700">
-                      <serv.icon className="size-4" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-extrabold text-slate-900">
-                        {serv.title}
-                      </p>
-                      <p className="text-[11px] text-slate-400 font-semibold">
-                        {serv.sub}
-                      </p>
-                    </div>
+            {/* Interactive Order Cost Estimator */}
+            <div className="rounded-[2.2rem] bg-gradient-to-br from-[#020333] to-[#0A1852] text-white p-6 sm:p-8 shadow-xl space-y-6">
+              <div className="flex items-center justify-between border-b border-white/15 pb-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/20 px-3 py-0.5 text-xs font-bold text-amber-300 border border-amber-400/30">
+                    <Sliders className="size-3.5" />
+                    <span>Instant Price Estimator</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white">
+                    {isSi ? "ඇණවුම් වියදම් ගණනය කිරීම" : "Estimate Your Order Cost"}
+                  </h3>
+                </div>
+                <span className="text-xs font-bold text-slate-300">Live Simulation</span>
+              </div>
+
+              <div className="space-y-5">
+                {/* Quantity Slider */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center text-sm font-bold">
+                    <span>Target Production Batch:</span>
+                    <span className="text-amber-400 text-lg font-black">{estQuantity} Pieces</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={50}
+                    max={2000}
+                    step={25}
+                    value={estQuantity}
+                    onChange={(e) => setEstQuantity(Number(e.target.value))}
+                    className="w-full h-2.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  />
+                  <div className="flex justify-between text-[11px] text-slate-400 font-semibold">
+                    <span>50 Pcs (Pilot Run)</span>
+                    <span>500 Pcs (Commercial)</span>
+                    <span>2000+ Pcs (Enterprise)</span>
+                  </div>
+                </div>
+
+                {/* Fabric Option */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-bold uppercase text-slate-300">Select Fabric Tier:</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                    {[
+                      "Standard Cotton (180 GSM)",
+                      "Organic Combed Cotton (220 GSM)",
+                      "Premium French Terry / Linen",
+                    ].map((f, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setEstFabric(f)}
+                        className={`p-3 rounded-xl text-xs font-bold text-left border transition-all cursor-pointer ${
+                          estFabric === f
+                            ? "bg-white text-slate-900 border-white shadow-sm font-extrabold"
+                            : "bg-white/10 text-white border-white/15 hover:bg-white/20"
+                        }`}
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Estimation Results Panel */}
+                <div className="rounded-2xl bg-white/10 p-5 border border-white/15 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div>
+                    <span className="text-xs font-bold uppercase text-slate-300">Estimated Unit Cost:</span>
+                    <p className="text-2xl sm:text-3xl font-black text-amber-400">LKR {unitCostEst} <span className="text-xs text-slate-300 font-semibold">/ pc</span></p>
+                    <p className="text-xs text-slate-300">Est. Total: <strong>LKR {totalEstCost.toLocaleString()}</strong> ({leadTimeText})</p>
                   </div>
 
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-black ${
-                      serv.offered
-                        ? "bg-emerald-100 text-emerald-800"
-                        : "bg-slate-200/80 text-slate-500"
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppClick}
+                    className="h-12 px-6 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-black flex items-center gap-2 cursor-pointer shadow-md transition-transform active:scale-98 shrink-0"
+                  >
+                    <MessageCircle className="size-4.5" />
+                    <span>WhatsApp this Estimate</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Factory Address & Location Map Card */}
+            <div className="rounded-[2.2rem] bg-white p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-4">
+              <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-[#020333] text-white">
+                  <MapPin className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#0B122F]">
+                    {isSi ? "කර්මාන්තශාලා පිහිටීම සහ ලියාපදිංචිය" : "Factory Location & Registration"}
+                  </h3>
+                  <p className="text-xs text-slate-400">Verified official business presence</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span className="font-bold text-slate-400 block mb-1">Business Registration (BRN)</span>
+                  <strong className="text-slate-800 text-sm">{brnNumber}</strong>
+                </div>
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span className="font-bold text-slate-400 block mb-1">Logistics Hub</span>
+                  <strong className="text-slate-800 text-sm">{locationDistrict} District</strong>
+                </div>
+                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                  <span className="font-bold text-slate-400 block mb-1">Factory Address</span>
+                  <strong className="text-slate-800 text-sm">{factoryAddress}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Interactive Pricing & Sticky RFQ Card (4 cols) */}
+          <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-28 space-y-6">
+            {/* 3-Tier Pricing Card */}
+            <div className="rounded-[2.2rem] bg-white border-2 border-slate-200/90 shadow-xl overflow-hidden">
+              {/* Package Selector Tabs */}
+              <div className="grid grid-cols-3 bg-slate-100 border-b border-slate-200 p-1.5 gap-1">
+                {(["basic", "standard", "premium"] as const).map((tab) => (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActivePackageTab(tab)}
+                    className={`py-2.5 text-xs font-black rounded-xl transition-all cursor-pointer capitalize ${
+                      activePackageTab === tab
+                        ? "bg-[#020333] text-white shadow-sm"
+                        : "text-slate-600 hover:text-slate-900"
                     }`}
                   >
-                    {serv.offered ? "Offered" : "Not Offered"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* FACTORY PROFILE & LOCATION INFORMATION */}
-        {/* ========================================================================= */}
-        <div className="rounded-3xl bg-white p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
-          <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-              <Building2 className="size-5" />
-            </div>
-            <h3 className="text-lg font-black text-[#0B122F]">
-              Factory Profile & Location Information
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1 text-xs">
-            <div>
-              <span className="font-bold text-slate-400 uppercase text-[11px] block">
-                Registration Status
-              </span>
-              <p className="font-extrabold text-slate-900 text-sm mt-0.5">
-                {brnNumber}
-              </p>
-            </div>
-
-            <div>
-              <span className="font-bold text-slate-400 uppercase text-[11px] block">
-                Nearest Major Hub
-              </span>
-              <p className="font-extrabold text-slate-900 text-sm mt-0.5">
-                {locationDistrict}
-              </p>
-            </div>
-
-            <div>
-              <span className="font-bold text-slate-400 uppercase text-[11px] block">
-                Factory Location
-              </span>
-              <p className="font-extrabold text-slate-900 text-sm mt-0.5">
-                {factoryAddress}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* CLOTHING PRODUCT PORTFOLIO & GALLERY */}
-        {/* ========================================================================= */}
-        <div className="rounded-3xl bg-white p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-[#020333] text-white shadow-2xs">
-                <Camera className="size-5" />
+                    {tab === "basic" ? "Pilot / Sample" : tab === "standard" ? "Standard" : "Commercial"}
+                  </button>
+                ))}
               </div>
-              <div>
-                <h3 className="text-lg font-black text-[#0B122F]">
-                  Clothing Product Portfolio & Gallery
-                </h3>
-              </div>
-            </div>
 
-            <span className="rounded-full bg-blue-50 border border-blue-100 text-blue-900 text-xs font-bold px-3 py-1">
-              {portfolioPhotos.length} Portfolio Items
-            </span>
-          </div>
-
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">
-            Genuine factory samples, finished garments, and production lines.
-            Click any photo to enlarge.
-          </p>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-            {portfolioPhotos.map((photo) => (
-              <div
-                key={photo.id}
-                onClick={() => setActivePhoto(photo.src)}
-                className="group relative rounded-2xl bg-[#020333] text-white overflow-hidden p-3 cursor-pointer shadow-sm hover:shadow-xl transition-all duration-200"
-              >
-                <div className="relative h-44 w-full rounded-xl overflow-hidden bg-slate-800">
-                  <Image
-                    src={photo.src}
-                    alt={photo.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300 opacity-80 group-hover:opacity-100"
-                  />
-                  <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded">
-                    {photo.id}
+              {/* Package Details */}
+              <div className="p-6 sm:p-7 space-y-6">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="text-xl font-black text-[#0B122F]">{currentPkg.name}</h3>
+                    <p className="text-xs text-slate-500 font-semibold mt-0.5">{currentPkg.description}</p>
                   </div>
                 </div>
 
-                <div className="pt-2.5 text-center">
-                  <p className="text-xs font-extrabold text-white truncate">
-                    {photo.title}
-                  </p>
-                  <p className="text-[10px] font-bold text-slate-400 truncate mt-0.5">
-                    {photo.file}
-                  </p>
+                {/* Price Display */}
+                <div className="rounded-2xl bg-blue-50/70 p-4 border border-blue-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] font-black uppercase text-blue-900">Estimated Unit Rate</span>
+                    <p className="text-2xl sm:text-3xl font-black text-[#020333]">{currentPkg.pricePerUnit}</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[11px] font-black uppercase text-slate-500">Batch MOQ</span>
+                    <p className="text-base font-extrabold text-slate-800">{currentPkg.moq}</p>
+                  </div>
+                </div>
+
+                {/* Features & Turnaround */}
+                <div className="space-y-3 pt-1">
+                  <div className="flex items-center gap-2 text-xs font-extrabold text-slate-700">
+                    <Clock className="size-4 text-blue-600" />
+                    <span>{currentPkg.deliveryDays} Production Turnaround</span>
+                  </div>
+
+                  <div className="space-y-2 border-t border-slate-100 pt-3">
+                    {currentPkg.features.map((f, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                        <Check className="size-4 text-emerald-600 stroke-[3]" />
+                        <span>{f}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppClick}
+                    className="w-full flex h-14 items-center justify-center gap-2 rounded-2xl bg-[#10B981] hover:bg-[#10B981]/90 text-white text-base font-black shadow-md transition-all cursor-pointer active:scale-98"
+                  >
+                    <MessageCircle className="size-5 fill-white" />
+                    <span>Chat Directly on WhatsApp</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setQuoteModalOpen(true)}
+                    className="w-full flex h-13 items-center justify-center gap-2 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 text-white text-sm font-extrabold shadow-sm transition-all cursor-pointer active:scale-98"
+                  >
+                    <Send className="size-4.5" />
+                    <span>Request Custom Quote (RFQ)</span>
+                  </button>
+
+                  <a
+                    href={`tel:${supplier.phone}`}
+                    className="w-full flex h-12 items-center justify-center gap-2 rounded-2xl border-2 border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                  >
+                    <Phone className="size-4 text-slate-500" />
+                    <span>Call Factory: {supplier.phone}</span>
+                  </a>
+                </div>
+
+                {/* Trust & Guarantee Badges */}
+                <div className="pt-2 border-t border-slate-100 space-y-2 text-center text-[11px] text-slate-400 font-semibold">
+                  <div className="flex items-center justify-center gap-1.5 text-emerald-700 font-bold">
+                    <ShieldCheck className="size-4" />
+                    <span>Apparel Bank Verified Direct Contract</span>
+                  </div>
+                  <p>100% Quality Assurance & Factory-Direct Pricing</p>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        {/* ========================================================================= */}
-        {/* BOTTOM ACTION BANNER */}
-        {/* ========================================================================= */}
-        <div className="rounded-[2.2rem] bg-[#020333] p-6 sm:p-8 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-0.5 text-xs font-black text-amber-400 border border-white/10">
-              <Sparkles className="size-3.5 fill-amber-400" />
-              <span>Verified Direct Supplier Connection</span>
-            </span>
-
-            <h3 className="text-2xl sm:text-3xl font-black text-white">
-              Interested in Manufacturing with {supplier.businessName}?
-            </h3>
-
-            <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-xl leading-relaxed">
-              Contact the factory manager directly via WhatsApp for instant
-              sample approvals or submit a formal Quote Request (RFQ) with your
-              tech pack details.
-            </p>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 w-full md:w-auto shrink-0">
-            <button
-              type="button"
-              onClick={handleWhatsAppClick}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-2xl bg-[#10B981] hover:bg-[#10B981]/90 text-white font-extrabold px-6 py-4 text-sm shadow-md transition-all cursor-pointer active:scale-98"
-            >
-              <MessageCircle className="size-5 fill-white" />
-              <span>Contact on WhatsApp</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setQuoteModalOpen(true)}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-2xl bg-white hover:bg-slate-100 text-[#020333] font-extrabold px-6 py-4 text-sm shadow-md transition-all cursor-pointer active:scale-98"
-            >
-              <Send className="size-4.5" />
-              <span>Request a Quote</span>
-            </button>
+            {/* Senior Supplier Support Contact Box */}
+            <div className="rounded-3xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                  <HelpCircle className="size-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black text-[#0B122F]">Need Buyer Assistance?</h4>
+                  <p className="text-xs text-slate-400">Call Apparel Bank support team</p>
+                </div>
+              </div>
+              <a
+                href="tel:0112345678"
+                className="flex h-10 items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-bold transition-colors"
+              >
+                <Phone className="size-3.5" />
+                <span>011 234 5678 (Help Desk)</span>
+              </a>
+            </div>
           </div>
         </div>
 
         {/* ========================================================================= */}
         {/* FOOTER */}
         {/* ========================================================================= */}
-        <footer className="pt-6 pb-4 text-center text-xs font-semibold text-slate-400">
-          <p>© 2026 Apparel Bank Ltd. All rights reserved. • Sri Lanka</p>
+        <footer className="pt-8 pb-4 text-center text-xs font-semibold text-slate-400 border-t border-slate-200">
+          <p>© 2026 Apparel Bank Ltd. All rights reserved. • Sri Lanka Garment Ecosystem</p>
         </footer>
       </main>
 
       {/* ========================================================================= */}
-      {/* PHOTO ENLARGE MODAL */}
+      {/* MOBILE FIXED BOTTOM ACTION BAR */}
+      {/* ========================================================================= */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3.5 shadow-2xl flex items-center justify-between gap-3">
+        <div>
+          <span className="text-[10px] font-black uppercase text-slate-400 block">Starting At</span>
+          <p className="text-lg font-black text-[#020333]">{gig.startingPrice}</p>
+        </div>
+
+        <div className="flex items-center gap-2 flex-1 max-w-xs justify-end">
+          <button
+            type="button"
+            onClick={handleWhatsAppClick}
+            className="flex-1 h-12 flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 text-white text-xs font-black shadow-md active:scale-98"
+          >
+            <MessageCircle className="size-4 fill-white" />
+            <span>WhatsApp</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setQuoteModalOpen(true)}
+            className="flex-1 h-12 flex items-center justify-center gap-1 rounded-xl bg-[#020333] text-white text-xs font-black shadow-md active:scale-98"
+          >
+            <Send className="size-3.5" />
+            <span>RFQ Quote</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ========================================================================= */}
+      {/* PHOTO LIGHTBOX MODAL */}
       {/* ========================================================================= */}
       {activePhoto && (
         <div
           onClick={() => setActivePhoto(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm cursor-pointer"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md cursor-pointer animate-in fade-in"
         >
-          <div className="relative max-w-2xl w-full h-96 rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl">
-            <Image src={activePhoto} alt="Enlarged Photo" fill className="object-cover" />
+          <div className="relative max-w-4xl w-full h-[520px] rounded-3xl overflow-hidden border-2 border-white/20 shadow-2xl">
+            <Image src={activePhoto} alt="Enlarged Garment Sample" fill className="object-contain" />
             <button
               onClick={() => setActivePhoto(null)}
-              className="absolute top-4 right-4 rounded-full bg-black/60 text-white p-2"
+              className="absolute top-4 right-4 rounded-full bg-black/60 text-white p-2 hover:bg-black"
             >
               <X className="size-6" />
             </button>
@@ -675,18 +862,18 @@ export default function SupplierGigDetailPage({
       )}
 
       {/* ========================================================================= */}
-      {/* REQUEST A QUOTE MODAL */}
+      {/* REQUEST A QUOTE (RFQ) MODAL */}
       {/* ========================================================================= */}
       {quoteModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
           <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-8">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
               <div>
-                <h3 className="text-xl font-extrabold text-slate-900">
-                  Request a Quote (RFQ)
+                <h3 className="text-xl font-black text-[#0B122F]">
+                  Request a Formal Quotation (RFQ)
                 </h3>
                 <p className="text-xs text-slate-400 font-medium">
-                  Direct inquiry to {supplier.businessName}
+                  Direct tech-pack submission to {supplier.businessName}
                 </p>
               </div>
               <button
@@ -700,49 +887,62 @@ export default function SupplierGigDetailPage({
 
             {quoteSubmitted ? (
               <div className="py-10 text-center space-y-3">
-                <CheckCircle2 className="size-14 text-emerald-600 mx-auto" />
-                <h4 className="text-xl font-extrabold text-slate-900">
-                  Quote Request Dispatched!
+                <CheckCircle2 className="size-16 text-emerald-600 mx-auto" />
+                <h4 className="text-2xl font-black text-slate-900">
+                  Quote Request Dispatched! 🎉
                 </h4>
-                <p className="text-xs font-semibold text-slate-500 max-w-sm mx-auto">
-                  Your RFQ has been forwarded to {supplier.userName} at{" "}
-                  {supplier.businessName}. You will receive a quotation shortly.
+                <p className="text-xs sm:text-sm font-semibold text-slate-500 max-w-sm mx-auto">
+                  Your RFQ has been delivered to {supplier.userName} at {supplier.businessName}. You will be contacted via WhatsApp/phone shortly.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleQuoteSubmit} className="mt-4 space-y-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
-                    Your Name / Brand Name *
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    Your Name / Apparel Brand *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Maya Apparel Colombo"
+                    placeholder="e.g. Colombo Urban Clothing Ltd"
                     className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold outline-none focus:border-[#020333]"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
-                    Mobile Phone / WhatsApp *
-                  </label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="077 123 4567"
-                    className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold outline-none focus:border-[#020333]"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                      Mobile / WhatsApp Phone *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="077 123 4567"
+                      className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold outline-none focus:border-[#020333]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                      Target Batch Quantity *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      defaultValue={`${estQuantity} Pieces`}
+                      className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-sm font-semibold outline-none focus:border-[#020333]"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
-                    Target Order Quantity & Specifications
+                  <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
+                    Garment Style & Tech Pack Notes
                   </label>
                   <textarea
                     rows={3}
                     required
-                    placeholder="e.g. Need 200 custom crewneck t-shirts (100% cotton, 180 GSM, screen printed front logo)..."
+                    placeholder="Describe sizing, fabric GSM, screen printing colors, neck labels, and delivery deadline..."
                     className="w-full rounded-2xl border-2 border-slate-200 px-4 py-2.5 text-sm font-semibold outline-none focus:border-[#020333]"
                   />
                 </div>
@@ -750,14 +950,14 @@ export default function SupplierGigDetailPage({
                 <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                   <button
                     type="submit"
-                    className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3.5 text-sm font-bold text-white shadow-sm cursor-pointer"
+                    className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-4 text-sm font-extrabold text-white shadow-md cursor-pointer active:scale-98"
                   >
-                    Submit Quote Request
+                    Submit Quotation Request
                   </button>
                   <button
                     type="button"
                     onClick={() => setQuoteModalOpen(false)}
-                    className="rounded-2xl border border-slate-200 px-5 py-3.5 text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                    className="rounded-2xl border-2 border-slate-200 px-5 py-4 text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                   >
                     Cancel
                   </button>
