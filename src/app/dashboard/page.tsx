@@ -319,7 +319,7 @@ export default function UserDashboardPage() {
     return (
       <div className="min-h-screen flex flex-col bg-[#F3F6FA]">
         <header className="sticky top-0 z-50 w-full bg-[#020326] px-4 py-3 sm:px-8 shadow-md border-b border-white/10">
-          <div className="mx-auto flex max-w-5xl items-center justify-between">
+          <div className="mx-auto flex max-w-7xl items-center justify-between">
             <Link href="/" className="flex items-center">
               <div className="relative h-9 w-28 sm:h-11 sm:w-36">
                 <Image src="/images/logo.png" alt="Apparel Bank" fill priority className="object-contain object-left" />
@@ -328,28 +328,28 @@ export default function UserDashboardPage() {
           </div>
         </header>
         <main className="flex-1 flex items-center justify-center px-4 py-12">
-          <div className="w-full max-w-md rounded-[2.2rem] bg-white p-8 sm:p-10 shadow-sm ring-1 ring-slate-200/80 text-center">
-            <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-8 ring-amber-50/50 mb-5">
-              <HelpCircle className="size-10 stroke-[2.5]" />
+          <div className="w-full max-w-md rounded-[2.2rem] bg-white p-6 sm:p-10 shadow-sm ring-1 ring-slate-200/80 text-center">
+            <div className="mx-auto flex size-18 sm:size-20 items-center justify-center rounded-full bg-amber-50 text-amber-600 ring-8 ring-amber-50/50 mb-5">
+              <HelpCircle className="size-9 sm:size-10 stroke-[2.5]" />
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B122F]">
+            <h1 className="text-xl sm:text-3xl font-extrabold text-[#0B122F]">
               {isSi ? "පිවිසුමක් අවශ්‍යයි" : "Sign In Required"}
             </h1>
-            <p className="mt-2 text-base text-slate-500">
+            <p className="mt-2 text-sm sm:text-base text-slate-500">
               {isSi
                 ? "ඔබගේ ලියාපදිංචි තොරතුරු සහ උපකරණ පුවරුව (Dashboard) බැලීමට කරුණාකර පළමුව ඇතුල් වන්න."
                 : "Please sign in to access your supplier dashboard and manage your manufacturing Gig."}
             </p>
-            <div className="mt-8 flex flex-col gap-3">
+            <div className="mt-7 flex flex-col gap-3">
               <Link
                 href="/signin"
-                className="flex h-14 w-full items-center justify-center rounded-2xl bg-[#020333] px-6 text-lg font-bold text-white shadow-sm hover:bg-[#020333]/90"
+                className="flex h-13 sm:h-14 w-full items-center justify-center rounded-2xl bg-[#020333] px-6 text-base sm:text-lg font-bold text-white shadow-sm hover:bg-[#020333]/90"
               >
                 {isSi ? "ඇතුල් වන්න (Sign In)" : "Sign In"}
               </Link>
               <Link
                 href="/"
-                className="flex h-12 w-full items-center justify-center rounded-2xl border border-slate-300 font-bold text-slate-700 hover:bg-slate-50"
+                className="flex h-12 w-full items-center justify-center rounded-2xl border border-slate-300 font-bold text-slate-700 hover:bg-slate-50 text-sm sm:text-base"
               >
                 {isSi ? "මුල් පිටුවට (Home)" : "Back to Home"}
               </Link>
@@ -427,28 +427,28 @@ export default function UserDashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen flex bg-[#F6F8FC] text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white w-full">
+    <div className="min-h-screen flex bg-[#F6F8FC] text-slate-800 font-sans antialiased selection:bg-blue-600 selection:text-white w-full overflow-x-hidden">
       {/* Mobile Drawer Backdrop */}
       {sidebarOpen && (
         <div
           onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden backdrop-blur-xs transition-opacity"
+          className="fixed inset-0 z-50 bg-black/60 lg:hidden backdrop-blur-xs transition-opacity duration-200"
         />
       )}
 
       {/* ========================================================================= */}
-      {/* 1. SIDE PANEL / SIDEBAR (Responsive, Sticky Desktop, Drawer on Mobile) */}
+      {/* 1. SIDE PANEL / SIDEBAR (Responsive, Sticky Desktop, Slide Drawer on Mobile) */}
       {/* ========================================================================= */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200/80 flex flex-col justify-between p-5 transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 lg:h-screen lg:sticky lg:top-0 shadow-sm ${
-          sidebarOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full lg:translate-x-0"
+        className={`fixed inset-y-0 left-0 z-50 w-[84vw] max-w-xs sm:w-72 bg-white border-r border-slate-200/80 flex flex-col justify-between p-4 sm:p-5 transition-transform duration-200 ease-in-out lg:static lg:translate-x-0 lg:h-screen lg:sticky lg:top-0 shadow-xl lg:shadow-none ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        <div className="space-y-6 overflow-y-auto pr-0.5">
+        <div className="space-y-5 overflow-y-auto pr-0.5">
           {/* Top Brand Header */}
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex items-center justify-between pt-0.5">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative h-9 w-32 shrink-0">
+              <div className="relative h-8 w-28 sm:h-9 sm:w-32 shrink-0">
                 <Image
                   src="/images/logo.png"
                   alt="Apparel Bank"
@@ -459,17 +459,18 @@ export default function UserDashboardPage() {
               </div>
             </Link>
             <button
+              type="button"
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              className="lg:hidden p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
             >
               <X className="size-5" />
             </button>
           </div>
 
           {/* Supplier Mini Profile Card */}
-          <div className="rounded-2xl bg-gradient-to-br from-[#02032B] to-[#0A1145] p-4 text-white shadow-sm space-y-3">
+          <div className="rounded-2xl bg-gradient-to-br from-[#02032B] to-[#0A1145] p-3.5 sm:p-4 text-white shadow-sm space-y-3">
             <div className="flex items-center gap-3">
-              <div className="relative size-12 rounded-xl overflow-hidden bg-slate-800 border-2 border-white/20 shrink-0">
+              <div className="relative size-11 rounded-xl overflow-hidden bg-slate-800 border-2 border-white/20 shrink-0">
                 <Image
                   src={user.profileDetails?.factoryBranding?.logoUrl || "/images/categories/shirt.jpg"}
                   alt="Avatar"
@@ -480,18 +481,18 @@ export default function UserDashboardPage() {
               <div className="overflow-hidden flex-1">
                 <div className="flex items-center gap-1.5">
                   <span className="size-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <span className="text-[11px] font-black uppercase text-emerald-300 tracking-wider">
+                  <span className="text-[10px] font-black uppercase text-emerald-300 tracking-wider">
                     {user.status === "approved" ? "Verified Supplier" : user.status === "pending" ? "Pending Review" : "Rejected"}
                   </span>
                 </div>
-                <h2 className="text-sm font-black text-white truncate">{user.businessName}</h2>
-                <p className="text-xs text-slate-300 font-medium truncate">ID: {user.id}</p>
+                <h2 className="text-xs sm:text-sm font-black text-white truncate">{user.businessName}</h2>
+                <p className="text-[11px] text-slate-300 font-medium truncate">ID: {user.id}</p>
               </div>
             </div>
 
             {/* Profile Completeness Bar */}
             <div className="space-y-1 pt-1 border-t border-white/10">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-300">
+              <div className="flex items-center justify-between text-[10px] sm:text-[11px] font-bold text-slate-300">
                 <span>{isSi ? "ගිණුමේ සම්පූර්ණත්වය" : "Profile Setup"}</span>
                 <span className={completenessScore === 100 ? "text-emerald-300" : "text-amber-300"}>
                   {completenessScore}%
@@ -509,8 +510,8 @@ export default function UserDashboardPage() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1.5">
-            <p className="px-3 text-[11px] font-black tracking-wider uppercase text-slate-400">
+          <nav className="space-y-1">
+            <p className="px-3 text-[10px] font-black tracking-wider uppercase text-slate-400">
               {isSi ? "ප්‍රධාන මෙනුව" : "Main Navigation"}
             </p>
 
@@ -525,20 +526,20 @@ export default function UserDashboardPage() {
                     setActiveTab(item.id);
                     setSidebarOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-3 rounded-2xl text-[14px] font-bold transition-all cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 sm:py-3 rounded-2xl text-[13px] sm:text-[14px] font-bold transition-all cursor-pointer ${
                     isActive
                       ? "bg-[#020333] text-white shadow-md shadow-[#020333]/15 translate-x-1"
                       : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <Icon className={`size-4.5 shrink-0 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
-                    <span>{isSi ? item.labelSi : item.labelEn}</span>
+                  <div className="flex items-center gap-2.5 sm:gap-3">
+                    <Icon className={`size-4 sm:size-4.5 shrink-0 ${isActive ? "text-amber-400" : "text-slate-500"}`} />
+                    <span className="truncate">{isSi ? item.labelSi : item.labelEn}</span>
                   </div>
 
                   {item.badge && (
                     <span
-                      className={`text-[11px] font-extrabold px-2 py-0.5 rounded-full ${
+                      className={`text-[10px] sm:text-[11px] font-extrabold px-2 py-0.5 rounded-full shrink-0 ${
                         isActive ? "bg-white/20 text-white" : item.badgeColor || "bg-slate-100 text-slate-600"
                       }`}
                     >
@@ -551,37 +552,37 @@ export default function UserDashboardPage() {
           </nav>
 
           {/* Quick Shortcuts */}
-          <div className="pt-2 border-t border-slate-100 space-y-2">
-            <p className="px-3 text-[11px] font-black tracking-wider uppercase text-slate-400">
+          <div className="pt-2 border-t border-slate-100 space-y-1.5">
+            <p className="px-3 text-[10px] font-black tracking-wider uppercase text-slate-400">
               {isSi ? "කෙටි මාර්ග" : "Quick Shortcuts"}
             </p>
 
             <Link
               href={`/gig/${user.id}`}
-              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors border border-emerald-200"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-colors border border-emerald-200"
             >
               <div className="flex items-center gap-2">
-                <ExternalLink className="size-4" />
+                <ExternalLink className="size-3.5" />
                 <span>{isSi ? "සේවා දැන්වීම බලන්න" : "View Live Gig"}</span>
               </div>
-              <ChevronRight className="size-3.5" />
+              <ChevronRight className="size-3" />
             </Link>
 
             <Link
               href="/marketplace"
-              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors border border-indigo-200"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors border border-indigo-200"
             >
               <div className="flex items-center gap-2">
-                <Tag className="size-4" />
+                <Tag className="size-3.5" />
                 <span>{isSi ? "වෙළඳපොළට යන්න" : "Marketplace"}</span>
               </div>
-              <ChevronRight className="size-3.5" />
+              <ChevronRight className="size-3" />
             </Link>
           </div>
         </div>
 
         {/* Sidebar Footer Controls */}
-        <div className="pt-4 border-t border-slate-200/80 space-y-2.5">
+        <div className="pt-3 border-t border-slate-200/80 space-y-2">
           {/* Language Switcher Pill */}
           <div className="flex items-center justify-between rounded-xl bg-slate-100 p-1">
             <span className="text-xs font-bold text-slate-500 pl-2">
@@ -615,7 +616,7 @@ export default function UserDashboardPage() {
             <button
               type="button"
               onClick={handleRefresh}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors shadow-2xs"
+              className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition-colors shadow-2xs"
             >
               <RefreshCw className={`size-3.5 ${refreshing ? "animate-spin text-blue-600" : ""}`} />
               <span>{isSi ? "යාවත්කාලීන" : "Refresh"}</span>
@@ -624,7 +625,7 @@ export default function UserDashboardPage() {
             <button
               type="button"
               onClick={handleSignOut}
-              className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-rose-50 text-xs font-bold text-rose-700 hover:bg-rose-100 cursor-pointer transition-colors border border-rose-100"
+              className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl bg-rose-50 text-xs font-bold text-rose-700 hover:bg-rose-100 cursor-pointer transition-colors border border-rose-100"
             >
               <LogOut className="size-3.5" />
               <span>{isSi ? "ඉවත් වන්න" : "Sign Out"}</span>
@@ -638,28 +639,29 @@ export default function UserDashboardPage() {
       {/* ========================================================================= */}
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Header Bar */}
-        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5 flex items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             {/* Mobile Hamburger Drawer Button */}
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
+              className="lg:hidden p-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer shrink-0"
+              aria-label="Open navigation menu"
             >
               <Menu className="size-5" />
             </button>
 
-            <div>
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+            <div className="min-w-0">
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 truncate">
                 <span>{isSi ? "සැපයුම්කරු පුවරුව" : "Supplier Portal"}</span>
                 <span>/</span>
-                <span className="text-slate-700 capitalize">
+                <span className="text-slate-700 capitalize truncate">
                   {isSi
                     ? navItems.find((n) => n.id === activeTab)?.labelSi
                     : navItems.find((n) => n.id === activeTab)?.labelEn}
                 </span>
               </div>
-              <h1 className="text-lg sm:text-xl font-black text-[#0B122F] leading-tight">
+              <h1 className="text-base sm:text-xl font-black text-[#0B122F] leading-tight truncate">
                 {isSi
                   ? navItems.find((n) => n.id === activeTab)?.labelSi
                   : navItems.find((n) => n.id === activeTab)?.labelEn}
@@ -668,10 +670,10 @@ export default function UserDashboardPage() {
           </div>
 
           {/* Top Actions */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <Link
               href={`/gig/${user.id}`}
-              className="hidden sm:inline-flex h-10 items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 text-xs font-black transition-colors shadow-2xs"
+              className="hidden sm:inline-flex h-9 sm:h-10 items-center gap-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 text-xs font-black transition-colors shadow-2xs"
             >
               <Eye className="size-3.5" />
               <span>{isSi ? "සජීවී සේවා පිටුව (Gig)" : "View Public Gig ↗"}</span>
@@ -681,70 +683,70 @@ export default function UserDashboardPage() {
               type="button"
               onClick={handleRefresh}
               title="Refresh"
-              className="flex size-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
+              className="flex size-9 sm:size-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 cursor-pointer"
             >
-              <RefreshCw className={`size-4 ${refreshing ? "animate-spin text-blue-600" : ""}`} />
+              <RefreshCw className={`size-3.5 sm:size-4 ${refreshing ? "animate-spin text-blue-600" : ""}`} />
             </button>
 
             <button
               type="button"
               onClick={handleSignOut}
               title="Sign Out"
-              className="flex size-10 items-center justify-center rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 cursor-pointer"
+              className="flex size-9 sm:size-10 items-center justify-center rounded-xl border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100 cursor-pointer"
             >
-              <LogOut className="size-4" />
+              <LogOut className="size-3.5 sm:size-4" />
             </button>
           </div>
         </header>
 
         {/* Toast Notification */}
         {toastMsg && (
-          <div className="fixed top-18 right-6 z-50 animate-in fade-in slide-in-from-top-4">
-            <div className="rounded-2xl bg-[#020333] text-white px-5 py-3.5 shadow-2xl border-2 border-emerald-400 text-sm sm:text-base font-bold flex items-center gap-3">
+          <div className="fixed top-14 sm:top-18 right-4 sm:right-6 z-50 animate-in fade-in slide-in-from-top-4 max-w-[90vw]">
+            <div className="rounded-2xl bg-[#020333] text-white px-4 sm:px-5 py-3 shadow-2xl border-2 border-emerald-400 text-xs sm:text-sm font-bold flex items-center gap-2.5">
               <span>{toastMsg}</span>
             </div>
           </div>
         )}
 
-        {/* Tab Views Container */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto space-y-6">
+        {/* Tab Views Container - Added bottom padding pb-28 for mobile bottom bar */}
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 max-w-6xl w-full mx-auto space-y-5 sm:space-y-6 pb-28 lg:pb-8">
           {/* ========================================================================= */}
           {/* TAB 1: OVERVIEW */}
           {/* ========================================================================= */}
           {activeTab === "overview" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Top Welcome Hero Banner */}
-              <div className="rounded-[2.2rem] bg-gradient-to-r from-[#020333] to-[#121E5C] text-white p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
-                <div className="space-y-2 relative z-10">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1 text-xs font-extrabold text-amber-300 border border-white/15">
-                    <Sparkles className="size-3.5" />
+              <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-gradient-to-r from-[#020333] to-[#121E5C] text-white p-5 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-5 relative overflow-hidden">
+                <div className="space-y-1.5 sm:space-y-2 relative z-10">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-0.5 sm:py-1 text-[11px] sm:text-xs font-extrabold text-amber-300 border border-white/15">
+                    <Sparkles className="size-3 sm:size-3.5" />
                     <span>{isSi ? "සැපයුම්කරු කළමනාකරණ පුවරුව" : "Garment Supplier Portal"}</span>
                     <span>•</span>
                     <span>ID: {user.id}</span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black text-white">
+                  <h2 className="text-xl sm:text-3xl font-black text-white">
                     {isSi ? `ආයුබෝවන්, ${user.userName}! 👋` : `Welcome back, ${user.userName}! 👋`}
                   </h2>
-                  <p className="text-sm sm:text-base text-slate-300 font-medium max-w-xl">
+                  <p className="text-xs sm:text-base text-slate-300 font-medium max-w-xl">
                     {user.businessName} • 📞 {user.phone} • {district}, Sri Lanka
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-3 relative z-10">
+                <div className="flex flex-wrap sm:flex-nowrap gap-2.5 sm:gap-3 relative z-10 pt-1 sm:pt-0">
                   <button
                     type="button"
                     onClick={() => setActiveModal("addProduct")}
-                    className="flex h-12 items-center gap-2 rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-5 text-sm cursor-pointer shadow-md transition-transform active:scale-98"
+                    className="flex-1 sm:flex-none flex h-11 sm:h-12 items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black px-4 sm:px-5 text-xs sm:text-sm cursor-pointer shadow-md transition-transform active:scale-98"
                   >
-                    <Plus className="size-4.5 stroke-[3]" />
+                    <Plus className="size-4 stroke-[3]" />
                     <span>{isSi ? "+ ඇඳුමක් එක් කරන්න" : "+ Add Garment"}</span>
                   </button>
 
                   <Link
                     href={`/gig/${user.id}`}
-                    className="flex h-12 items-center gap-2 rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold px-5 text-sm cursor-pointer transition-colors border border-white/20"
+                    className="flex-1 sm:flex-none flex h-11 sm:h-12 items-center justify-center gap-1.5 sm:gap-2 rounded-xl sm:rounded-2xl bg-white/15 hover:bg-white/25 text-white font-bold px-4 sm:px-5 text-xs sm:text-sm cursor-pointer transition-colors border border-white/20"
                   >
-                    <Eye className="size-4.5" />
+                    <Eye className="size-4" />
                     <span>{isSi ? "සේවා දැන්වීම (Gig)" : "View Live Gig"}</span>
                   </Link>
                 </div>
@@ -752,16 +754,16 @@ export default function UserDashboardPage() {
 
               {/* Status Banner */}
               {user.status === "approved" && (
-                <div className="rounded-[1.8rem] bg-emerald-50 border-2 border-emerald-400/90 p-5 sm:p-6 text-emerald-950 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
-                      <CheckCircle2 className="size-8 stroke-[2.5]" />
+                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] bg-emerald-50 border-2 border-emerald-400/90 p-4 sm:p-6 text-emerald-950 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-600 text-white shadow-sm">
+                      <CheckCircle2 className="size-7 sm:size-8 stroke-[2.5]" />
                     </div>
                     <div>
-                      <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase text-emerald-800 bg-emerald-200/80 px-2.5 py-0.5 rounded-full mb-1">
+                      <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase text-emerald-800 bg-emerald-200/80 px-2.5 py-0.5 rounded-full mb-1">
                         Verified & Approved
                       </span>
-                      <h3 className="text-lg font-black text-emerald-950">
+                      <h3 className="text-base sm:text-lg font-black text-emerald-950">
                         {isSi ? "ලියාපදිංචිය සාර්ථකව අනුමත කර ඇත! 🎉" : "Factory Registration Approved! 🎉"}
                       </h3>
                       <p className="text-xs sm:text-sm font-semibold text-emerald-800">
@@ -773,7 +775,7 @@ export default function UserDashboardPage() {
                   </div>
                   <button
                     onClick={() => setActiveTab("gig")}
-                    className="h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer shrink-0"
+                    className="w-full sm:w-auto h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer shrink-0"
                   >
                     {isSi ? "දැන්වීම පරීක්ෂා කරන්න" : "Manage Gig"}
                   </button>
@@ -781,15 +783,15 @@ export default function UserDashboardPage() {
               )}
 
               {user.status === "pending" && (
-                <div className="rounded-[1.8rem] bg-amber-50 border-2 border-amber-400 p-5 sm:p-6 text-amber-950 shadow-2xs flex items-center gap-4">
-                  <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
-                    <Clock className="size-8 stroke-[2.5]" />
+                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] bg-amber-50 border-2 border-amber-400 p-4 sm:p-6 text-amber-950 shadow-2xs flex items-center gap-3 sm:gap-4">
+                  <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-sm">
+                    <Clock className="size-7 sm:size-8 stroke-[2.5]" />
                   </div>
                   <div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-full mb-1">
+                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase text-amber-900 bg-amber-200 px-2.5 py-0.5 rounded-full mb-1">
                       Under Review
                     </span>
-                    <h3 className="text-lg font-black text-amber-950">
+                    <h3 className="text-base sm:text-lg font-black text-amber-950">
                       {isSi ? "අයදුම්පත පරීක්ෂා කෙරෙමින් පවතී ⏳" : "Application Under Review ⏳"}
                     </h3>
                     <p className="text-xs sm:text-sm font-semibold text-amber-900">
@@ -802,15 +804,15 @@ export default function UserDashboardPage() {
               )}
 
               {user.status === "rejected" && (
-                <div className="rounded-[1.8rem] bg-rose-50 border-2 border-rose-400 p-5 sm:p-6 text-rose-950 shadow-2xs flex items-center gap-4">
-                  <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-sm">
-                    <XCircle className="size-8 stroke-[2.5]" />
+                <div className="rounded-[1.6rem] sm:rounded-[1.8rem] bg-rose-50 border-2 border-rose-400 p-4 sm:p-6 text-rose-950 shadow-2xs flex items-center gap-3 sm:gap-4">
+                  <div className="flex size-12 sm:size-14 shrink-0 items-center justify-center rounded-2xl bg-rose-600 text-white shadow-sm">
+                    <XCircle className="size-7 sm:size-8 stroke-[2.5]" />
                   </div>
                   <div>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-black uppercase text-rose-900 bg-rose-200 px-2.5 py-0.5 rounded-full mb-1">
+                    <span className="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-black uppercase text-rose-900 bg-rose-200 px-2.5 py-0.5 rounded-full mb-1">
                       Action Required
                     </span>
-                    <h3 className="text-lg font-black text-rose-950">
+                    <h3 className="text-base sm:text-lg font-black text-rose-950">
                       {isSi ? "ලියාපදිංචිය තහවුරු කර නැත ❌" : "Application Not Approved ❌"}
                     </h3>
                     <p className="text-xs sm:text-sm font-semibold text-rose-900">
@@ -823,83 +825,83 @@ export default function UserDashboardPage() {
               )}
 
               {/* 4 Pulse Metric Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-1">
-                  <span className="text-xs font-bold uppercase text-slate-400">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs space-y-1">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-slate-400">
                     {isSi ? "ඇඳුම් සාම්පල" : "Active Products"}
                   </span>
-                  <p className="text-2xl sm:text-3xl font-black text-[#0B122F]">{productsList.length}</p>
-                  <p className="text-[11px] text-emerald-600 font-semibold">In Gig Portfolio</p>
+                  <p className="text-xl sm:text-3xl font-black text-[#0B122F]">{productsList.length}</p>
+                  <p className="text-[10px] sm:text-[11px] text-emerald-600 font-semibold truncate">In Gig Portfolio</p>
                 </div>
 
-                <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-1">
-                  <span className="text-xs font-bold uppercase text-slate-400">
+                <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs space-y-1">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-slate-400">
                     {isSi ? "ගැණුම්කරු විමසීම්" : "Buyer Inquiries"}
                   </span>
-                  <p className="text-2xl sm:text-3xl font-black text-emerald-600">{inquiries.length}</p>
-                  <p className="text-[11px] text-slate-400 font-semibold">RFQ & WhatsApp Leads</p>
+                  <p className="text-xl sm:text-3xl font-black text-emerald-600">{inquiries.length}</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate">RFQ & WhatsApp Leads</p>
                 </div>
 
-                <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-1">
-                  <span className="text-xs font-bold uppercase text-slate-400">
+                <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs space-y-1">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-slate-400">
                     {isSi ? "අවම ඇණවුම (MOQ)" : "Min Order Qty"}
                   </span>
-                  <p className="text-2xl sm:text-3xl font-black text-[#0B122F]">{user.moq}</p>
-                  <p className="text-[11px] text-blue-600 font-semibold">Flexible Tier</p>
+                  <p className="text-xl sm:text-3xl font-black text-[#0B122F] truncate">{user.moq}</p>
+                  <p className="text-[10px] sm:text-[11px] text-blue-600 font-semibold truncate">Flexible Tier</p>
                 </div>
 
-                <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs space-y-1">
-                  <span className="text-xs font-bold uppercase text-slate-400">
+                <div className="rounded-2xl bg-white p-3.5 sm:p-5 border border-slate-200/90 shadow-xs space-y-1">
+                  <span className="text-[10px] sm:text-xs font-bold uppercase text-slate-400">
                     {isSi ? "නිෂ්පාදන කාලය" : "Lead Time"}
                   </span>
-                  <p className="text-2xl sm:text-3xl font-black text-[#0B122F] truncate">
-                    {leadTime.split(" ")[0]} <span className="text-sm font-bold text-slate-400">Days</span>
+                  <p className="text-xl sm:text-3xl font-black text-[#0B122F] truncate">
+                    {leadTime.split(" ")[0]} <span className="text-xs font-bold text-slate-400">Days</span>
                   </p>
-                  <p className="text-[11px] text-slate-400 font-semibold">Standard Turnaround</p>
+                  <p className="text-[10px] sm:text-[11px] text-slate-400 font-semibold truncate">Standard Turnaround</p>
                 </div>
               </div>
 
               {/* Complete Your Profile Cards */}
-              <div className="space-y-4 pt-2">
+              <div className="space-y-3 sm:space-y-4 pt-1">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-xl font-black text-[#0B122F] flex items-center gap-2">
-                      <Sparkles className="size-5 text-amber-500 fill-amber-500" />
+                    <h3 className="text-lg sm:text-xl font-black text-[#0B122F] flex items-center gap-1.5 sm:gap-2">
+                      <Sparkles className="size-4 sm:size-5 text-amber-500 fill-amber-500" />
                       <span>{isSi ? "ගිණුම සම්පූර්ණ කරන්න" : "Complete Factory Profile"}</span>
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                    <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
                       {isSi
                         ? "ගැනුම්කරුවන්ට ඔබගේ කර්මාන්තශාලාව පූර්ණ ලෙස ප්‍රදර්ශනය කිරීමට පහත විස්තර ඇතුළත් කරන්න."
-                        : "Complete all sections to receive a Verified Supplier badge and higher search rank."}
+                        : "Complete all sections to receive a Verified Supplier badge."}
                     </p>
                   </div>
-                  <span className="text-xs font-extrabold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-                    {completenessScore}% {isSi ? "සම්පූර්ණයි" : "Completed"}
+                  <span className="text-[11px] sm:text-xs font-extrabold text-slate-600 bg-slate-100 px-2.5 sm:px-3 py-1 rounded-full shrink-0">
+                    {completenessScore}% {isSi ? "සම්පූර්ණයි" : "Done"}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4">
                   {/* Card 1 */}
-                  <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div className="space-y-1.5 sm:space-y-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                          <MapPin className="size-4.5" />
+                        <div className="flex size-8 sm:size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                          <MapPin className="size-4 sm:size-4.5" />
                         </div>
                         {hasLocation ? (
-                          <span className="text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <span className="text-[10px] sm:text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                             ✓ Done
                           </span>
                         ) : (
-                          <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] sm:text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
                             Pending
                           </span>
                         )}
                       </div>
-                      <h4 className="text-base font-extrabold text-[#0B122F]">
+                      <h4 className="text-sm sm:text-base font-extrabold text-[#0B122F]">
                         {isSi ? "ව්‍යාපාර සහ ලිපිනය" : "Business & Location"}
                       </h4>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-[11px] sm:text-xs text-slate-500">
                         {isSi ? "BRN අංකය, සමාගම් වර්ගය සහ භෞතික ලිපිනය." : "Registration BRN, legal type & factory street address."}
                       </p>
                     </div>
@@ -913,26 +915,26 @@ export default function UserDashboardPage() {
                   </div>
 
                   {/* Card 2 */}
-                  <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div className="space-y-1.5 sm:space-y-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                          <Truck className="size-4.5" />
+                        <div className="flex size-8 sm:size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                          <Truck className="size-4 sm:size-4.5" />
                         </div>
                         {hasLogistics ? (
-                          <span className="text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <span className="text-[10px] sm:text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                             ✓ Done
                           </span>
                         ) : (
-                          <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] sm:text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
                             Pending
                           </span>
                         )}
                       </div>
-                      <h4 className="text-base font-extrabold text-[#0B122F]">
+                      <h4 className="text-sm sm:text-base font-extrabold text-[#0B122F]">
                         {isSi ? "මෙහෙයුම් සහ සැපයුම්" : "Operations & Logistics"}
                       </h4>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-[11px] sm:text-xs text-slate-500">
                         {isSi ? "නිෂ්පාදන කාලය, රෙදිපිළි සැපයුම සහ බෙදාහැරීම." : "Lead time, fabric sourcing support & delivery mode."}
                       </p>
                     </div>
@@ -946,26 +948,26 @@ export default function UserDashboardPage() {
                   </div>
 
                   {/* Card 3 */}
-                  <div className="rounded-2xl bg-white p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-4">
-                    <div className="space-y-2">
+                  <div className="rounded-2xl bg-white p-4 sm:p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between space-y-3 sm:space-y-4">
+                    <div className="space-y-1.5 sm:space-y-2">
                       <div className="flex items-center justify-between">
-                        <div className="flex size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                          <Building2 className="size-4.5" />
+                        <div className="flex size-8 sm:size-9 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                          <Building2 className="size-4 sm:size-4.5" />
                         </div>
                         {hasBranding ? (
-                          <span className="text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <span className="text-[10px] sm:text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                             ✓ Done
                           </span>
                         ) : (
-                          <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
+                          <span className="text-[10px] sm:text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">
                             Pending
                           </span>
                         )}
                       </div>
-                      <h4 className="text-base font-extrabold text-[#0B122F]">
+                      <h4 className="text-sm sm:text-base font-extrabold text-[#0B122F]">
                         {isSi ? "කර්මාන්තශාලා සන්නාමය" : "Factory Branding"}
                       </h4>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-[11px] sm:text-xs text-slate-500">
                         {isSi ? "ලාංඡනය (Logo), Gig ආවරණ ඡායාරූපය සහ කෙටි විස්තරය." : "Logo avatar, wide cover banner & factory tagline."}
                       </p>
                     </div>
@@ -981,14 +983,14 @@ export default function UserDashboardPage() {
               </div>
 
               {/* Gig Preview Spotlight */}
-              <div className="rounded-[2.2rem] bg-[#020333] text-white p-6 sm:p-7 shadow-md space-y-5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+              <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-[#020333] text-white p-4 sm:p-7 shadow-md space-y-4 sm:space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3 sm:pb-4">
                   <div>
-                    <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-400 uppercase">
-                      <Sparkles className="size-3.5" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-black text-emerald-400 uppercase">
+                      <Sparkles className="size-3 sm:size-3.5" />
                       Live Gig Spotlight
                     </span>
-                    <h3 className="text-xl font-black text-white mt-0.5">
+                    <h3 className="text-lg sm:text-xl font-black text-white mt-0.5">
                       {isSi ? "වෙළඳපොළ සේවා පිටුව" : "Public Marketplace Gig"}
                     </h3>
                   </div>
@@ -997,22 +999,22 @@ export default function UserDashboardPage() {
                     <button
                       type="button"
                       onClick={() => setActiveModal("addProduct")}
-                      className="h-10 px-4 rounded-xl bg-white text-[#020333] text-xs font-black hover:bg-slate-100 cursor-pointer"
+                      className="flex-1 sm:flex-none h-9 sm:h-10 px-3 sm:px-4 rounded-xl bg-white text-[#020333] text-xs font-black hover:bg-slate-100 cursor-pointer"
                     >
                       {isSi ? "+ ඇඳුමක් එක් කරන්න" : "+ Add Product"}
                     </button>
                     <Link
                       href={`/gig/${user.id}`}
-                      className="h-10 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer"
+                      className="flex-1 sm:flex-none h-9 sm:h-10 px-3 sm:px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <Eye className="size-4" />
+                      <Eye className="size-3.5" />
                       <span>{isSi ? "පිටුව බලන්න ↗" : "View Live ↗"}</span>
                     </Link>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-center">
-                  <div className="relative h-40 md:h-48 rounded-2xl overflow-hidden bg-slate-800 border border-white/20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 items-center">
+                  <div className="relative h-36 sm:h-44 md:h-48 rounded-2xl overflow-hidden bg-slate-800 border border-white/20">
                     <Image
                       src={user.profileDetails?.factoryBranding?.coverUrl || gigData.coverImage}
                       alt="Cover"
@@ -1027,9 +1029,9 @@ export default function UserDashboardPage() {
                     </div>
                   </div>
 
-                  <div className="md:col-span-2 space-y-3">
+                  <div className="md:col-span-2 space-y-2.5 sm:space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="relative size-10 rounded-xl overflow-hidden bg-slate-700 border border-white/20 shrink-0">
+                      <div className="relative size-9 sm:size-10 rounded-xl overflow-hidden bg-slate-700 border border-white/20 shrink-0">
                         <Image
                           src={user.profileDetails?.factoryBranding?.logoUrl || gigData.seller.avatar}
                           alt="Logo"
@@ -1037,27 +1039,27 @@ export default function UserDashboardPage() {
                           className="object-cover"
                         />
                       </div>
-                      <div>
-                        <h4 className="text-base font-black text-white">{user.businessName}</h4>
-                        <p className="text-xs text-slate-300">
-                          {district}, Sri Lanka • ⭐ 4.9 Rating ({Math.floor(20 + productsList.length * 3)} orders)
+                      <div className="overflow-hidden">
+                        <h4 className="text-sm sm:text-base font-black text-white truncate">{user.businessName}</h4>
+                        <p className="text-[11px] sm:text-xs text-slate-300 truncate">
+                          {district}, Sri Lanka • ⭐ 4.9 Rating
                         </p>
                       </div>
                     </div>
 
-                    <p className="text-sm font-semibold text-slate-200 line-clamp-2">
+                    <p className="text-xs sm:text-sm font-semibold text-slate-200 line-clamp-2">
                       {gigData.title}
                     </p>
 
-                    <div className="flex flex-wrap gap-2 text-xs font-bold text-slate-300 pt-1">
-                      <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/10">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-bold text-slate-300 pt-0.5">
+                      <span className="bg-white/10 px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/10">
                         📦 MOQ: {user.moq}
                       </span>
-                      <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/10">
+                      <span className="bg-white/10 px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/10">
                         ⏱️ {leadTime}
                       </span>
-                      <span className="bg-white/10 px-3 py-1 rounded-lg border border-white/10">
-                        👕 {productsList.length} Styles Available
+                      <span className="bg-white/10 px-2.5 py-0.5 sm:py-1 rounded-lg border border-white/10">
+                        👕 {productsList.length} Styles
                       </span>
                     </div>
                   </div>
@@ -1070,67 +1072,67 @@ export default function UserDashboardPage() {
           {/* TAB 2: MY LIVE GIG */}
           {/* ========================================================================= */}
           {activeTab === "gig" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-2xl font-black text-[#0B122F]">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B122F]">
                     {isSi ? "සජීවී සේවා දැන්වීම (My Live Gig)" : "My Live Manufacturing Gig"}
                   </h2>
-                  <p className="text-sm text-slate-500 font-medium">
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium">
                     {isSi
                       ? "ගැණුම්කරුවන්ට ඔබගේ කර්මාන්තශාලාව වෙළඳපොළේ දිස්වන ආකාරය මෙතැනින් කළමනාකරණය කරන්න."
                       : "Preview and manage how wholesale clothing buyers see your manufacturing gig."}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <button
                     type="button"
                     onClick={() => setActiveModal("branding")}
-                    className="h-11 px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer shadow-2xs"
+                    className="flex-1 sm:flex-none h-10 px-3 sm:px-4 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer shadow-2xs"
                   >
-                    {isSi ? "කවරය / ලාංඡනය වෙනස් කරන්න" : "Edit Cover & Logo"}
+                    {isSi ? "කවරය / ලාංඡනය" : "Edit Cover & Logo"}
                   </button>
                   <Link
                     href={`/gig/${user.id}`}
-                    className="h-11 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    className="flex-1 sm:flex-none h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black inline-flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                   >
-                    <Eye className="size-4" />
-                    <span>{isSi ? "ප්‍රසිද්ධ පිටුව බලන්න ↗" : "View Live Page ↗"}</span>
+                    <Eye className="size-3.5" />
+                    <span>{isSi ? "ප්‍රසිද්ධ පිටුව ↗" : "View Live ↗"}</span>
                   </Link>
                 </div>
               </div>
 
               {/* Live Gig Preview Card */}
-              <div className="rounded-[2.2rem] bg-white border border-slate-200/90 shadow-sm overflow-hidden space-y-6 p-6 sm:p-8">
+              <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-white border border-slate-200/90 shadow-sm overflow-hidden space-y-5 p-4 sm:p-7">
                 {/* Widescreen Banner */}
-                <div className="relative h-56 sm:h-72 w-full rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
+                <div className="relative h-48 sm:h-64 md:h-72 w-full rounded-2xl overflow-hidden bg-slate-100 shadow-inner">
                   <Image
                     src={user.profileDetails?.factoryBranding?.coverUrl || gigData.coverImage}
                     alt="Cover"
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-6">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-4 sm:p-6">
                     <div className="flex items-center justify-between">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 text-white text-xs font-black px-3 py-1 shadow-md">
-                        <ShieldCheck className="size-4" />
+                      <span className="inline-flex items-center gap-1 rounded-full bg-emerald-600 text-white text-[10px] sm:text-xs font-black px-2.5 sm:px-3 py-1 shadow-md">
+                        <ShieldCheck className="size-3.5" />
                         Verified Apparel Manufacturer
                       </span>
 
                       <button
                         type="button"
                         onClick={() => setActiveModal("branding")}
-                        className="bg-black/60 hover:bg-black/80 backdrop-blur-xs text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-white/30 cursor-pointer"
+                        className="bg-black/60 hover:bg-black/80 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-lg border border-white/30 cursor-pointer"
                       >
-                        {isSi ? "ඡායාරූපය වෙනස් කරන්න" : "Change Cover"}
+                        {isSi ? "වෙනස් කරන්න" : "Change Cover"}
                       </button>
                     </div>
 
                     <div className="text-white space-y-1">
                       <div className="flex items-center gap-2">
-                        <div className="relative size-12 rounded-xl overflow-hidden border-2 border-white bg-slate-800 shrink-0 shadow-md">
+                        <div className="relative size-10 sm:size-12 rounded-xl overflow-hidden border-2 border-white bg-slate-800 shrink-0 shadow-md">
                           <Image
                             src={user.profileDetails?.factoryBranding?.logoUrl || gigData.seller.avatar}
                             alt="Logo"
@@ -1138,9 +1140,9 @@ export default function UserDashboardPage() {
                             className="object-cover"
                           />
                         </div>
-                        <div>
-                          <h3 className="text-lg sm:text-xl font-black text-white">{user.businessName}</h3>
-                          <p className="text-xs font-semibold text-slate-200">
+                        <div className="overflow-hidden">
+                          <h3 className="text-base sm:text-xl font-black text-white truncate">{user.businessName}</h3>
+                          <p className="text-xs font-semibold text-slate-200 truncate">
                             {district}, Sri Lanka • 📞 {user.phone}
                           </p>
                         </div>
@@ -1150,48 +1152,48 @@ export default function UserDashboardPage() {
                 </div>
 
                 {/* Gig Title & Overview */}
-                <div className="space-y-4">
-                  <div className="border-b border-slate-100 pb-4">
-                    <h3 className="text-xl sm:text-2xl font-black text-[#0B122F]">
+                <div className="space-y-3">
+                  <div className="border-b border-slate-100 pb-3">
+                    <h3 className="text-lg sm:text-2xl font-black text-[#0B122F]">
                       {gigData.title}
                     </h3>
-                    <p className="text-sm sm:text-base text-slate-600 font-medium mt-2 leading-relaxed">
+                    <p className="text-xs sm:text-base text-slate-600 font-medium mt-1.5 leading-relaxed">
                       {gigData.overview}
                     </p>
                   </div>
 
                   {/* Highlights Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
-                    <div className="rounded-xl bg-slate-50 p-3.5 border border-slate-100">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase">Starting Price</span>
-                      <p className="text-base font-black text-[#0B122F]">{gigData.startingPrice} / pc</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 pt-1">
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">Starting Price</span>
+                      <p className="text-sm sm:text-base font-black text-[#0B122F]">{gigData.startingPrice} / pc</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3.5 border border-slate-100">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase">Minimum MOQ</span>
-                      <p className="text-base font-black text-[#0B122F]">{user.moq}</p>
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">Minimum MOQ</span>
+                      <p className="text-sm sm:text-base font-black text-[#0B122F]">{user.moq}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3.5 border border-slate-100">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase">Lead Time</span>
-                      <p className="text-base font-black text-[#0B122F]">{leadTime}</p>
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">Lead Time</span>
+                      <p className="text-sm sm:text-base font-black text-[#0B122F]">{leadTime}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-50 p-3.5 border border-slate-100">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase">Workforce</span>
-                      <p className="text-base font-black text-[#0B122F]">{user.workforce} Staff</p>
+                    <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">Workforce</span>
+                      <p className="text-sm sm:text-base font-black text-[#0B122F]">{user.workforce} Staff</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Packages Breakdown */}
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-base font-black text-[#0B122F]">
+                <div className="space-y-3 pt-1">
+                  <h4 className="text-sm sm:text-base font-black text-[#0B122F]">
                     {isSi ? "සේවා පැකේජ (Gig Packages)" : "Configured Gig Packages"}
                   </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                     {/* Basic */}
-                    <div className="rounded-2xl border border-slate-200 p-4 space-y-3 bg-white">
+                    <div className="rounded-2xl border border-slate-200 p-3.5 sm:p-4 space-y-2.5 bg-white">
                       <div className="flex justify-between items-center">
                         <span className="font-extrabold text-sm text-[#0B122F]">Basic / Pilot Run</span>
-                        <span className="text-xs font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
                           Sample Tier
                         </span>
                       </div>
@@ -1206,13 +1208,13 @@ export default function UserDashboardPage() {
                     </div>
 
                     {/* Standard */}
-                    <div className="rounded-2xl border-2 border-[#020333] p-4 space-y-3 bg-blue-50/30 relative">
+                    <div className="rounded-2xl border-2 border-[#020333] p-3.5 sm:p-4 space-y-2.5 bg-blue-50/30 relative">
                       <div className="absolute -top-2.5 right-3 bg-[#020333] text-white text-[10px] font-black px-2 py-0.5 rounded-full">
                         POPULAR
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="font-extrabold text-sm text-[#0B122F]">Standard Bulk</span>
-                        <span className="text-xs font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
                           Commercial
                         </span>
                       </div>
@@ -1227,10 +1229,10 @@ export default function UserDashboardPage() {
                     </div>
 
                     {/* Premium */}
-                    <div className="rounded-2xl border border-slate-200 p-4 space-y-3 bg-white">
+                    <div className="rounded-2xl border border-slate-200 p-3.5 sm:p-4 space-y-2.5 bg-white">
                       <div className="flex justify-between items-center">
                         <span className="font-extrabold text-sm text-[#0B122F]">Enterprise Export</span>
-                        <span className="text-xs font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded">
                           Enterprise
                         </span>
                       </div>
@@ -1253,14 +1255,14 @@ export default function UserDashboardPage() {
           {/* TAB 3: GARMENTS & SAMPLES */}
           {/* ========================================================================= */}
           {activeTab === "products" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-2xl font-black text-[#0B122F]">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B122F]">
                     {isSi ? "ඇඳුම් සාම්පල කළමනාකරණය" : "Garment Catalog & Samples"}
                   </h2>
-                  <p className="text-sm text-slate-500 font-medium">
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium">
                     {isSi
                       ? "ඔබ නිපදවන ඇඳුම් සාම්පල, මිල ගණන් සහ ඡායාරූප මෙතැනින් එකතු කරන්න හෝ ඉවත් කරන්න."
                       : "Add clothing styles, fabric specifications, MOQ, and photos to showcase in your Gig."}
@@ -1270,16 +1272,16 @@ export default function UserDashboardPage() {
                 <button
                   type="button"
                   onClick={() => setActiveModal("addProduct")}
-                  className="flex h-12 items-center justify-center gap-2 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 text-white font-black px-6 text-sm cursor-pointer shadow-md transition-all active:scale-98"
+                  className="flex h-11 sm:h-12 items-center justify-center gap-2 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 text-white font-black px-5 sm:px-6 text-xs sm:text-sm cursor-pointer shadow-md transition-all active:scale-98"
                 >
-                  <Plus className="size-4.5 stroke-[3]" />
+                  <Plus className="size-4 stroke-[3]" />
                   <span>{isSi ? "+ අලුත් ඇඳුමක් එක් කරන්න" : "+ Add Garment Sample"}</span>
                 </button>
               </div>
 
               {/* Category Filter Pills */}
-              <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
-                <span className="text-xs font-bold text-slate-400 mr-1">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 border-b border-slate-200">
+                <span className="text-xs font-bold text-slate-400 mr-1 shrink-0">
                   <SlidersHorizontal className="size-3.5 inline mr-1" />
                   Filter:
                 </span>
@@ -1294,7 +1296,7 @@ export default function UserDashboardPage() {
                     key={tab.id}
                     type="button"
                     onClick={() => setProductFilter(tab.id)}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all cursor-pointer shrink-0 ${
                       productFilter === tab.id
                         ? "bg-[#020333] text-white shadow-xs"
                         : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
@@ -1307,10 +1309,10 @@ export default function UserDashboardPage() {
 
               {/* Products Grid */}
               {filteredProducts.length === 0 ? (
-                <div className="rounded-[2.2rem] bg-white border-2 border-dashed border-slate-200 p-8 sm:p-12 text-center space-y-4 shadow-2xs">
-                  <ShoppingBag className="size-14 text-slate-300 mx-auto" />
+                <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-white border-2 border-dashed border-slate-200 p-6 sm:p-12 text-center space-y-3 sm:space-y-4 shadow-2xs">
+                  <ShoppingBag className="size-12 sm:size-14 text-slate-300 mx-auto" />
                   <div className="space-y-1">
-                    <h3 className="text-lg font-black text-[#0B122F]">
+                    <h3 className="text-base sm:text-lg font-black text-[#0B122F]">
                       {isSi ? "ඇඳුම් සාම්පල කිසිවක් හමු නොවීය" : "No Garment Samples Found"}
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 font-medium max-w-md mx-auto">
@@ -1322,14 +1324,14 @@ export default function UserDashboardPage() {
                   <button
                     type="button"
                     onClick={() => setActiveModal("addProduct")}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 text-sm cursor-pointer shadow-sm"
+                    className="inline-flex h-11 sm:h-12 items-center justify-center gap-2 rounded-xl sm:rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 sm:px-6 text-xs sm:text-sm cursor-pointer shadow-sm"
                   >
                     <Plus className="size-4 stroke-[3]" />
                     <span>{isSi ? "පළමු ඇඳුම එක් කරන්න" : "Add Garment Sample"}</span>
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
                   {filteredProducts.map((prod) => (
                     <div
                       key={prod.id}
@@ -1337,23 +1339,23 @@ export default function UserDashboardPage() {
                     >
                       <div>
                         {/* Product Image */}
-                        <div className="relative h-44 w-full bg-slate-100">
+                        <div className="relative h-40 sm:h-44 w-full bg-slate-100">
                           <Image src={prod.image} alt={prod.name} fill className="object-cover" />
                           <div className="absolute top-2.5 left-2.5">
-                            <span className="rounded-lg bg-[#020333]/80 backdrop-blur-xs text-white text-[11px] font-black px-2.5 py-1 uppercase">
+                            <span className="rounded-lg bg-[#020333]/80 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-0.5 uppercase">
                               {categoryLabels[prod.category]?.[isSi ? "si" : "en"] || prod.category}
                             </span>
                           </div>
                           <div className="absolute top-2.5 right-2.5">
-                            <span className="rounded-lg bg-emerald-600 text-white text-xs font-black px-2.5 py-1 shadow-sm">
+                            <span className="rounded-lg bg-emerald-600 text-white text-xs font-black px-2.5 py-0.5 shadow-sm">
                               {prod.pricePerUnit}
                             </span>
                           </div>
                         </div>
 
                         {/* Details */}
-                        <div className="p-4 space-y-2.5">
-                          <h4 className="text-base font-extrabold text-[#0B122F] line-clamp-1">
+                        <div className="p-3.5 sm:p-4 space-y-2">
+                          <h4 className="text-sm sm:text-base font-extrabold text-[#0B122F] line-clamp-1">
                             {prod.name}
                           </h4>
 
@@ -1376,8 +1378,8 @@ export default function UserDashboardPage() {
                       </div>
 
                       {/* Card Footer */}
-                      <div className="p-4 pt-0 flex items-center justify-between border-t border-slate-100 pt-3">
-                        <span className="text-[11px] font-bold text-slate-400">ID: {prod.id}</span>
+                      <div className="p-3.5 sm:p-4 pt-0 flex items-center justify-between border-t border-slate-100 pt-2.5">
+                        <span className="text-[10px] font-bold text-slate-400">ID: {prod.id}</span>
                         <button
                           type="button"
                           onClick={() => handleDeleteProduct(prod.id)}
@@ -1398,31 +1400,29 @@ export default function UserDashboardPage() {
           {/* TAB 4: FACTORY & OPERATIONS */}
           {/* ========================================================================= */}
           {activeTab === "factory" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-black text-[#0B122F]">
-                    {isSi ? "කර්මාන්තශාලා සහ මෙහෙයුම් තොරතුරු" : "Factory & Operations Profile"}
-                  </h2>
-                  <p className="text-sm text-slate-500 font-medium">
-                    {isSi
-                      ? "ව්‍යාපාර ලියාපදිංචිය, ලිපිනය, නිෂ්පාදන ධාරිතාව සහ ප්‍රවාහන පහසුකම්."
-                      : "Manage official business registration, factory premises address, and production capacities."}
-                  </p>
-                </div>
+              <div>
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B122F]">
+                  {isSi ? "කර්මාන්තශාලා සහ මෙහෙයුම් තොරතුරු" : "Factory & Operations Profile"}
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium">
+                  {isSi
+                    ? "ව්‍යාපාර ලියාපදිංචිය, ලිපිනය, නිෂ්පාදන ධාරිතාව සහ ප්‍රවාහන පහසුකම්."
+                    : "Manage official business registration, factory premises address, and production capacities."}
+                </p>
               </div>
 
               {/* 3 Detail Panels */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 {/* 1. Business & Legal Details */}
-                <div className="rounded-[2rem] bg-white p-6 border border-slate-200/90 shadow-xs space-y-4">
+                <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                        <MapPin className="size-5" />
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                        <MapPin className="size-4.5 sm:size-5" />
                       </div>
-                      <h3 className="text-base font-black text-[#0B122F]">
+                      <h3 className="text-sm sm:text-base font-black text-[#0B122F]">
                         {isSi ? "ව්‍යාපාර සහ ලිපිනය" : "Business & Location"}
                       </h3>
                     </div>
@@ -1431,11 +1431,11 @@ export default function UserDashboardPage() {
                       onClick={() => setActiveModal("location")}
                       className="text-xs font-bold text-blue-600 hover:text-blue-800 cursor-pointer"
                     >
-                      {isSi ? "සංස්කරණය (Edit)" : "Edit Details"}
+                      {isSi ? "සංස්කරණය" : "Edit Details"}
                     </button>
                   </div>
 
-                  <div className="space-y-3 text-xs sm:text-sm">
+                  <div className="space-y-2.5 text-xs sm:text-sm">
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">BRN Number</span>
                       <span className="font-extrabold text-slate-800">{brn || "Not specified"}</span>
@@ -1450,7 +1450,7 @@ export default function UserDashboardPage() {
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Factory Address</span>
-                      <span className="font-extrabold text-slate-800 text-right max-w-xs">{address || "Pending setup"}</span>
+                      <span className="font-extrabold text-slate-800 text-right max-w-[200px] truncate">{address || "Pending setup"}</span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="text-slate-400 font-bold">Postal Code</span>
@@ -1460,13 +1460,13 @@ export default function UserDashboardPage() {
                 </div>
 
                 {/* 2. Operations & Logistics Details */}
-                <div className="rounded-[2rem] bg-white p-6 border border-slate-200/90 shadow-xs space-y-4">
+                <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                        <Truck className="size-5" />
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                        <Truck className="size-4.5 sm:size-5" />
                       </div>
-                      <h3 className="text-base font-black text-[#0B122F]">
+                      <h3 className="text-sm sm:text-base font-black text-[#0B122F]">
                         {isSi ? "මෙහෙයුම් සහ සැපයුම්" : "Operations & Logistics"}
                       </h3>
                     </div>
@@ -1475,42 +1475,42 @@ export default function UserDashboardPage() {
                       onClick={() => setActiveModal("logistics")}
                       className="text-xs font-bold text-blue-600 hover:text-blue-800 cursor-pointer"
                     >
-                      {isSi ? "සංස්කරණය (Edit)" : "Edit Details"}
+                      {isSi ? "සංස්කරණය" : "Edit Details"}
                     </button>
                   </div>
 
-                  <div className="space-y-3 text-xs sm:text-sm">
+                  <div className="space-y-2.5 text-xs sm:text-sm">
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Lead Time</span>
                       <span className="font-extrabold text-slate-800">{leadTime}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Fabric Sourcing</span>
-                      <span className="font-extrabold text-slate-800 text-right max-w-xs">{fabricSourcing}</span>
+                      <span className="font-extrabold text-slate-800 text-right max-w-[200px] truncate">{fabricSourcing}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Sample Policy</span>
-                      <span className="font-extrabold text-slate-800 text-right max-w-xs">{sampleAvailability}</span>
+                      <span className="font-extrabold text-slate-800 text-right max-w-[200px] truncate">{sampleAvailability}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Delivery Mode</span>
-                      <span className="font-extrabold text-slate-800">{deliveryCapability}</span>
+                      <span className="font-extrabold text-slate-800 text-right max-w-[200px] truncate">{deliveryCapability}</span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="text-slate-400 font-bold">Payment Terms</span>
-                      <span className="font-extrabold text-slate-800">{paymentTerms}</span>
+                      <span className="font-extrabold text-slate-800 text-right max-w-[200px] truncate">{paymentTerms}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 3. Factory Branding */}
-                <div className="rounded-[2rem] bg-white p-6 border border-slate-200/90 shadow-xs space-y-4">
+                <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                        <Building2 className="size-5" />
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                        <Building2 className="size-4.5 sm:size-5" />
                       </div>
-                      <h3 className="text-base font-black text-[#0B122F]">
+                      <h3 className="text-sm sm:text-base font-black text-[#0B122F]">
                         {isSi ? "සන්නාමය සහ මාධ්‍ය" : "Factory Branding & Media"}
                       </h3>
                     </div>
@@ -1519,12 +1519,12 @@ export default function UserDashboardPage() {
                       onClick={() => setActiveModal("branding")}
                       className="text-xs font-bold text-blue-600 hover:text-blue-800 cursor-pointer"
                     >
-                      {isSi ? "සංස්කරණය (Edit)" : "Edit Media"}
+                      {isSi ? "සංස්කරණය" : "Edit Media"}
                     </button>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="relative size-14 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                    <div className="relative size-12 sm:size-14 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
                       <Image src={logoUrl} alt="Logo" fill className="object-cover" />
                     </div>
                     <div className="overflow-hidden">
@@ -1539,31 +1539,22 @@ export default function UserDashboardPage() {
                       {tagline || "Export-ready quality garment manufacturer specialized in knit & woven apparel."}
                     </p>
                   </div>
-
-                  {websiteOrSocial && (
-                    <div className="flex justify-between py-1 text-xs">
-                      <span className="text-slate-400 font-bold">Website / Social</span>
-                      <a href={websiteOrSocial} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline font-bold">
-                        {websiteOrSocial}
-                      </a>
-                    </div>
-                  )}
                 </div>
 
                 {/* 4. Registration Summary */}
-                <div className="rounded-[2rem] bg-white p-6 border border-slate-200/90 shadow-xs space-y-4">
+                <div className="rounded-[1.8rem] sm:rounded-[2rem] bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                        <FileCheck className="size-5" />
+                    <div className="flex items-center gap-2 sm:gap-2.5">
+                      <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                        <FileCheck className="size-4.5 sm:size-5" />
                       </div>
-                      <h3 className="text-base font-black text-[#0B122F]">
+                      <h3 className="text-sm sm:text-base font-black text-[#0B122F]">
                         {isSi ? "ලියාපදිංචි මුල් තොරතුරු" : "Initial Registration Data"}
                       </h3>
                     </div>
                   </div>
 
-                  <div className="space-y-3 text-xs sm:text-sm">
+                  <div className="space-y-2.5 text-xs sm:text-sm">
                     <div className="flex justify-between py-1 border-b border-slate-50">
                       <span className="text-slate-400 font-bold">Operational Experience</span>
                       <span className="font-extrabold text-slate-800">
@@ -1606,72 +1597,72 @@ export default function UserDashboardPage() {
           {/* TAB 5: BUYER INQUIRIES */}
           {/* ========================================================================= */}
           {activeTab === "inquiries" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                 <div>
-                  <h2 className="text-2xl font-black text-[#0B122F]">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B122F]">
                     {isSi ? "ගැනුම්කරු විමසීම් සහ ඇණවුම්" : "Buyer Inquiries & Quote Requests (RFQ)"}
                   </h2>
-                  <p className="text-sm text-slate-500 font-medium">
+                  <p className="text-xs sm:text-sm text-slate-500 font-medium">
                     {isSi
                       ? "ඇපරල් බෑන්ක් වෙළඳපොළෙන් ඔබගේ කර්මාන්තශාලාවට ලැබුණු ඇඳුම් තොග ඇණවුම් විමසීම්."
                       : "Wholesale garment buyers interested in your factory production capacity."}
                   </p>
                 </div>
 
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 text-emerald-900 px-4 py-1.5 text-xs font-black">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 text-emerald-900 px-3.5 py-1 text-xs font-black self-start sm:self-auto">
                   <span className="size-2 rounded-full bg-emerald-500 animate-ping"></span>
                   {inquiries.length} Active Leads
                 </span>
               </div>
 
               {/* Inquiries List */}
-              <div className="space-y-4">
+              <div className="space-y-3.5 sm:space-y-4">
                 {inquiries.map((inq) => (
                   <div
                     key={inq.id}
-                    className="rounded-2xl bg-white p-5 sm:p-6 border border-slate-200/90 shadow-xs hover:shadow-md transition-shadow space-y-4"
+                    className="rounded-2xl bg-white p-4 sm:p-6 border border-slate-200/90 shadow-xs hover:shadow-md transition-shadow space-y-3 sm:space-y-4"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-base text-[#0B122F]">{inq.buyerName}</span>
-                          <span className="text-xs font-semibold text-slate-400">• {inq.buyerCompany}</span>
+                          <span className="font-extrabold text-sm sm:text-base text-[#0B122F]">{inq.buyerName}</span>
+                          <span className="text-xs font-semibold text-slate-400 truncate">• {inq.buyerCompany}</span>
                         </div>
-                        <p className="text-xs text-slate-400 font-medium">{inq.date}</p>
+                        <p className="text-[11px] text-slate-400 font-medium">{inq.date}</p>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 self-start sm:self-auto">
                         {inq.status === "new" && (
-                          <span className="rounded-full bg-amber-100 text-amber-900 text-xs font-black px-3 py-1 border border-amber-200">
+                          <span className="rounded-full bg-amber-100 text-amber-900 text-[11px] font-black px-2.5 py-0.5 border border-amber-200">
                             🔥 New Inquiry
                           </span>
                         )}
                         {inq.status === "sample_requested" && (
-                          <span className="rounded-full bg-blue-100 text-blue-900 text-xs font-black px-3 py-1 border border-blue-200">
+                          <span className="rounded-full bg-blue-100 text-blue-900 text-[11px] font-black px-2.5 py-0.5 border border-blue-200">
                             📦 Sample Requested
                           </span>
                         )}
                         {inq.status === "discussion" && (
-                          <span className="rounded-full bg-emerald-100 text-emerald-900 text-xs font-black px-3 py-1 border border-emerald-200">
+                          <span className="rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-black px-2.5 py-0.5 border border-emerald-200">
                             💬 In Discussion
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs bg-slate-50 p-2.5 sm:p-3 rounded-xl border border-slate-100">
                       <div>
-                        <span className="text-slate-400 font-bold block">Garment Style</span>
+                        <span className="text-slate-400 font-bold block text-[10px]">Garment Style</span>
                         <strong className="text-slate-800">{inq.category}</strong>
                       </div>
                       <div>
-                        <span className="text-slate-400 font-bold block">Target Order Quantity</span>
+                        <span className="text-slate-400 font-bold block text-[10px]">Order Quantity</span>
                         <strong className="text-slate-800">{inq.quantity}</strong>
                       </div>
                       <div className="col-span-2 sm:col-span-1">
-                        <span className="text-slate-400 font-bold block">Direct Phone</span>
+                        <span className="text-slate-400 font-bold block text-[10px]">Direct Phone</span>
                         <strong className="text-slate-800">{inq.phone}</strong>
                       </div>
                     </div>
@@ -1680,24 +1671,24 @@ export default function UserDashboardPage() {
                       &quot;{inq.message}&quot;
                     </p>
 
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                      <span className="text-xs text-slate-400 font-bold">RFQ ID: {inq.id}</span>
-                      <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2.5 pt-1">
+                      <span className="text-[11px] text-slate-400 font-bold">RFQ ID: {inq.id}</span>
+                      <div className="flex items-center gap-2 w-full sm:w-auto">
                         <a
                           href={`https://wa.me/94${inq.phone.replace(/^0/, "")}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer transition-colors shadow-2xs"
+                          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 h-9 sm:h-10 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer transition-colors shadow-2xs"
                         >
                           <Send className="size-3.5" />
-                          <span>WhatsApp Buyer</span>
+                          <span>WhatsApp</span>
                         </a>
                         <a
                           href={`tel:${inq.phone}`}
-                          className="inline-flex items-center gap-1.5 h-10 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer transition-colors shadow-2xs"
+                          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 h-9 sm:h-10 px-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer transition-colors shadow-2xs"
                         >
                           <Phone className="size-3.5" />
-                          <span>Call Buyer</span>
+                          <span>Call</span>
                         </a>
                       </div>
                     </div>
@@ -1711,13 +1702,13 @@ export default function UserDashboardPage() {
           {/* TAB 6: HELP & SUPPORT */}
           {/* ========================================================================= */}
           {activeTab === "support" && (
-            <div className="space-y-6">
+            <div className="space-y-5 sm:space-y-6">
               {/* Header */}
               <div>
-                <h2 className="text-2xl font-black text-[#0B122F]">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B122F]">
                   {isSi ? "උපකාර සහ පාරිභෝගික සහාය" : "Help & Supplier Assistance"}
                 </h2>
-                <p className="text-sm text-slate-500 font-medium">
+                <p className="text-xs sm:text-sm text-slate-500 font-medium">
                   {isSi
                     ? "ඔබගේ ගිණුම හෝ වෙළඳපොළ සම්බන්ධ ඕනෑම ගැටළුවක් සඳහා අපගේ කණ්ඩායම අමතන්න."
                     : "Direct hotline and step-by-step guidance for garment factory owners and suppliers."}
@@ -1725,38 +1716,38 @@ export default function UserDashboardPage() {
               </div>
 
               {/* Big Hotline Card */}
-              <div className="rounded-[2.2rem] bg-gradient-to-br from-indigo-900 to-[#020333] p-6 sm:p-8 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-md">
-                <div className="flex items-center gap-4">
-                  <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-white">
-                    <PhoneCall className="size-8" />
+              <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-gradient-to-br from-indigo-900 to-[#020333] p-5 sm:p-8 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6 shadow-md">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex size-12 sm:size-16 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-white">
+                    <PhoneCall className="size-6 sm:size-8" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black">
+                    <h3 className="text-lg sm:text-xl font-black">
                       {isSi ? "සැපයුම්කරු උපකාරක දුරකථන අංකය" : "Supplier Support Hotline"}
                     </h3>
                     <p className="text-xs sm:text-sm text-indigo-200 font-semibold mt-0.5">
-                      {isSi ? "සඳුදා - සිකුරාදා (පෙ.ව. 8.30 - ප.ව. 5.00) සිංහල / English සහාය" : "Monday - Friday (8:30 AM - 5:00 PM) Bilingual Assistance"}
+                      {isSi ? "සඳුදා - සිකුරාදා (පෙ.ව. 8.30 - ප.ව. 5.00)" : "Monday - Friday (8:30 AM - 5:00 PM)"}
                     </p>
                   </div>
                 </div>
 
                 <a
                   href="tel:0112345678"
-                  className="flex h-14 items-center justify-center gap-2 rounded-2xl bg-white px-8 font-black text-lg text-indigo-950 hover:bg-white/95 active:scale-98 shadow-md transition-all shrink-0"
+                  className="w-full sm:w-auto flex h-12 sm:h-14 items-center justify-center gap-2 rounded-xl sm:rounded-2xl bg-white px-6 sm:px-8 font-black text-base sm:text-lg text-indigo-950 hover:bg-white/95 active:scale-98 shadow-md transition-all shrink-0"
                 >
-                  <Phone className="size-5" />
+                  <Phone className="size-4 sm:size-5" />
                   <span>011 234 5678</span>
                 </a>
               </div>
 
               {/* FAQ Accordion */}
-              <div className="rounded-[2.2rem] bg-white p-6 sm:p-8 border border-slate-200/90 shadow-xs space-y-4">
-                <h3 className="text-lg font-black text-[#0B122F] flex items-center gap-2">
-                  <QuestionIcon className="size-5 text-blue-600" />
+              <div className="rounded-[1.8rem] sm:rounded-[2.2rem] bg-white p-5 sm:p-8 border border-slate-200/90 shadow-xs space-y-3 sm:space-y-4">
+                <h3 className="text-base sm:text-lg font-black text-[#0B122F] flex items-center gap-2">
+                  <QuestionIcon className="size-4.5 sm:size-5 text-blue-600" />
                   <span>{isSi ? "නිතර අසන ප්‍රශ්න (FAQ)" : "Frequently Asked Questions"}</span>
                 </h3>
 
-                <div className="space-y-3 pt-2">
+                <div className="space-y-2.5 sm:space-y-3 pt-1">
                   {[
                     {
                       qEn: "How does a buyer contact my garment factory?",
@@ -1779,22 +1770,22 @@ export default function UserDashboardPage() {
                   ].map((faq, idx) => (
                     <div
                       key={idx}
-                      className="rounded-2xl border border-slate-200 overflow-hidden transition-all"
+                      className="rounded-xl sm:rounded-2xl border border-slate-200 overflow-hidden transition-all"
                     >
                       <button
                         type="button"
                         onClick={() => setFaqOpen(faqOpen === idx ? null : idx)}
-                        className="w-full p-4 text-left font-extrabold text-sm sm:text-base text-[#0B122F] flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 cursor-pointer"
+                        className="w-full p-3.5 sm:p-4 text-left font-extrabold text-xs sm:text-base text-[#0B122F] flex justify-between items-center bg-slate-50/50 hover:bg-slate-50 cursor-pointer"
                       >
-                        <span>{isSi ? faq.qSi : faq.qEn}</span>
+                        <span className="pr-2">{isSi ? faq.qSi : faq.qEn}</span>
                         <ChevronRight
-                          className={`size-4 text-slate-400 transition-transform ${
+                          className={`size-4 text-slate-400 shrink-0 transition-transform ${
                             faqOpen === idx ? "rotate-90 text-blue-600" : ""
                           }`}
                         />
                       </button>
                       {faqOpen === idx && (
-                        <div className="p-4 pt-1 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed bg-white border-t border-slate-100">
+                        <div className="p-3.5 sm:p-4 pt-1 text-xs sm:text-sm text-slate-600 font-medium leading-relaxed bg-white border-t border-slate-100">
                           {isSi ? faq.aSi : faq.aEn}
                         </div>
                       )}
@@ -1808,21 +1799,58 @@ export default function UserDashboardPage() {
       </div>
 
       {/* ========================================================================= */}
+      {/* 3. MOBILE BOTTOM NAVIGATION BAR (Instant 1-Tap Tab Switching on Phones) */}
+      {/* ========================================================================= */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 shadow-2xl flex items-center justify-around">
+        {[
+          { id: "overview" as DashboardTab, icon: LayoutGrid, labelEn: "Overview", labelSi: "සාරාංශය" },
+          { id: "gig" as DashboardTab, icon: Sparkles, labelEn: "Gig", labelSi: "Gig" },
+          { id: "products" as DashboardTab, icon: ShoppingBag, labelEn: "Samples", labelSi: "සාම්පල" },
+          { id: "factory" as DashboardTab, icon: Building2, labelEn: "Factory", labelSi: "විස්තර" },
+          { id: "inquiries" as DashboardTab, icon: MessageSquare, labelEn: "Leads", labelSi: "විමසීම්", badge: inquiries.length },
+        ].map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all relative cursor-pointer ${
+                isActive ? "text-[#020333] font-black" : "text-slate-400 hover:text-slate-700 font-bold"
+              }`}
+            >
+              <div className="relative">
+                <Icon className={`size-5 ${isActive ? "text-[#020333] stroke-[2.5]" : "text-slate-400"}`} />
+                {tab.badge && (
+                  <span className="absolute -top-1 -right-2 size-4 rounded-full bg-amber-500 text-white text-[9px] font-black flex items-center justify-center">
+                    {tab.badge}
+                  </span>
+                )}
+              </div>
+              <span className="text-[10px] mt-0.5">{isSi ? tab.labelSi : tab.labelEn}</span>
+              {isActive && <span className="size-1 rounded-full bg-[#020333] mt-0.5" />}
+            </button>
+          );
+        })}
+      </nav>
+
+      {/* ========================================================================= */}
       {/* MODAL 1: ADD PRODUCT / SAMPLE TO GIG */}
       {/* ========================================================================= */}
       {activeModal === "addProduct" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-8">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
-              <div className="flex items-center gap-2.5">
-                <div className="flex size-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
-                  <ShoppingBag className="size-6" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-5 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2 sm:gap-2.5">
+                <div className="flex size-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                  <ShoppingBag className="size-5 sm:size-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black text-[#0B122F]">
+                  <h3 className="text-base sm:text-xl font-black text-[#0B122F]">
                     {isSi ? "අලුත් ඇඳුම් සාම්පලයක් එක් කරන්න" : "Add Product / Sample to Gig"}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-400 font-medium">
                     {isSi ? "පාරිභෝගිකයින්ට පෙන්වීම සඳහා සාම්පලයක් ඇතුළත් කරන්න" : "Add garment style & photo to your public Gig"}
                   </p>
                 </div>
@@ -1832,11 +1860,11 @@ export default function UserDashboardPage() {
                 onClick={() => setActiveModal(null)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 cursor-pointer"
               >
-                <X className="size-6" />
+                <X className="size-5 sm:size-6" />
               </button>
             </div>
 
-            <form onSubmit={handleAddProductSubmit} className="mt-5 space-y-4">
+            <form onSubmit={handleAddProductSubmit} className="mt-4 space-y-3.5">
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-600 mb-1">
                   {isSi ? "ඇඳුමේ නම (Garment Name) *" : "Product / Garment Name *"}
@@ -1847,7 +1875,7 @@ export default function UserDashboardPage() {
                   value={productName}
                   onChange={(e) => setProductName(e.target.value)}
                   placeholder="e.g. Cotton Crewneck T-Shirt / Formal Linen Shirt"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-[#020333]"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
                 />
               </div>
 
@@ -1865,7 +1893,7 @@ export default function UserDashboardPage() {
                       else if (e.target.value === "dresses") setProductImage("/images/categories/dresses.jpg");
                       else if (e.target.value === "trousers") setProductImage("/images/categories/trousers.jpg");
                     }}
-                    className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-[#020333] cursor-pointer bg-white"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333] cursor-pointer bg-white"
                   >
                     <option value="tshirt">T-Shirts (ටී-ෂර්ට්)</option>
                     <option value="shirt">Shirts (කමිස)</option>
@@ -1884,7 +1912,7 @@ export default function UserDashboardPage() {
                     value={productPrice}
                     onChange={(e) => setProductPrice(e.target.value)}
                     placeholder="e.g. LKR 850"
-                    className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-[#020333]"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
                   />
                 </div>
               </div>
@@ -1900,7 +1928,7 @@ export default function UserDashboardPage() {
                     value={productMoq}
                     onChange={(e) => setProductMoq(e.target.value)}
                     placeholder="e.g. 50 Pcs"
-                    className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-[#020333]"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
                   />
                 </div>
 
@@ -1913,7 +1941,7 @@ export default function UserDashboardPage() {
                     value={productMaterial}
                     onChange={(e) => setProductMaterial(e.target.value)}
                     placeholder="e.g. 100% Cotton / Linen"
-                    className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-[#020333]"
+                    className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333]"
                   />
                 </div>
               </div>
@@ -1923,7 +1951,7 @@ export default function UserDashboardPage() {
                   {isSi ? "සාම්පල ඡායාරූපය (Sample Photo) *" : "Sample Photo *"}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className="relative size-16 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shrink-0">
+                  <div className="relative size-14 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shrink-0">
                     <Image src={productImage} alt="Preview" fill className="object-cover" />
                   </div>
                   <div className="flex-1 space-y-1.5">
@@ -1932,9 +1960,9 @@ export default function UserDashboardPage() {
                       value={productImage}
                       onChange={(e) => setProductImage(e.target.value)}
                       placeholder="/images/categories/tshirt.jpg"
-                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold outline-none focus:border-[#020333]"
+                      className="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold outline-none focus:border-[#020333]"
                     />
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1">
                       {[
                         { label: "T-Shirt", src: "/images/categories/tshirt.jpg" },
                         { label: "Shirt", src: "/images/categories/shirt.jpg" },
@@ -1968,21 +1996,21 @@ export default function UserDashboardPage() {
                   value={productDescription}
                   onChange={(e) => setProductDescription(e.target.value)}
                   placeholder="e.g. Export finish, double needle stitch, customizable collar and tag."
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-2.5 text-sm font-semibold outline-none focus:border-[#020333]"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2 text-xs sm:text-sm font-semibold outline-none focus:border-[#020333]"
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="submit"
-                  className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-4 text-base font-extrabold text-white shadow-md cursor-pointer active:scale-98"
+                  className="flex-1 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3 sm:py-3.5 text-sm sm:text-base font-extrabold text-white shadow-md cursor-pointer active:scale-98"
                 >
                   {isSi ? "ඇඳුම සුරකින්න (Save Product)" : "Save Product to Gig"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveModal(null)}
-                  className="rounded-2xl border-2 border-slate-200 px-6 py-4 text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  className="rounded-xl sm:rounded-2xl border-2 border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   {isSi ? "අවලංගු කරන්න" : "Cancel"}
                 </button>
@@ -1996,18 +2024,18 @@ export default function UserDashboardPage() {
       {/* MODAL 2: BUSINESS & LOCATION FORM */}
       {/* ========================================================================= */}
       {activeModal === "location" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-8">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-5 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <MapPin className="size-5" />
+                <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                  <MapPin className="size-4.5 sm:size-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-[#0B122F]">
+                  <h3 className="text-base sm:text-xl font-extrabold text-[#0B122F]">
                     {isSi ? "ව්‍යාපාර සහ ලිපින තොරතුරු" : "Business & Location"}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-400 font-medium">
                     {isSi ? "ලියාපදිංචි අංකය සහ කර්මාන්තශාලාවේ ලිපිනය" : "Registration status, BRN, and physical address"}
                   </p>
                 </div>
@@ -2021,7 +2049,7 @@ export default function UserDashboardPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSaveLocation} className="mt-5 space-y-4">
+            <form onSubmit={handleSaveLocation} className="mt-4 space-y-3.5">
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
                   {isSi ? "ව්‍යාපාර ලියාපදිංචි අංකය (BRN) *" : "Business Registration Number (BRN) *"}
@@ -2032,7 +2060,7 @@ export default function UserDashboardPage() {
                   value={brn}
                   onChange={(e) => setBrn(e.target.value)}
                   placeholder="e.g. PV-89210 / W-1289"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
@@ -2043,7 +2071,7 @@ export default function UserDashboardPage() {
                 <select
                   value={businessType}
                   onChange={(e) => setBusinessType(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="Sole Proprietorship">තනි පුද්ගල ව්‍යාපාර (Sole Proprietorship)</option>
                   <option value="Partnership">හවුල් ව්‍යාපාර (Partnership)</option>
@@ -2059,7 +2087,7 @@ export default function UserDashboardPage() {
                 <select
                   value={district}
                   onChange={(e) => setDistrict(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="Colombo">Colombo (කොළඹ)</option>
                   <option value="Gampaha">Gampaha (ගම්පහ)</option>
@@ -2083,7 +2111,7 @@ export default function UserDashboardPage() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="e.g. No. 45, Industrial Zone Road, Moratuwa"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-2.5 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2 text-xs sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
@@ -2096,21 +2124,21 @@ export default function UserDashboardPage() {
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   placeholder="e.g. 10400"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="submit"
-                  className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3.5 text-base font-bold text-white shadow-sm cursor-pointer"
+                  className="flex-1 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white shadow-sm cursor-pointer"
                 >
                   {isSi ? "සුරකින්න (Save Location)" : "Save Business & Location"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveModal(null)}
-                  className="rounded-2xl border border-slate-200 px-5 py-3.5 text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  className="rounded-xl sm:rounded-2xl border border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   {isSi ? "අවලංගු කරන්න" : "Cancel"}
                 </button>
@@ -2124,18 +2152,18 @@ export default function UserDashboardPage() {
       {/* MODAL 3: OPERATIONS & LOGISTICS FORM */}
       {/* ========================================================================= */}
       {activeModal === "logistics" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-8">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-5 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <Truck className="size-5" />
+                <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                  <Truck className="size-4.5 sm:size-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-[#0B122F]">
+                  <h3 className="text-base sm:text-xl font-extrabold text-[#0B122F]">
                     {isSi ? "මෙහෙයුම් සහ සැපයුම් තොරතුරු" : "Operations & Logistics"}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-400 font-medium">
                     {isSi ? "නිෂ්පාදන කාලය, රෙදිපිළි සහ ප්‍රවාහන පහසුකම්" : "Lead times, fabric sourcing, and delivery"}
                   </p>
                 </div>
@@ -2149,7 +2177,7 @@ export default function UserDashboardPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSaveLogistics} className="mt-5 space-y-4">
+            <form onSubmit={handleSaveLogistics} className="mt-4 space-y-3.5">
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
                   {isSi ? "සාමාන්‍ය නිෂ්පාදන කාලය (Lead Time) *" : "Production Lead Time *"}
@@ -2157,7 +2185,7 @@ export default function UserDashboardPage() {
                 <select
                   value={leadTime}
                   onChange={(e) => setLeadTime(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="7 - 14 Days">7 - 14 Days (දින 7 - 14 ක් ඇතුළත)</option>
                   <option value="14 - 21 Days">14 - 21 Days (දින 14 - 21 ක් ඇතුළත)</option>
@@ -2173,7 +2201,7 @@ export default function UserDashboardPage() {
                 <select
                   value={fabricSourcing}
                   onChange={(e) => setFabricSourcing(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="Full Fabric & Trims In-House Sourcing">
                     {isSi ? "අප විසින්ම රෙදිපිළි සහ අමුද්‍රව්‍ය සපයනු ලැබේ (In-House)" : "Full Fabric & Trims In-House Sourcing"}
@@ -2194,7 +2222,7 @@ export default function UserDashboardPage() {
                 <select
                   value={sampleAvailability}
                   onChange={(e) => setSampleAvailability(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="Free with Bulk Orders (3-5 Days)">
                     {isSi ? "තොග ඇණවුම් සමඟ නොමිලේ (Free with Orders)" : "Free with Bulk Orders (3-5 Days)"}
@@ -2215,7 +2243,7 @@ export default function UserDashboardPage() {
                 <select
                   value={deliveryCapability}
                   onChange={(e) => setDeliveryCapability(e.target.value)}
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600 cursor-pointer bg-white"
                 >
                   <option value="Islandwide Doorstep Delivery">
                     {isSi ? "දිවයින පුරා බෙදාහැරීම (Islandwide Delivery)" : "Islandwide Doorstep Delivery"}
@@ -2238,21 +2266,21 @@ export default function UserDashboardPage() {
                   value={paymentTerms}
                   onChange={(e) => setPaymentTerms(e.target.value)}
                   placeholder="e.g. 30% Advance, Balance on Delivery"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="submit"
-                  className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3.5 text-base font-bold text-white shadow-sm cursor-pointer"
+                  className="flex-1 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white shadow-sm cursor-pointer"
                 >
                   {isSi ? "සුරකින්න (Save Logistics)" : "Save Logistics Details"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveModal(null)}
-                  className="rounded-2xl border border-slate-200 px-5 py-3.5 text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  className="rounded-xl sm:rounded-2xl border border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   {isSi ? "අවලංගු කරන්න" : "Cancel"}
                 </button>
@@ -2266,18 +2294,18 @@ export default function UserDashboardPage() {
       {/* MODAL 4: FACTORY BRANDING FORM */}
       {/* ========================================================================= */}
       {activeModal === "branding" && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
-          <div className="w-full max-w-lg rounded-3xl bg-white p-6 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-8">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-xs overflow-y-auto">
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white p-5 sm:p-8 shadow-2xl ring-1 ring-slate-200 animate-in fade-in zoom-in-95 my-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="flex size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <Building2 className="size-5" />
+                <div className="flex size-9 sm:size-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                  <Building2 className="size-4.5 sm:size-5" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-extrabold text-[#0B122F]">
+                  <h3 className="text-base sm:text-xl font-extrabold text-[#0B122F]">
                     {isSi ? "කර්මාන්තශාලා සන්නාමය" : "Factory Branding"}
                   </h3>
-                  <p className="text-xs text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-400 font-medium">
                     {isSi ? "ලාංඡනය සහ ආවරණ ඡායාරූපය ඇතුළත් කරන්න" : "Upload logo avatar and widescreen cover image"}
                   </p>
                 </div>
@@ -2291,13 +2319,13 @@ export default function UserDashboardPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSaveBranding} className="mt-5 space-y-4">
+            <form onSubmit={handleSaveBranding} className="mt-4 space-y-3.5">
               <div>
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
                   {isSi ? "ව්‍යාපාර ලාංඡනය (Logo Avatar) *" : "Business Logo Avatar *"}
                 </label>
                 <div className="flex items-center gap-3">
-                  <div className="relative size-14 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shrink-0">
+                  <div className="relative size-12 sm:size-14 rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shrink-0">
                     <Image src={logoUrl} alt="Logo Preview" fill className="object-cover" />
                   </div>
                   <div className="flex-1 space-y-1">
@@ -2306,9 +2334,9 @@ export default function UserDashboardPage() {
                       value={logoUrl}
                       onChange={(e) => setLogoUrl(e.target.value)}
                       placeholder="/images/categories/shirt.jpg"
-                      className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold outline-none focus:border-blue-600"
+                      className="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold outline-none focus:border-blue-600"
                     />
-                    <div className="flex gap-1.5">
+                    <div className="flex gap-1">
                       {["/images/categories/shirt.jpg", "/images/categories/tshirt.jpg", "/images/categories/dresses.jpg"].map((preset, idx) => (
                         <button
                           key={idx}
@@ -2328,8 +2356,8 @@ export default function UserDashboardPage() {
                 <label className="block text-xs font-bold uppercase text-slate-500 mb-1">
                   {isSi ? "කර්මාන්තශාලා ආවරණ ඡායාරූපය (Widescreen Gig Cover Photo) *" : "Widescreen Gig Cover Photo *"}
                 </label>
-                <div className="space-y-2">
-                  <div className="relative h-28 w-full rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shadow-xs">
+                <div className="space-y-1.5">
+                  <div className="relative h-24 sm:h-28 w-full rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shadow-xs">
                     <Image src={coverUrl} alt="Cover Preview" fill className="object-cover" />
                     <div className="absolute top-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[10px] font-black px-2 py-0.5 rounded">
                       Gig Banner Preview
@@ -2340,9 +2368,9 @@ export default function UserDashboardPage() {
                     value={coverUrl}
                     onChange={(e) => setCoverUrl(e.target.value)}
                     placeholder="/images/categories/tshirt.jpg"
-                    className="w-full rounded-xl border border-slate-200 px-3 py-2 text-xs font-semibold outline-none focus:border-blue-600"
+                    className="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold outline-none focus:border-blue-600"
                   />
-                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                  <div className="flex flex-wrap gap-1 pt-0.5">
                     {[
                       { name: "Stitching Floor", url: "/images/categories/tshirt.jpg" },
                       { name: "Apparel Line", url: "/images/categories/shirt.jpg" },
@@ -2353,7 +2381,7 @@ export default function UserDashboardPage() {
                         key={idx}
                         type="button"
                         onClick={() => setCoverUrl(preset.url)}
-                        className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition-all cursor-pointer ${
                           coverUrl === preset.url
                             ? "bg-[#020333] text-white border-[#020333]"
                             : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
@@ -2376,7 +2404,7 @@ export default function UserDashboardPage() {
                   value={tagline}
                   onChange={(e) => setTagline(e.target.value)}
                   placeholder="e.g. Export-quality knitwear & polo shirts manufacturer specialized in custom orders."
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-2.5 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2 text-xs sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
@@ -2389,21 +2417,21 @@ export default function UserDashboardPage() {
                   value={websiteOrSocial}
                   onChange={(e) => setWebsiteOrSocial(e.target.value)}
                   placeholder="https://facebook.com/yourfactory or https://yourfactory.lk"
-                  className="w-full rounded-2xl border-2 border-slate-200 px-4 py-3 text-base font-semibold outline-none focus:border-blue-600"
+                  className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-blue-600"
                 />
               </div>
 
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-100">
+              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
                 <button
                   type="submit"
-                  className="flex-1 rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3.5 text-base font-bold text-white shadow-sm cursor-pointer"
+                  className="flex-1 rounded-xl sm:rounded-2xl bg-[#020333] hover:bg-[#020333]/90 py-3 sm:py-3.5 text-sm sm:text-base font-bold text-white shadow-sm cursor-pointer"
                 >
                   {isSi ? "සුරකින්න (Save Branding)" : "Save Factory Branding"}
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveModal(null)}
-                  className="rounded-2xl border border-slate-200 px-5 py-3.5 text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  className="rounded-xl sm:rounded-2xl border border-slate-200 px-4 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-base font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   {isSi ? "අවලංගු කරන්න" : "Cancel"}
                 </button>

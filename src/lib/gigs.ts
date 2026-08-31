@@ -52,27 +52,41 @@ const categoryImageMap: Record<string, string> = {
   dresses: "/images/categories/dresses.jpg",
 };
 
-const categoryTitleMap: Record<string, string> = {
-  tshirt: "Custom T-Shirts, Polos & Knitwear Manufacturing",
-  shirt: "Export-Quality Formal & Casual Shirts Production",
-  trousers: "Tailored Trousers, Chinos & Pants Manufacturing",
-  dresses: "High-Fashion Dresses, Frocks & Woven Garments",
+const categoryShortNames: Record<string, string> = {
+  tshirt: "T-Shirts & Polos",
+  shirt: "Shirts",
+  trousers: "Trousers",
+  dresses: "Dresses",
 };
 
-// Generate a Fiverr-style Gig object from a supplier registration record
+// Generate a clean, concise, Fiverr-style Gig object from a supplier registration record
 export function generateGigFromSupplier(supplier: SupplierRegistration): SupplierGig {
-  const primaryCat = supplier.selectedCategories?.[0] || "tshirt";
-  const catNames = supplier.selectedCategories?.map((c) => categoryTitleMap[c] || c).join(" & ") || "Apparel";
+  const selected = supplier.selectedCategories || [];
+  const primaryCat = selected[0] || "tshirt";
+
+  // Build clean, concise title without awkward repetition or run-on sentences
+  let cleanCategoryTitle = "Apparel";
+  if (selected.length === 1) {
+    cleanCategoryTitle = categoryShortNames[selected[0]] || selected[0];
+  } else if (selected.length === 2) {
+    const name1 = categoryShortNames[selected[0]] || selected[0];
+    const name2 = categoryShortNames[selected[1]] || selected[1];
+    cleanCategoryTitle = `${name1} & ${name2}`;
+  } else if (selected.length >= 3) {
+    cleanCategoryTitle = "Custom Garments & Apparel";
+  }
+
+  const gigTitle = `I will manufacture custom ${cleanCategoryTitle} for your brand`;
 
   const coverImg = categoryImageMap[primaryCat] || "/images/categories/tshirt.jpg";
-  const gallery = supplier.selectedCategories?.map((c) => categoryImageMap[c]).filter(Boolean) || [coverImg];
+  const gallery = selected.map((c) => categoryImageMap[c]).filter(Boolean);
 
   const moqText = supplier.moq === "1-50" ? "50 pcs" : supplier.moq === "51-200" ? "100 pcs" : "500 pcs";
 
   return {
     id: `GIG-${supplier.id.replace("REG-", "")}`,
     supplierId: supplier.id,
-    title: `I will manufacture custom ${catNames} for your clothing brand`,
+    title: gigTitle,
     slug: `gig-${supplier.id.toLowerCase()}`,
     category: primaryCat,
     coverImage: supplier.profileDetails?.factoryBranding?.coverUrl || coverImg,
