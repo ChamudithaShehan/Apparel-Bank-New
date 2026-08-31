@@ -78,7 +78,7 @@ export default function MarketplaceGigsPage() {
       {/* Hero Header */}
       <section className="bg-[#020333] text-white py-10 sm:py-14 px-4 sm:px-6 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-        
+
         <div className="mx-auto max-w-6xl relative z-10 text-center space-y-4">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold text-emerald-400 border border-white/10 backdrop-blur-xs">
             <Sparkles className="size-4" />
@@ -138,11 +138,10 @@ export default function MarketplaceGigsPage() {
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`rounded-2xl px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  activeCategory === cat.id
+                className={`rounded-2xl px-4 py-2 text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${activeCategory === cat.id
                     ? "bg-[#020333] text-white shadow-xs"
                     : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-                }`}
+                  }`}
               >
                 {isSi ? cat.labelSi : cat.labelEn}
               </button>
@@ -355,11 +354,10 @@ export default function MarketplaceGigsPage() {
                   <button
                     key={pkg}
                     onClick={() => setSelectedPackage(pkg)}
-                    className={`py-2 text-xs sm:text-sm font-extrabold uppercase tracking-wide rounded-xl transition-all cursor-pointer ${
-                      selectedPackage === pkg
+                    className={`py-2 text-xs sm:text-sm font-extrabold uppercase tracking-wide rounded-xl transition-all cursor-pointer ${selectedPackage === pkg
                         ? "bg-[#020333] text-white shadow-xs"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
+                      }`}
                   >
                     {pkg} Package
                   </button>

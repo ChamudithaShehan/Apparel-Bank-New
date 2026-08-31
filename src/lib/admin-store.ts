@@ -1,3 +1,5 @@
+export * from "./audit-logs";
+
 export interface RolePermission {
   id: string;
   name: string;
@@ -26,8 +28,24 @@ export interface AdminUser {
   joinedAt: string;
 }
 
+export interface BuyerRFQLead {
+  id: string;
+  supplierId: string;
+  supplierBusinessName: string;
+  buyerName: string;
+  buyerCompany: string;
+  buyerPhone: string;
+  garmentCategory: string;
+  quantity: string;
+  estimatedValue: string;
+  status: "new" | "sample_requested" | "in_discussion" | "deal_won" | "closed";
+  notes: string;
+  date: string;
+}
+
 const ROLES_STORAGE_KEY = "apparel_bank_roles";
 const ADMINS_STORAGE_KEY = "apparel_bank_admins";
+const BUYER_RFQS_STORAGE_KEY = "apparel_bank_buyer_rfqs";
 
 export const INITIAL_ROLES: RolePermission[] = [
   {
@@ -100,42 +118,101 @@ export const INITIAL_ADMINS: AdminUser[] = [
     roleId: "role-super-admin",
     roleName: "Super Admin",
     avatar: "CS",
-    lastActive: "Active now",
+    lastActive: "Just now",
     status: "active",
-    joinedAt: "Jan 12, 2026",
+    joinedAt: "Jan 10, 2026",
   },
   {
     id: "ADM-02",
-    name: "Sandun Wickramasinghe",
-    email: "sandun.w@apparelbank.lk",
+    name: "Dilini Senanayake",
+    email: "dilini.s@apparelbank.lk",
     roleId: "role-verification-officer",
     roleName: "Verification Officer",
-    avatar: "SW",
-    lastActive: "12 mins ago",
+    avatar: "DS",
+    lastActive: "14 mins ago",
     status: "active",
-    joinedAt: "Feb 01, 2026",
+    joinedAt: "Jan 18, 2026",
   },
   {
     id: "ADM-03",
-    name: "Dinithi Fernando",
-    email: "dinithi.f@apparelbank.lk",
+    name: "Roshana Jayasinghe",
+    email: "roshana@apparelbank.lk",
     roleId: "role-compliance-auditor",
     roleName: "Compliance Auditor",
-    avatar: "DF",
-    lastActive: "1 hour ago",
+    avatar: "RJ",
+    lastActive: "2 hours ago",
     status: "active",
-    joinedAt: "Feb 15, 2026",
+    joinedAt: "Feb 02, 2026",
   },
   {
     id: "ADM-04",
-    name: "Kasun Jayawardena",
-    email: "kasun.j@apparelbank.lk",
+    name: "Nuwan Pradeep",
+    email: "nuwan.p@apparelbank.lk",
     roleId: "role-support-agent",
     roleName: "Support Agent",
-    avatar: "KJ",
+    avatar: "NP",
     lastActive: "Yesterday",
     status: "inactive",
-    joinedAt: "Mar 02, 2026",
+    joinedAt: "Feb 14, 2026",
+  },
+];
+
+export const INITIAL_BUYER_RFQS: BuyerRFQLead[] = [
+  {
+    id: "RFQ-701",
+    supplierId: "REG-8012",
+    supplierBusinessName: "Lanka Weave Handlooms",
+    buyerName: "Kasun Jayawardena",
+    buyerCompany: "Ceylon Urban Wear Ltd",
+    buyerPhone: "0778901234",
+    garmentCategory: "T-Shirts & Polos",
+    quantity: "500 Pcs",
+    estimatedValue: "LKR 425,000",
+    status: "new",
+    notes: "Custom embroidered crewneck t-shirts (180 GSM combed cotton) with brand woven label.",
+    date: "Today, 10:30 AM",
+  },
+  {
+    id: "RFQ-700",
+    supplierId: "REG-8012",
+    supplierBusinessName: "Lanka Weave Handlooms",
+    buyerName: "Dharshani Perera",
+    buyerCompany: "Colombo Style Hub",
+    buyerPhone: "0712349876",
+    garmentCategory: "Formal & Casual Shirts",
+    quantity: "150 Pcs",
+    estimatedValue: "LKR 217,500",
+    status: "sample_requested",
+    notes: "Fabric swatch and 1 pre-production prototype sample requested to Rajagiriya showroom.",
+    date: "Yesterday",
+  },
+  {
+    id: "RFQ-699",
+    supplierId: "REG-8014",
+    supplierBusinessName: "Southern Stitchers Ltd",
+    buyerName: "Mahesh Ranasinghe",
+    buyerCompany: "Apex Uniforms & Corporate",
+    buyerPhone: "0763456789",
+    garmentCategory: "Trousers & Pants",
+    quantity: "1,000 Pcs",
+    estimatedValue: "LKR 1,250,000",
+    status: "in_discussion",
+    notes: "Monthly regular contract for corporate hospitality staff trousers. Sample approved.",
+    date: "3 days ago",
+  },
+  {
+    id: "RFQ-698",
+    supplierId: "REG-8013",
+    supplierBusinessName: "Kandy Garments Co.",
+    buyerName: "Sonali Wickramasinghe",
+    buyerCompany: "Lotus Boutique Retail",
+    buyerPhone: "0724567890",
+    garmentCategory: "Dresses & Frocks",
+    quantity: "200 Pcs",
+    estimatedValue: "LKR 330,000",
+    status: "deal_won",
+    notes: "Turnkey cotton sundresses with custom brand hangtags. Production scheduled.",
+    date: "5 days ago",
   },
 ];
 
@@ -281,6 +358,33 @@ export function deleteStoredAdmin(id: string): AdminUser[] {
   const updated = admins.filter((a) => a.id !== id);
   if (typeof window !== "undefined") {
     localStorage.setItem(ADMINS_STORAGE_KEY, JSON.stringify(updated));
+  }
+  return updated;
+}
+
+// Buyer RFQs Store
+export function getStoredBuyerRFQs(): BuyerRFQLead[] {
+  if (typeof window === "undefined") return INITIAL_BUYER_RFQS;
+  try {
+    const raw = localStorage.getItem(BUYER_RFQS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(BUYER_RFQS_STORAGE_KEY, JSON.stringify(INITIAL_BUYER_RFQS));
+      return INITIAL_BUYER_RFQS;
+    }
+    return JSON.parse(raw);
+  } catch {
+    return INITIAL_BUYER_RFQS;
+  }
+}
+
+export function updateStoredBuyerRFQStatus(
+  id: string,
+  status: BuyerRFQLead["status"]
+): BuyerRFQLead[] {
+  const rfqs = getStoredBuyerRFQs();
+  const updated = rfqs.map((r) => (r.id === id ? { ...r, status } : r));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(BUYER_RFQS_STORAGE_KEY, JSON.stringify(updated));
   }
   return updated;
 }
