@@ -46,6 +46,7 @@ import {
   User,
 } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
+import { BrandLogo } from "@/components/BrandLogo";
 import {
   getCurrentUser,
   clearCurrentUser,
@@ -493,15 +494,7 @@ export default function UserDashboardPage() {
           {/* Top Brand Header */}
           <div className="flex items-center justify-between pt-0.5">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative h-8 w-28 sm:h-9 sm:w-32 shrink-0">
-                <Image
-                  src="/images/logo.png"
-                  alt="Apparel Bank"
-                  fill
-                  priority
-                  className="object-contain object-left"
-                />
-              </div>
+              <BrandLogo variant="light" size="md" />
             </Link>
             <button
               type="button"

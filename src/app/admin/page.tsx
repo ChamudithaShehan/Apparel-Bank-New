@@ -76,6 +76,7 @@ import {
   INITIAL_AUDIT_LOGS,
 } from "@/lib/audit-logs";
 import { AuditLogViewer } from "@/components/audit-logs/AuditLogViewer";
+import { BrandLogo } from "@/components/BrandLogo";
 
 type AdminTab =
   | "dashboard"
@@ -478,19 +479,11 @@ export default function ProfessionalAdminDashboard() {
           {/* Brand Header */}
           <div className="flex items-center justify-between px-2 pt-1">
             <Link href="/" className="flex items-center gap-2 group">
-              <div className="relative h-9 w-32 shrink-0">
-                <Image
-                  src="/images/logo.png"
-                  alt="Apparel Bank"
-                  fill
-                  priority
-                  className="object-contain object-left"
-                />
-              </div>
+              <BrandLogo variant="light" size="md" />
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+              className="lg:hidden p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
             >
               <X className="size-5" />
             </button>
@@ -567,29 +560,7 @@ export default function ProfessionalAdminDashboard() {
               </span>
             </button>
 
-            {/* 4. Audit Trail & Security Timeline */}
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab("audit");
-                setSidebarOpen(false);
-              }}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activeTab === "audit"
-                  ? "bg-[#020333] text-white shadow-xs"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <History className="size-4 shrink-0" />
-                <span>Audit Logs & History</span>
-              </div>
-              <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
-                {auditLogs.length}
-              </span>
-            </button>
-
-            {/* 6. Capacity Intelligence */}
+            {/* 4. Capacity Intelligence */}
             <button
               type="button"
               onClick={() => {
@@ -612,7 +583,7 @@ export default function ProfessionalAdminDashboard() {
               Security & Access
             </p>
 
-            {/* 7. Roles & Permissions */}
+            {/* 5. Roles & Permissions */}
             <button
               type="button"
               onClick={() => {
@@ -634,7 +605,7 @@ export default function ProfessionalAdminDashboard() {
               </span>
             </button>
 
-            {/* 8. Admin Access */}
+            {/* 6. Admin Access */}
             <button
               type="button"
               onClick={() => {
@@ -653,6 +624,28 @@ export default function ProfessionalAdminDashboard() {
               </div>
               <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
                 {adminTeam.length}
+              </span>
+            </button>
+
+            {/* 7. Audit Logs & Administrative History */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab("audit");
+                setSidebarOpen(false);
+              }}
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                activeTab === "audit"
+                  ? "bg-[#020333] text-white shadow-xs"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              <div className="flex items-center gap-3">
+                <History className="size-4 shrink-0" />
+                <span>Audit Logs & History</span>
+              </div>
+              <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                {auditLogs.length}
               </span>
             </button>
 
