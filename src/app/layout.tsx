@@ -1,28 +1,6 @@
 import type { Metadata } from "next";
-import { Quicksand, Nunito, Noto_Sans_Sinhala } from "next/font/google";
 import "../styles.css";
 import { LanguageProvider } from "@/lib/language-context";
-
-const quicksand = Quicksand({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["600", "700"],
-  display: "swap",
-});
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["600", "700", "800", "900"],
-  display: "swap",
-});
-
-const notoSansSinhala = Noto_Sans_Sinhala({
-  subsets: ["sinhala"],
-  variable: "--font-sinhala",
-  weight: ["500", "600", "700", "800", "900"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Apparel Bank — සැපයුම්කරු ලියාපදිංචිය | Supplier Registration",
@@ -39,14 +17,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="si"
-      suppressHydrationWarning
-      className={`${quicksand.variable} ${nunito.variable} ${notoSansSinhala.variable}`}
-    >
+    <html lang="si" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@500;600;700;800;900&family=Nunito:wght@600;700;800;900&family=Quicksand:wght@600;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         suppressHydrationWarning
-        className="antialiased bg-[#F3F6FA] text-foreground min-h-screen"
+        className="antialiased bg-[#F3F6FA] text-foreground min-h-screen font-body"
       >
         <LanguageProvider>{children}</LanguageProvider>
       </body>

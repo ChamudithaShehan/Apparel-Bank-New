@@ -30,8 +30,8 @@ export default function SignInPage() {
     if (!trimmedUser || !trimmedPhone) {
       setErrorMsg(
         isSi
-          ? "කරුණාකර පරිශීලක නාමය සහ දුරකථන අංකය ඇතුළත් කරන්න."
-          : "Please enter both User Name and Mobile Number."
+          ? "කරුණාකර ඔබේ නම සහ දුරකථන අංකය ඇතුළත් කරන්න."
+          : "Please enter both Your Name and Mobile Number."
       );
       return;
     }
@@ -47,8 +47,8 @@ export default function SignInPage() {
       setIsLoading(false);
       setErrorMsg(
         isSi
-          ? "පරිශීලක නාමය හෝ දුරකථන අංකය සොයාගත නොහැක. කරුණාකර නැවත පරීක්ෂා කරන්න හෝ නව ගිණුමක් සාදන්න."
-          : "No registration found with this User Name and Mobile Number. Please check your details or register first."
+          ? "ඇතුළත් කළ නම හෝ දුරකථන අංකය සොයාගත නොහැක. කරුණාකර නැවත පරීක්ෂා කරන්න හෝ නව ගිණුමක් සාදන්න."
+          : "No registration found with this Name and Mobile Number. Please check your details or register first."
       );
     }
   };
@@ -84,8 +84,8 @@ export default function SignInPage() {
               </h1>
               <p className="mt-1.5 text-base text-muted-foreground">
                 {isSi
-                  ? "පරිශීලක නාමය සහ දුරකථන අංකය ඇතුළත් කරන්න"
-                  : "Enter your user name and mobile number to sign in"}
+                  ? "ඔබේ නම සහ දුරකථන අංකය ඇතුළත් කරන්න"
+                  : "Enter your name and mobile number to sign in"}
               </p>
             </div>
 
@@ -99,11 +99,11 @@ export default function SignInPage() {
 
             {/* Form */}
             <form className="mt-6 flex flex-col gap-4.5" onSubmit={handleSubmit}>
-              {/* Field 1: User Name */}
+              {/* Field 1: Your Name */}
               <div>
                 <label htmlFor="s-username" className="mb-1.5 block cursor-pointer">
                   <span className="font-display text-base font-bold text-foreground">
-                    {isSi ? "පරිශීලක නාමය (User Name)" : "User Name"}
+                    {isSi ? "ඔබේ නම (Your Name)" : "Your Name"}
                   </span>
                 </label>
                 <input
@@ -112,7 +112,7 @@ export default function SignInPage() {
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   placeholder={isSi ? "උදා: Sunil Bandara" : "e.g. Sunil Bandara"}
-                  autoComplete="username"
+                  autoComplete="name"
                   required
                   className={inputClass}
                 />

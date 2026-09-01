@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Check, Clock, FileText, ShieldCheck, PhoneCall } from "lucide-react";
+import { ArrowRight, Clock, FileText, PhoneCall } from "lucide-react";
 import { useLanguage } from "@/lib/language-context";
 import { AppHeader } from "@/components/AppHeader";
 
@@ -40,47 +40,35 @@ export default function WelcomePage() {
 
               {/* Heading & Subtext */}
               {isSi ? (
-                <h1 className="mt-6 text-center font-[family-name:var(--font-sinhala)] text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
-                  ආයුබෝවන්! 👋
-                  <span className="block mt-0.5">අපි එක්ක එකතු වෙන්න</span>
+                <h1 className="mt-6 text-center font-[family-name:var(--font-sinhala)] text-3xl sm:text-4xl font-black leading-snug text-[#0B122F] tracking-tight">
+                  Welcome! 👋
+                  <span className="block mt-2 text-lg sm:text-xl font-bold text-[#0B122F]/90 leading-snug sm:leading-relaxed">
+                    Sri Lanka Apparel Bank වෙත ඔබව සාදරයෙන් පිලිගන්නවා
+                  </span>
                 </h1>
               ) : (
-                <h1 className="mt-6 text-center font-display text-2xl sm:text-3xl font-extrabold leading-snug text-[#0B122F] tracking-tight">
+                <h1 className="mt-6 text-center font-display text-3xl sm:text-4xl font-black leading-snug text-[#0B122F] tracking-tight">
                   Welcome! 👋
-                  <span className="block mt-0.5">Join with us</span>
+                  <span className="block mt-2 text-lg sm:text-xl font-bold text-[#0B122F]/90 leading-snug sm:leading-relaxed">
+                    Sri Lanka Apparel Bank welcomes you
+                  </span>
                 </h1>
               )}
 
-              {/* 3 Key Highlights */}
-              <div className="mt-6 grid w-full grid-cols-3 gap-2 rounded-2xl bg-slate-50 p-3 text-center border border-slate-100">
+              {/* 2 Key Highlights */}
+              <div className="mt-6 grid w-full grid-cols-2 gap-2 rounded-2xl bg-slate-50 p-3 text-center border border-slate-100">
                 <div className="flex flex-col items-center">
                   <Clock className="size-5 text-blue-600 mb-1" strokeWidth={2.2} />
                   <span className="text-xs font-bold text-slate-700">
                     {isSi ? "විනාඩි 2යි" : "2 Minutes"}
                   </span>
                 </div>
-                <div className="flex flex-col items-center border-x border-slate-200">
+                <div className="flex flex-col items-center border-l border-slate-200">
                   <FileText className="size-5 text-indigo-600 mb-1" strokeWidth={2.2} />
                   <span className="text-xs font-bold text-slate-700">
-                    {isSi ? "විස්තර 4යි" : "4 Details"}
+                    {isSi ? "විස්තර 5යි" : "5 Details"}
                   </span>
                 </div>
-                <div className="flex flex-col items-center">
-                  <ShieldCheck className="size-5 text-emerald-600 mb-1" strokeWidth={2.2} />
-                  <span className="text-xs font-bold text-slate-700">
-                    {isSi ? "නොමිලේ" : "100% Free"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Free Registration Badge */}
-              <div className="mt-5 flex w-full items-center justify-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/40 py-3 px-5 shadow-xs">
-                <div className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-emerald-500 text-emerald-500 bg-white">
-                  <Check className="size-3.5 stroke-[3]" />
-                </div>
-                <span className="font-[family-name:var(--font-sinhala)] text-base sm:text-lg font-bold text-[#0B122F] text-center">
-                  {isSi ? "ලියාපදිංචිය සම්පූර්ණයෙන්ම නොමිලේ" : "Registration is 100% Free"}
-                </span>
               </div>
 
               {/* Action Button */}

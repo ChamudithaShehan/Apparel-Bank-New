@@ -194,6 +194,20 @@ export default function UserDashboardPage() {
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const tabParam = searchParams.get("tab") as DashboardTab | null;
+      if (
+        tabParam &&
+        ["overview", "gig", "products", "factory", "inquiries", "support"].includes(tabParam)
+      ) {
+        setActiveTab(tabParam);
+      }
+      const actionParam = searchParams.get("action");
+      if (actionParam === "addProduct") {
+        setActiveModal("addProduct");
+      }
+    }
     const currentUser = getCurrentUser();
     setUser(currentUser);
     if (currentUser) {

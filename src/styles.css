@@ -64,6 +64,10 @@
 }
 
 :root {
+  --font-display: "Quicksand", "Noto Sans Sinhala", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Nunito", "Noto Sans Sinhala", ui-sans-serif, system-ui, sans-serif;
+  --font-sinhala: "Noto Sans Sinhala", "Nunito", ui-sans-serif, system-ui, sans-serif;
+
   --radius: 0.75rem;
 
   /* Primary = #020333 deep navy; everything else leans on white. */
