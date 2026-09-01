@@ -286,12 +286,12 @@ export default function SignUpPage() {
                             : "border-slate-200 bg-card hover:border-slate-300 hover:shadow-xs"
                             }`}
                         >
-                          <div className="relative aspect-square w-full overflow-hidden bg-slate-100">
+                          <div className="relative aspect-square w-full overflow-hidden bg-slate-50 p-2">
                             <Image
                               src={cat.image}
                               alt={cat.nameEn}
                               fill
-                              className="object-cover transition-transform duration-200 group-hover:scale-105"
+                              className="object-contain p-2 transition-transform duration-200 group-hover:scale-105"
                               sizes="(max-width: 640px) 50vw, 250px"
                             />
                             <div
@@ -914,12 +914,12 @@ export default function SignUpPage() {
 
                     {newProductImage ? (
                       <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/10 border border-white/20">
-                        <div className="relative size-16 sm:size-18 rounded-xl overflow-hidden bg-slate-800 border-2 border-white/20 shrink-0">
+                        <div className="relative size-16 sm:size-18 rounded-xl overflow-hidden bg-slate-800 border-2 border-white/20 shrink-0 p-1">
                           <Image
                             src={newProductImage}
                             alt="Product preview"
                             fill
-                            className="object-cover"
+                            className="object-contain p-1"
                           />
                         </div>
                         <div className="flex-1 flex flex-col gap-1.5 min-w-0">
@@ -1068,12 +1068,12 @@ export default function SignUpPage() {
                           className="flex items-center justify-between gap-3 rounded-2xl bg-white text-slate-900 p-3 border border-slate-200 shadow-sm"
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            <div className="relative size-12 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                            <div className="relative size-12 rounded-xl overflow-hidden bg-slate-100 shrink-0 p-1">
                               <Image
                                 src={prod.image}
                                 alt={prod.name}
                                 fill
-                                className="object-cover"
+                                className="object-contain"
                               />
                             </div>
                             <div className="min-w-0">
