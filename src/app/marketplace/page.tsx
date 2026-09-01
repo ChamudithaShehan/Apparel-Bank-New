@@ -30,10 +30,10 @@ import { getAllGigs, SupplierGig, getGigById } from "@/lib/gigs";
 
 const categoryFilters = [
   { id: "all", labelEn: "All Manufacturing Gigs", labelSi: "සියලු සේවාවන්" },
-  { id: "tshirt", labelEn: "T-Shirts & Polos", labelSi: "ටී-ෂර්ට් සහ පෝලෝ" },
-  { id: "shirt", labelEn: "Formal & Casual Shirts", labelSi: "කමිස නිෂ්පාදනය" },
-  { id: "trousers", labelEn: "Trousers & Pants", labelSi: "කලිසම් නිෂ්පාදනය" },
-  { id: "dresses", labelEn: "Dresses & Frocks", labelSi: "ගවුම් සහ විලාසිතා" },
+  { id: "tshirt_shirt", labelEn: "T-Shirts & Shirts", labelSi: "ටී-ෂර්ට් සහ කමිස" },
+  { id: "denim_trousers", labelEn: "Denim & Trousers", labelSi: "ඩෙනිම් සහ කලිසම්" },
+  { id: "frock_skirt_blouse", labelEn: "Frock & Skirt & Blouse", labelSi: "ගවුම්, සාය සහ බ්ලවුස්" },
+  { id: "other", labelEn: "Other Garments", labelSi: "වෙනත් ඇඳුම්" },
 ];
 
 export default function MarketplaceGigsPage() {
@@ -51,7 +51,13 @@ export default function MarketplaceGigsPage() {
   }, []);
 
   const filteredGigs = gigs.filter((gig) => {
-    const matchCategory = activeCategory === "all" ? true : gig.category === activeCategory;
+    const matchCategory =
+      activeCategory === "all"
+        ? true
+        : gig.category === activeCategory ||
+          (activeCategory === "tshirt_shirt" && (gig.category === "tshirt" || gig.category === "shirt")) ||
+          (activeCategory === "denim_trousers" && gig.category === "trousers") ||
+          (activeCategory === "frock_skirt_blouse" && gig.category === "dresses");
     const q = searchQuery.trim().toLowerCase();
     const matchSearch =
       !q ||

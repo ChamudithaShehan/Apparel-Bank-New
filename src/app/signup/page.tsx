@@ -40,28 +40,28 @@ const inputClass =
 
 const garmentCategories = [
   {
-    id: "tshirt",
-    nameEn: "T-Shirts",
-    nameSi: "T-Shirts",
-    image: "/images/categories/tshirt.jpg",
+    id: "tshirt_shirt",
+    nameEn: "T-Shirts & Shirts",
+    nameSi: "ටී-ෂර්ට් සහ කමිස",
+    image: "/images/categories/tshirt_shirt.jpg",
   },
   {
-    id: "shirt",
-    nameEn: "Shirts",
-    nameSi: "Shirts",
-    image: "/images/categories/shirt.jpg",
+    id: "denim_trousers",
+    nameEn: "Denim & Trousers",
+    nameSi: "ඩෙනිම් සහ කලිසම්",
+    image: "/images/categories/denim_trousers.jpg",
   },
   {
-    id: "trousers",
-    nameEn: "Trousers",
-    nameSi: "Trousers",
-    image: "/images/categories/trousers.jpg",
+    id: "frock_skirt_blouse",
+    nameEn: "Frock & Skirt & Blouse",
+    nameSi: "ගවුම්, සාය සහ බ්ලවුස්",
+    image: "/images/categories/frock_skirt_blouse.jpg",
   },
   {
-    id: "dresses",
-    nameEn: "Frocks",
-    nameSi: "Frocks",
-    image: "/images/categories/dresses.jpg",
+    id: "other",
+    nameEn: "Other",
+    nameSi: "වෙනත්",
+    image: "/images/categories/other.jpg",
   },
 ];
 
@@ -100,7 +100,7 @@ export default function SignUpPage() {
   const [workforce, setWorkforce] = useState<string>("1-10");
   const [moq, setMoq] = useState<string>("51-200");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([
-    "tshirt",
+    "tshirt_shirt",
   ]);
   const [registeredId, setRegisteredId] = useState<string>("");
 
@@ -108,7 +108,7 @@ export default function SignUpPage() {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [addedProducts, setAddedProducts] = useState<GigProduct[]>([]);
   const [newProductName, setNewProductName] = useState("");
-  const [newProductCategory, setNewProductCategory] = useState("tshirt");
+  const [newProductCategory, setNewProductCategory] = useState("tshirt_shirt");
   const [newProductImage, setNewProductImage] = useState("");
   const [newProductPrice, setNewProductPrice] = useState("");
   const [newProductMoq, setNewProductMoq] = useState("");
@@ -157,7 +157,7 @@ export default function SignUpPage() {
     });
     setCurrentUser(newReg);
     setRegisteredId(newReg.id);
-    const initialCategory = selectedCategories[0] || "tshirt";
+    const initialCategory = selectedCategories[0] || "tshirt_shirt";
     setNewProductCategory(initialCategory);
     setNewProductImage("");
     setStep(6);
@@ -197,7 +197,7 @@ export default function SignUpPage() {
       image:
         newProductImage ||
         garmentCategories.find((c) => c.id === newProductCategory)?.image ||
-        "/images/categories/tshirt.jpg",
+        "/images/categories/tshirt_shirt.jpg",
       pricePerUnit: price,
       moq: moqVal,
     };
@@ -307,7 +307,7 @@ export default function SignUpPage() {
                           </div>
                           <div className="p-3">
                             <h3 className="font-display text-base font-bold text-foreground leading-tight">
-                              {cat.nameEn}
+                              {isSi ? cat.nameSi : cat.nameEn}
                             </h3>
                           </div>
                         </button>
@@ -1205,7 +1205,7 @@ export default function SignUpPage() {
                     setYearsInOperation("1-5");
                     setWorkforce("1-10");
                     setMoq("51-200");
-                    setSelectedCategories(["tshirt"]);
+                    setSelectedCategories(["tshirt_shirt"]);
                     setRegisteredId("");
                     setAddedProducts([]);
                     setNewProductName("");

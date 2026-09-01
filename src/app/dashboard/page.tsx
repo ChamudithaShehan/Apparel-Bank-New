@@ -63,10 +63,15 @@ import { generateGigFromSupplier } from "@/lib/gigs";
 type DashboardTab = "overview" | "gig" | "products" | "factory" | "inquiries" | "support";
 
 const categoryLabels: Record<string, { en: string; si: string }> = {
-  tshirt: { en: "T-Shirts (ටී-ෂර්ට්)", si: "ටී-ෂර්ට් (T-Shirts)" },
+  tshirt_shirt: { en: "T-Shirts & Shirts (ටී-ෂර්ට් සහ කමිස)", si: "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" },
+  denim_trousers: { en: "Denim & Trousers (ඩෙනිම් සහ කලිසම්)", si: "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" },
+  frock_skirt_blouse: { en: "Frock & Skirt & Blouse (ගවුම්, සාය සහ බ්ලවුස්)", si: "ගවුම්, සාය සහ බ්ලවුස් (Frock & Skirt & Blouse)" },
+  other: { en: "Other (වෙනත්)", si: "වෙනත් (Other)" },
+  // Backward compatibility aliases
+  tshirt: { en: "T-Shirts & Shirts (ටී-ෂර්ට් සහ කමිස)", si: "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" },
   shirt: { en: "Shirts (කමිස)", si: "කමිස (Shirts)" },
-  trousers: { en: "Trousers (කලිසම්)", si: "කලිසම් (Trousers)" },
-  dresses: { en: "Dresses (ගවුම්)", si: "ගවුම් (Dresses)" },
+  trousers: { en: "Denim & Trousers (ඩෙනිම් සහ කලිසම්)", si: "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" },
+  dresses: { en: "Frock & Skirt & Blouse (ගවුම්, සාය සහ බ්ලවුස්)", si: "ගවුම්, සාය සහ බ්ලවුස් (Frock & Skirt & Blouse)" },
 };
 
 const yearsLabels: Record<string, { en: string; si: string }> = {
@@ -161,7 +166,7 @@ export default function UserDashboardPage() {
   const [editYears, setEditYears] = useState("5-10");
   const [editWorkforce, setEditWorkforce] = useState("11-50");
   const [editMoq, setEditMoq] = useState("51-200");
-  const [editCategories, setEditCategories] = useState<string[]>(["tshirt"]);
+  const [editCategories, setEditCategories] = useState<string[]>(["tshirt_shirt"]);
 
   // Form states for Location
   const [brn, setBrn] = useState("");
@@ -178,15 +183,15 @@ export default function UserDashboardPage() {
   const [paymentTerms, setPaymentTerms] = useState("30% Advance, Balance on Delivery");
 
   // Form states for Branding
-  const [logoUrl, setLogoUrl] = useState("/images/categories/shirt.jpg");
-  const [coverUrl, setCoverUrl] = useState("/images/categories/tshirt.jpg");
+  const [logoUrl, setLogoUrl] = useState("/images/categories/tshirt_shirt.jpg");
+  const [coverUrl, setCoverUrl] = useState("/images/categories/tshirt_shirt.jpg");
   const [tagline, setTagline] = useState("");
   const [websiteOrSocial, setWebsiteOrSocial] = useState("");
 
   // Form states for Add Product
   const [productName, setProductName] = useState("");
-  const [productCategory, setProductCategory] = useState("tshirt");
-  const [productImage, setProductImage] = useState("/images/categories/tshirt.jpg");
+  const [productCategory, setProductCategory] = useState("tshirt_shirt");
+  const [productImage, setProductImage] = useState("/images/categories/tshirt_shirt.jpg");
   const [productPrice, setProductPrice] = useState("LKR 850");
   const [productMoq, setProductMoq] = useState("50 Pcs");
   const [productMaterial, setProductMaterial] = useState("100% Cotton");
@@ -217,7 +222,7 @@ export default function UserDashboardPage() {
       setEditYears(currentUser.yearsInOperation || "5-10");
       setEditWorkforce(currentUser.workforce || "11-50");
       setEditMoq(currentUser.moq || "51-200");
-      setEditCategories(currentUser.selectedCategories || ["tshirt"]);
+      setEditCategories(currentUser.selectedCategories || ["tshirt_shirt"]);
 
       if (currentUser.profileDetails) {
         const { businessAndLocation, operationsAndLogistics, factoryBranding } =
@@ -434,7 +439,12 @@ export default function UserDashboardPage() {
 
   const filteredProducts = productsList.filter((p) => {
     if (productFilter === "all") return true;
-    return p.category === productFilter;
+    return (
+      p.category === productFilter ||
+      (productFilter === "tshirt_shirt" && (p.category === "tshirt" || p.category === "shirt")) ||
+      (productFilter === "denim_trousers" && p.category === "trousers") ||
+      (productFilter === "frock_skirt_blouse" && p.category === "dresses")
+    );
   });
 
   const navItems = [
@@ -1400,11 +1410,11 @@ export default function UserDashboardPage() {
                   Filter:
                 </span>
                 {[
-                  { id: "all", label: "All Products (සියල්ල)" },
-                  { id: "tshirt", label: "T-Shirts (ටී-ෂර්ට්)" },
-                  { id: "shirt", label: "Shirts (කමිස)" },
-                  { id: "trousers", label: "Trousers (කලිසම්)" },
-                  { id: "dresses", label: "Dresses (ගවුම්)" },
+                  { id: "all", label: isSi ? "සියල්ල" : "All Products" },
+                  { id: "tshirt_shirt", label: isSi ? "ටී-ෂර්ට් සහ කමිස" : "T-Shirts & Shirts" },
+                  { id: "denim_trousers", label: isSi ? "ඩෙනිම් සහ කලිසම්" : "Denim & Trousers" },
+                  { id: "frock_skirt_blouse", label: isSi ? "ගවුම්, සාය සහ බ්ලවුස්" : "Frock & Skirt & Blouse" },
+                  { id: "other", label: isSi ? "වෙනත්" : "Other" },
                 ].map((tab) => (
                   <button
                     key={tab.id}
@@ -2095,10 +2105,10 @@ export default function UserDashboardPage() {
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { id: "tshirt", label: "T-Shirts (ටී-ෂර්ට්)" },
-                    { id: "shirt", label: "Shirts (කමිස)" },
-                    { id: "trousers", label: "Trousers (කලිසම්)" },
-                    { id: "dresses", label: "Dresses (ගවුම්)" },
+                    { id: "tshirt_shirt", label: isSi ? "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" : "T-Shirts & Shirts" },
+                    { id: "denim_trousers", label: isSi ? "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" : "Denim & Trousers" },
+                    { id: "frock_skirt_blouse", label: isSi ? "ගවුම්, සාය සහ බ්ලවුස් (Frock, Skirt & Blouse)" : "Frock & Skirt & Blouse" },
+                    { id: "other", label: isSi ? "වෙනත් (Other)" : "Other" },
                   ].map((cat) => {
                     const isChecked = editCategories.includes(cat.id);
                     return (
@@ -2201,17 +2211,17 @@ export default function UserDashboardPage() {
                     value={productCategory}
                     onChange={(e) => {
                       setProductCategory(e.target.value);
-                      if (e.target.value === "tshirt") setProductImage("/images/categories/tshirt.jpg");
-                      else if (e.target.value === "shirt") setProductImage("/images/categories/shirt.jpg");
-                      else if (e.target.value === "dresses") setProductImage("/images/categories/dresses.jpg");
-                      else if (e.target.value === "trousers") setProductImage("/images/categories/trousers.jpg");
+                      if (e.target.value === "tshirt_shirt" || e.target.value === "tshirt" || e.target.value === "shirt") setProductImage("/images/categories/tshirt_shirt.jpg");
+                      else if (e.target.value === "denim_trousers" || e.target.value === "trousers") setProductImage("/images/categories/denim_trousers.jpg");
+                      else if (e.target.value === "frock_skirt_blouse" || e.target.value === "dresses") setProductImage("/images/categories/frock_skirt_blouse.jpg");
+                      else if (e.target.value === "other") setProductImage("/images/categories/other.jpg");
                     }}
                     className="w-full rounded-xl sm:rounded-2xl border-2 border-slate-200 px-3.5 py-2.5 sm:py-3 text-sm sm:text-base font-semibold outline-none focus:border-[#020333] cursor-pointer bg-white"
                   >
-                    <option value="tshirt">T-Shirts (ටී-ෂර්ට්)</option>
-                    <option value="shirt">Shirts (කමිස)</option>
-                    <option value="trousers">Trousers (කලිසම්)</option>
-                    <option value="dresses">Dresses (ගවුම්)</option>
+                    <option value="tshirt_shirt">{isSi ? "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" : "T-Shirts & Shirts"}</option>
+                    <option value="denim_trousers">{isSi ? "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" : "Denim & Trousers"}</option>
+                    <option value="frock_skirt_blouse">{isSi ? "ගවුම්, සාය සහ බ්ලවුස් (Frock, Skirt & Blouse)" : "Frock & Skirt & Blouse"}</option>
+                    <option value="other">{isSi ? "වෙනත් (Other)" : "Other"}</option>
                   </select>
                 </div>
 
@@ -2272,15 +2282,15 @@ export default function UserDashboardPage() {
                       type="text"
                       value={productImage}
                       onChange={(e) => setProductImage(e.target.value)}
-                      placeholder="/images/categories/tshirt.jpg"
+                      placeholder="/images/categories/tshirt_shirt.jpg"
                       className="w-full rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-semibold outline-none focus:border-[#020333]"
                     />
                     <div className="flex flex-wrap gap-1">
                       {[
-                        { label: "T-Shirt", src: "/images/categories/tshirt.jpg" },
-                        { label: "Shirt", src: "/images/categories/shirt.jpg" },
-                        { label: "Dress", src: "/images/categories/dresses.jpg" },
-                        { label: "Trousers", src: "/images/categories/trousers.jpg" },
+                        { label: "T-Shirts & Shirts", src: "/images/categories/tshirt_shirt.jpg" },
+                        { label: "Denim & Trousers", src: "/images/categories/denim_trousers.jpg" },
+                        { label: "Frock, Skirt & Blouse", src: "/images/categories/frock_skirt_blouse.jpg" },
+                        { label: "Other", src: "/images/categories/other.jpg" },
                       ].map((p, idx) => (
                         <button
                           key={idx}
@@ -2685,10 +2695,10 @@ export default function UserDashboardPage() {
                   />
                   <div className="flex flex-wrap gap-1 pt-0.5">
                     {[
-                      { name: "Stitching Floor", url: "/images/categories/tshirt.jpg" },
-                      { name: "Apparel Line", url: "/images/categories/shirt.jpg" },
-                      { name: "Fashion Studio", url: "/images/categories/dresses.jpg" },
-                      { name: "Finishing Unit", url: "/images/categories/trousers.jpg" },
+                      { name: "T-Shirts & Shirts", url: "/images/categories/tshirt_shirt.jpg" },
+                      { name: "Denim & Trousers", url: "/images/categories/denim_trousers.jpg" },
+                      { name: "Frock & Skirt & Blouse", url: "/images/categories/frock_skirt_blouse.jpg" },
+                      { name: "Other Garments", url: "/images/categories/other.jpg" },
                     ].map((preset, idx) => (
                       <button
                         key={idx}

@@ -46,23 +46,33 @@ export interface SupplierGig {
 const GIG_STORAGE_KEY = "apparel_bank_supplier_gigs";
 
 const categoryImageMap: Record<string, string> = {
-  tshirt: "/images/categories/tshirt.jpg",
-  shirt: "/images/categories/shirt.jpg",
-  trousers: "/images/categories/trousers.jpg",
-  dresses: "/images/categories/dresses.jpg",
+  tshirt_shirt: "/images/categories/tshirt_shirt.jpg",
+  denim_trousers: "/images/categories/denim_trousers.jpg",
+  frock_skirt_blouse: "/images/categories/frock_skirt_blouse.jpg",
+  other: "/images/categories/other.jpg",
+  // Backward compatibility
+  tshirt: "/images/categories/tshirt_shirt.jpg",
+  shirt: "/images/categories/tshirt_shirt.jpg",
+  trousers: "/images/categories/denim_trousers.jpg",
+  dresses: "/images/categories/frock_skirt_blouse.jpg",
 };
 
 const categoryShortNames: Record<string, string> = {
-  tshirt: "T-Shirts & Polos",
-  shirt: "Shirts",
-  trousers: "Trousers",
-  dresses: "Dresses",
+  tshirt_shirt: "T-Shirts & Shirts",
+  denim_trousers: "Denim & Trousers",
+  frock_skirt_blouse: "Frock & Skirt & Blouse",
+  other: "Apparel & Garments",
+  // Backward compatibility
+  tshirt: "T-Shirts & Shirts",
+  shirt: "T-Shirts & Shirts",
+  trousers: "Denim & Trousers",
+  dresses: "Frock & Skirt & Blouse",
 };
 
 // Generate a clean, concise, Fiverr-style Gig object from a supplier registration record
 export function generateGigFromSupplier(supplier: SupplierRegistration): SupplierGig {
   const selected = supplier.selectedCategories || [];
-  const primaryCat = selected[0] || "tshirt";
+  const primaryCat = selected[0] || "tshirt_shirt";
 
   // Build clean, concise title without awkward repetition or run-on sentences
   let cleanCategoryTitle = "Apparel";
@@ -78,7 +88,7 @@ export function generateGigFromSupplier(supplier: SupplierRegistration): Supplie
 
   const gigTitle = `I will manufacture custom ${cleanCategoryTitle} for your brand`;
 
-  const coverImg = categoryImageMap[primaryCat] || "/images/categories/tshirt.jpg";
+  const coverImg = categoryImageMap[primaryCat] || "/images/categories/tshirt_shirt.jpg";
   const gallery = selected.map((c) => categoryImageMap[c]).filter(Boolean);
 
   const moqText = supplier.moq === "1-50" ? "50 pcs" : supplier.moq === "51-200" ? "100 pcs" : "500 pcs";
@@ -101,7 +111,7 @@ export function generateGigFromSupplier(supplier: SupplierRegistration): Supplie
       responseTime: "1 Hour",
       location: supplier.profileDetails?.businessAndLocation?.district || "Sri Lanka",
     },
-    startingPrice: primaryCat === "tshirt" ? "LKR 750" : primaryCat === "shirt" ? "LKR 1,200" : "LKR 1,500",
+    startingPrice: primaryCat === "tshirt_shirt" || primaryCat === "tshirt" ? "LKR 850" : primaryCat === "frock_skirt_blouse" ? "LKR 1,650" : "LKR 1,200",
     moq: supplier.moq,
     turnaroundTime: supplier.profileDetails?.operationsAndLogistics?.leadTime || "14 - 21 Days",
     workforce: supplier.workforce,
@@ -130,7 +140,7 @@ export function generateGigFromSupplier(supplier: SupplierRegistration): Supplie
         name: "Boutique Production Run",
         description: `Small-to-medium batch (${moqText}) with custom brand labels and screen print`,
         moq: supplier.moq,
-        pricePerUnit: primaryCat === "tshirt" ? "LKR 950" : "LKR 1,450",
+        pricePerUnit: primaryCat === "tshirt_shirt" || primaryCat === "tshirt" ? "LKR 950" : "LKR 1,450",
         deliveryDays: "14 Days",
         features: ["Full Batch Production", "Custom Labels & Tags", "Standard Packaging", "QC Check"],
       },
@@ -138,7 +148,7 @@ export function generateGigFromSupplier(supplier: SupplierRegistration): Supplie
         name: "Commercial Export Run",
         description: "Bulk volume order (500+ pcs) with dedicated production line and priority shipping",
         moq: "500+ Pcs",
-        pricePerUnit: primaryCat === "tshirt" ? "LKR 750" : "LKR 1,150",
+        pricePerUnit: primaryCat === "tshirt_shirt" || primaryCat === "tshirt" ? "LKR 750" : "LKR 1,150",
         deliveryDays: "21 Days",
         features: ["Full Commercial Run", "Custom Trim & Accessories", "Export Barcode Packing", "Dedicated Account Manager"],
       },

@@ -89,10 +89,15 @@ type AdminTab =
   | "settings";
 
 const categoryLabels: Record<string, string> = {
-  tshirt: "T-Shirts & Polos",
-  shirt: "Formal & Casual Shirts",
-  trousers: "Trousers & Pants",
-  dresses: "Dresses & Frocks",
+  tshirt_shirt: "T-Shirts & Shirts",
+  denim_trousers: "Denim & Trousers",
+  frock_skirt_blouse: "Frock & Skirt & Blouse",
+  other: "Other",
+  // Backward compatibility aliases
+  tshirt: "T-Shirts & Shirts",
+  shirt: "T-Shirts & Shirts",
+  trousers: "Denim & Trousers",
+  dresses: "Frock & Skirt & Blouse",
 };
 
 const yearsLabels: Record<string, string> = {
@@ -426,7 +431,12 @@ export default function ProfessionalAdminDashboard() {
   // Filtered Suppliers
   const filteredSuppliers = registrations.filter((r) => {
     const matchesStatus = statusFilter === "all" || r.status === statusFilter;
-    const matchesCategory = categoryFilter === "all" || r.selectedCategories.includes(categoryFilter);
+    const matchesCategory =
+      categoryFilter === "all" ||
+      r.selectedCategories.includes(categoryFilter) ||
+      (categoryFilter === "tshirt_shirt" && (r.selectedCategories.includes("tshirt") || r.selectedCategories.includes("shirt"))) ||
+      (categoryFilter === "denim_trousers" && r.selectedCategories.includes("trousers")) ||
+      (categoryFilter === "frock_skirt_blouse" && r.selectedCategories.includes("dresses"));
     const matchesSearch =
       r.businessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       r.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1052,10 +1062,10 @@ export default function ProfessionalAdminDashboard() {
                   className="rounded-xl border border-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700 outline-none bg-slate-50 cursor-pointer"
                 >
                   <option value="all">All Garment Categories</option>
-                  <option value="tshirt">T-Shirts</option>
-                  <option value="shirt">Shirts</option>
-                  <option value="trousers">Trousers</option>
-                  <option value="dresses">Dresses</option>
+                  <option value="tshirt_shirt">T-Shirts & Shirts</option>
+                  <option value="denim_trousers">Denim & Trousers</option>
+                  <option value="frock_skirt_blouse">Frock & Skirt & Blouse</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
             </div>

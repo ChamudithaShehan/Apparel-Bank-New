@@ -72,9 +72,26 @@ const moqTextMap: Record<string, { en: string; si: string }> = {
 };
 
 const categorySpecialistMap: Record<string, { en: string; si: string }> = {
+  tshirt_shirt: {
+    en: "Custom T-Shirts, Shirts & Knitwear Manufacturing Specialist",
+    si: "ටී-ෂර්ට්, කමිස සහ නිට්වෙයාර් නිෂ්පාදන විශේෂඥ",
+  },
+  denim_trousers: {
+    en: "Export-Grade Denim, Trousers & Pants Production Specialist",
+    si: "ඩෙනිම් සහ කලිසම් නිෂ්පාදන විශේෂඥ",
+  },
+  frock_skirt_blouse: {
+    en: "High-Fashion Frocks, Skirts, Blouses & Woven Garment Specialist",
+    si: "ගවුම්, සාය, බ්ලවුස් සහ විලාසිතා ඇඳුම් නිෂ්පාදන විශේෂඥ",
+  },
+  other: {
+    en: "Custom Apparel, Sportswear, Uniforms & Textile Specialist",
+    si: "විවිධ ඇඳුම් සහ නිල ඇඳුම් නිෂ්පාදන විශේෂඥ",
+  },
+  // Backward compatibility aliases
   tshirt: {
-    en: "Custom T-Shirts, Polos & Knitwear Manufacturing Specialist",
-    si: "ටී-ෂර්ට්, පෝලෝ සහ නිට්වෙයාර් නිෂ්පාදන විශේෂඥ",
+    en: "Custom T-Shirts, Shirts & Knitwear Manufacturing Specialist",
+    si: "ටී-ෂර්ට්, කමිස සහ නිට්වෙයාර් නිෂ්පාදන විශේෂඥ",
   },
   shirt: {
     en: "Export-Grade Formal & Casual Shirts Production Specialist",
@@ -91,10 +108,15 @@ const categorySpecialistMap: Record<string, { en: string; si: string }> = {
 };
 
 const categoryLabels: Record<string, { en: string; si: string }> = {
-  tshirt: { en: "T-Shirts (ටී-ෂර්ට්)", si: "ටී-ෂර්ට් (T-Shirts)" },
+  tshirt_shirt: { en: "T-Shirts & Shirts (ටී-ෂර්ට් සහ කමිස)", si: "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" },
+  denim_trousers: { en: "Denim & Trousers (ඩෙනිම් සහ කලිසම්)", si: "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" },
+  frock_skirt_blouse: { en: "Frock & Skirt & Blouse (ගවුම්, සාය සහ බ්ලවුස්)", si: "ගවුම්, සාය සහ බ්ලවුස් (Frock & Skirt & Blouse)" },
+  other: { en: "Other (වෙනත්)", si: "වෙනත් (Other)" },
+  // Backward compatibility aliases
+  tshirt: { en: "T-Shirts & Shirts (ටී-ෂර්ට් සහ කමිස)", si: "ටී-ෂර්ට් සහ කමිස (T-Shirts & Shirts)" },
   shirt: { en: "Shirts (කමිස)", si: "කමිස (Shirts)" },
-  trousers: { en: "Trousers (කලිසම්)", si: "කලිසම් (Trousers)" },
-  dresses: { en: "Dresses (ගවුම්)", si: "ගවුම් (Dresses)" },
+  trousers: { en: "Denim & Trousers (ඩෙනිම් සහ කලිසම්)", si: "ඩෙනිම් සහ කලිසම් (Denim & Trousers)" },
+  dresses: { en: "Frock & Skirt & Blouse (ගවුම්, සාය සහ බ්ලවුස්)", si: "ගවුම්, සාය සහ බ්ලවුස් (Frock & Skirt & Blouse)" },
 };
 
 export default function SupplierGigDetailPage({
