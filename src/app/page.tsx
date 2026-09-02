@@ -43,14 +43,14 @@ export default function WelcomePage() {
                 <h1 className="mt-6 text-center font-[family-name:var(--font-sinhala)] text-3xl sm:text-4xl font-black leading-snug text-[#0B122F] tracking-tight">
                   Welcome! 👋
                   <span className="block mt-2 text-lg sm:text-xl font-bold text-[#0B122F]/90 leading-snug sm:leading-relaxed">
-                    Sri Lanka Apparel Bank වෙත ඔබව සාදරයෙන් පිලිගන්නවා
+                    Apparel Bank වෙත ඔබව සාදරයෙන් පිලිගන්නවා
                   </span>
                 </h1>
               ) : (
                 <h1 className="mt-6 text-center font-display text-3xl sm:text-4xl font-black leading-snug text-[#0B122F] tracking-tight">
                   Welcome! 👋
                   <span className="block mt-2 text-lg sm:text-xl font-bold text-[#0B122F]/90 leading-snug sm:leading-relaxed">
-                    Sri Lanka Apparel Bank welcomes you
+                    Apparel Bank welcomes you
                   </span>
                 </h1>
               )}
